@@ -1,2 +1,2 @@
-# helpdesk-rrn
-HelpDesk (React/Redux/Nodejs)
+# HelpDesk (built with React/Redux and Nodejs)
+
