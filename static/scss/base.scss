@@ -1,0 +1,149 @@
+$headerHeight: 50px;
+$minWidth: 320px;
+
+$mainFontColor: rgba(0,0,0,0.87);
+
+$blueLight: #28aae1;
+$blue: #1565c0;
+$blueDark: #0a0a91;
+$purple: #9b0064;
+
+$grayLight: #eeeeee;
+$gray: #cbcbcb;
+$red: #f44336;
+$green: #4caf50;
+$textRed: #ef5350;
+$textGreen: #558b2f;
+
+$sidebarMenuColor: #616161;
+$sidebarMenuActiveColor: #212121;
+$inputErrorColor: $red;
+
+$contentBg: #f5f5f5;
+
+$leftPadding: 10px;
+$tableRowShadow: 0 -1px 0 #e5e5e5,0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
+$tableOpenedRowShadow: 0 0 6px rgba(0,0,0,.16),0 6px 12px rgba(0,0,0,.32);
+$tableLineColor: #e0e0e0;
+
+$selectBorder: #e0e0e0;
+$selectFocus: #bbdefb;
+
+$inputBorder: $selectBorder;
+$inputFocus: $selectFocus;
+
+$checkboxColor: #1565c0;
+$checkboxBorderColor: #5a5a5a;
+$checkboxDisabledBorderColor: #BDBDBD;
+
+$radioColor: $checkboxColor;
+$radioBorderColor: $checkboxBorderColor;
+$radioDisabledBorderColor: $checkboxDisabledBorderColor;
+
+$buttonFlatBlue: $blueLight;
+$buttonFlatGray: #bdbdbd;
+$buttonRaisedBackground: #fff;
+$buttonRaisedBackgroundFocus: #f5f5f5;
+$buttonRaisedBackgroundBlue: $blue;
+$buttonRaisedBackgroundFocusBlue: #1E88E5;
+$buttonRaisedBackgroundGreen: #4caf50;
+$buttonRaisedBackgroundFocusGreen: #43A047;
+
+$modalAlertColor: rgba(0,0,0,.5);
+
+$tableSelectBackgroundColor: #e8eaf6;
+
+@mixin shadow($number) {
+  @if $number == 0 {
+    box-shadow: none;
+  }
+  @else if $number == 1 {
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.1),0 2px 10px 0 rgba(0,0,0,0.12);
+  }
+  @else if $number == 2 {
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  }
+  @else if $number == 3 {
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.18),0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+  @else if $number == 4 {
+    box-shadow: 0 12px 15px 0 rgba(0,0,0,0.2),0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+  @else if $number == 5 {
+    box-shadow: 0 16px 28px 0 rgba(0,0,0,0.24),0 25px 55px 0 rgba(0,0,0,0.21);
+  }
+  @else if $number == 6 {
+    box-shadow: 0 27px 24px 0 rgba(0,0,0,0.22),0 40px 77px 0 rgba(0,0,0,0.22);
+  }
+}
+
+@font-face {
+  font-family: Roboto Regular;
+  src: url("../fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: Roboto Medium;
+  src: url("../fonts/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url("../fonts/MaterialIcons-Regular.woff2") format('woff2'),
+       url("../fonts/MaterialIcons-Regular.woff") format('woff'),
+       url("../fonts/MaterialIcons-Regular.ttf") format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.material-icons__size_20 {
+  font-size: 20px;
+}
+
+html, body {
+  height: 100%;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Roboto Regular, sans-serif;
+  color: $mainFontColor;
+}
+
+.hide {
+  display: none;
+}

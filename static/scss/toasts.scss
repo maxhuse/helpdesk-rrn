@@ -1,0 +1,79 @@
+.toasts {
+  position: fixed;
+  z-index: 105;
+  bottom: 0;
+  left:0;
+  right:0;
+  margin: 0 auto;
+  width: 568px;
+  max-width: 100%;
+}
+
+.toasts__element {
+  padding: 14px 24px 14px 24px;
+  cursor: pointer;
+  border-radius: 2px;
+  color: white;
+  font-size: 1.2em;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  @include shadow(3);
+}
+
+.toasts__element_info {
+  background-color: #323232;
+}
+
+.toasts__element_error {
+  background-color: #EF5350;
+}
+
+.toasts__element_warning {
+  background-color: #ef6c00;
+}
+
+// animation
+.toast-enter, .toast-appear {
+  opacity: 0;
+  animation-duration: .3s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in;
+  animation-play-state: paused;
+}
+.toast-leave {
+  animation-duration: .3s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+  animation-play-state: paused;
+}
+.toast-enter.toast-enter-active, .toast-appear.toast-appear-active {
+  animation-name: toastIn;
+  animation-play-state: running;
+}
+.toast-leave.toast-leave-active {
+  animation-name: toastOut;
+  animation-play-state: running;
+}
+
+@keyframes toastIn {
+  0% {
+    bottom: -48px;
+    opacity: 0;
+  }
+  100% {
+    bottom: 0px;
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  0% {
+    bottom: 0px;
+    opacity: 1;
+  }
+  100% {
+    bottom: -48px;
+    opacity: 0;
+  }
+}

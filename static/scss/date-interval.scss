@@ -1,0 +1,10 @@
+.date-interval {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-interval__range {
+  width: 120px;
+  display: block;
+  flex: 0 1 auto;
+}

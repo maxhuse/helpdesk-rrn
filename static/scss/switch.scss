@@ -1,0 +1,70 @@
+.switch {
+  user-select: none;
+  display: inline-block;
+  margin: auto 0;
+}
+
+.switch__label {
+  cursor: pointer;
+}
+
+.switch__input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  user-select: none;
+}
+
+.switch__lever {
+  content: "";
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 15px;
+  background-color: #818181;
+  border-radius: 15px;
+  margin-right: 10px;
+  transition: background 0.3s ease;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+.switch__lever:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  background-color: #F1F1F1;
+  border-radius: 21px;
+  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4);
+  left: -5px;
+  top: -3px;
+  transition: left 0.3s ease, background .3s ease, box-shadow 0.1s ease;
+}
+
+.switch__input:checked+.switch__lever {
+  background-color: #87A5C7;
+}
+
+.switch__input:checked+.switch__lever:after {
+  left: 24px;
+  background-color: #1565c0;
+}
+
+.switch__input:checked:not(:disabled) ~ .switch__lever:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4),0 0 0 15px rgba(21,101,192,0.1);
+}
+
+.switch__input:not(:disabled) ~ .switch__lever:active:after {
+  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.4),0 0 0 15px rgba(0,0,0,0.08);
+}
+
+.switch__input[disabled]+.switch__lever {
+  cursor: default;
+}
+
+.switch__input[disabled]+.switch__lever:after, .switch__input[disabled]:checked+.switch__lever:after {
+  background-color: #BDBDBD;
+}

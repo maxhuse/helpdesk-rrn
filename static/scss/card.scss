@@ -1,0 +1,32 @@
+.card {
+  background-color: white;
+  border-radius: 3px;
+  @include shadow(1);
+  margin: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.card__content {
+  padding: 16px;
+}
+
+.card__content-row {
+  display: flex;
+
+  & + & {
+    margin-top: 20px;
+  }
+}
+
+.card__buttons {
+  display: flex;
+  align-content: flex-start;
+  padding: 8px;
+}
+
+.card__header {
+  margin: 0;
+  font-size: 1.5em;
+  padding: 24px 16px 0 16px;
+  font-weight: normal;
+}

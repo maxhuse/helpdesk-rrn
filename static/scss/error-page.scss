@@ -1,0 +1,58 @@
+.error-page {
+  width: 100%;
+  height: 100%;
+}
+
+.error-page__header {
+  background-color: $contentBg;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.error-page__logo {
+  margin: 0 auto;
+  height: 60px;
+}
+
+.error-page__title {
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  font-weight: 100;
+  height: 40px;
+}
+
+.error-page__container {
+  color: #565a5c;
+  display: flex;
+  justify-content: center;
+}
+
+.error-page__message {
+  vertical-align: middle;
+  padding: 50px 10px;
+}
+
+.error-page__message_wide {
+  width: 900px;
+}
+
+.error-page__text_big {
+  font-size: 145px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.error-page__text_normal {
+  font-size: 32px;
+  font-weight: normal;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.error-page__text_small {
+  font-size: 24px;
+  font-weight: normal;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,13 @@
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile__section {
+  display: block;
+  flex: 0 1 auto;
+}
+
+.profile__section_security {
+  width: 400px;
+}

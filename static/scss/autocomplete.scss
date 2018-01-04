@@ -1,0 +1,60 @@
+.autocomplete {
+  position: relative;
+}
+
+.autocomplete__list {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  overflow-y: scroll;
+  max-height: 250px;
+  border: 1px solid $inputBorder;
+  border-top: none;
+}
+
+.autocomplete__list_hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.autocomplete__item {
+  height: 2em;
+  line-height: 2em;
+  width: 100%;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+
+  cursor: pointer;
+  background-color: white;
+  transition: background-color, color 0.2s;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    background-color: $grayLight;
+  }
+
+  & + & {
+    border-top: 1px solid $inputBorder;
+  }
+}
+
+.autocomplete__item-enter {
+  opacity: 0.01;
+}
+
+.autocomplete__item-enter.autocomplete__item-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
+.autocomplete__item-leave {
+  opacity: 1;
+}
+
+.autocomplete__item-leave.autocomplete__item-leave-active {
+  opacity: 0.01;
+  transition: opacity 200ms ease-in-out;
+}

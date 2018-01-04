@@ -1,0 +1,18 @@
+.select {
+  background-color: #fff;
+  border: 1px solid $selectBorder;
+  border-radius: 2px;
+  height: 2em;
+  padding: 0 .25em;
+  width: 100%;
+
+  &:focus {
+    border-color: rgba(0,0,0,0.05);
+    outline: 1px solid $selectFocus;
+  }
+}
+
+.select_pagination {
+  width: auto;
+  margin-left: 10px;
+}

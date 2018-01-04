@@ -1,0 +1,132 @@
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: $headerHeight;
+  background-color: $blue;
+  z-index: 10;
+  @include shadow(2);
+}
+
+@media (max-width: 768px) {
+  .header {
+    min-width: $minWidth;
+  }
+}
+
+.header__logo {
+  width: 135px;
+  padding-left: $leftPadding;
+  height: 100%;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  line-height: $headerHeight;
+  float: left;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .header__logo {
+    display: none;
+  }
+}
+
+.header__content {
+  height: 100%;
+  color: white;
+  padding-left: 13%;
+  margin-right: 1%;
+}
+
+.header__content_without-sidebar {
+  padding-left: 40%;
+}
+
+@media (max-width: 768px) {
+  .header__content_without-sidebar {
+    padding-left: 0;
+  }
+}
+
+.header__center {
+  line-height: $headerHeight;
+  float: left;
+}
+
+.header__title {
+  font-size: 2em;
+}
+
+.header__tabs {
+  font-weight: bold;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.header__tabs-item {
+  text-transform: uppercase;
+  text-decoration: none;
+  display: block;
+  color: rgba(255,255,255,0.7);
+  padding: 0 20px;
+  height: $headerHeight;
+  text-align: center;
+  user-select: none;
+}
+
+.header__tabs-item_active {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+}
+
+.header__right {
+  float: right;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__user {
+  line-height: $headerHeight;
+  cursor: pointer;
+}
+
+.header__link {
+  border-bottom: 1px dashed white;
+  cursor: pointer;
+}
+
+.header__tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  align-items: center;
+  padding: 10px 15px;
+
+  & + & {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.header__toggle-button {
+  $HeaderToggleButtonMargin: 5px;
+
+  display: none;
+  background-color: $blueLight;
+  border-radius: 5px;
+  height: $headerHeight - $HeaderToggleButtonMargin * 2;
+  width: $headerHeight - $HeaderToggleButtonMargin * 2;
+  margin: $HeaderToggleButtonMargin;
+  float: left;
+  @include shadow(1);
+}
+
+@media (max-width: 768px) {
+  .header__toggle-button {
+    display: block;
+  }
+}

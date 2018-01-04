@@ -1,0 +1,8 @@
+.DS_Store
+npm-debug.log
+node_modules
+public
+.idea
+logs
+test/client/bin
+sql/_helpdesk.sqlite

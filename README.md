@@ -1,2 +1,2 @@
-# HelpDesk (built with React/Redux and Nodejs)
+# HelpDesk (built with React/Redux and Node.js)
 

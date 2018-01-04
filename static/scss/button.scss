@@ -1,0 +1,105 @@
+@mixin button-raised($text-color, $background-color, $focus-color) {
+  color: $text-color;
+  background-color: $background-color;
+  box-shadow: 0 0 1px rgba(0,0,0,.11),0 1px 2px rgba(0,0,0,.22);
+
+  &:not(:disabled):hover, &:not(:disabled):focus   {
+    box-shadow: 0 0 3px rgba(0,0,0,.13),0 3px 6px rgba(0,0,0,.26);
+    background-color: $focus-color;
+    outline: 0;
+  }
+
+  &:disabled {
+    box-shadow: none;
+    color: rgba(0,0,0,.26);
+    background-color: rgba(0,0,0,.12);
+  }
+}
+
+@mixin button-flat($color) {
+  color: $color;
+  background-color: transparent;
+
+  &:not(:disabled):hover, &:not(:disabled):focus   {
+    outline: 0;
+    background-color: rgba($color, .12);
+  }
+}
+
+.button {
+  transition: background-color .15s cubic-bezier(.4,0,.2,1),box-shadow .15s cubic-bezier(.4,0,.2,1);
+  padding: 0 18px;
+  height: 38px;
+  border: none;
+  border-radius: 2px;
+  min-width: 48px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.button_hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.button_in-card {
+  display: block;
+  margin-right: 8px;
+}
+
+.button_raised {
+  @include button-raised($mainFontColor, $buttonRaisedBackground, $buttonRaisedBackgroundFocus);
+}
+
+.button_raised_blue {
+  @include button-raised(#fff, $buttonRaisedBackgroundBlue, $buttonRaisedBackgroundFocusBlue);
+}
+
+.button_raised_green {
+  @include button-raised(#fff, $buttonRaisedBackgroundGreen, $buttonRaisedBackgroundFocusGreen);
+}
+
+.button_login {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.button_table-header {
+  margin: auto 0;
+}
+
+.button_flat {
+  @include button-flat($mainFontColor);
+}
+
+.button_icon {
+  min-width: initial;
+  width: 38px;
+  height: 38px;
+  font-size: 24px;
+  border-radius: 50%;
+  padding: 0;
+  color: rgba(0,0,0,0.70);
+  line-height: 0;
+}
+
+.button_flat_blue {
+  @include button-flat($buttonFlatBlue);
+}
+
+.button_flat_gray {
+  @include button-flat($gray);
+}
+
+.button_flat_green {
+  @include button-flat($green);
+}
+
+.button_dialog {
+  padding: 0 10px;
+
+  & + & {
+    margin-left: 5px;
+  }
+}

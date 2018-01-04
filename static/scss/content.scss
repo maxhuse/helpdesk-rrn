@@ -1,0 +1,39 @@
+.content {
+  position: absolute;
+  top: $headerHeight;
+  left: 12%;
+  width: 88%;
+  bottom: 0;
+  overflow: auto;
+  padding: 1%;
+  background-color: $contentBg;
+  overflow-y: scroll;
+}
+
+@media (max-width: 768px) {
+  .content {
+    width: 100%;
+    min-width: $minWidth;
+    left: 0;
+  }
+}
+
+.content__header {
+  line-height: 60px;
+  text-align: center;
+  background-color: $contentBg;
+  margin: 0;
+}
+
+.content__body {
+  animation: content-body-show 0.2s ease-in-out;
+}
+
+@keyframes content-body-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

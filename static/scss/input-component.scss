@@ -1,0 +1,40 @@
+.input-component {
+  width: 100%;
+}
+
+.input-component__error {
+  font-size: 0.76em;
+  height: 0.9em;
+  color: $inputErrorColor;
+  display: block;
+  position: absolute;
+}
+
+.input-component__error_modal {
+  margin-left: 8px;
+  margin-top: 3px;
+}
+
+.input-component__field {
+  background-color: #fff;
+  border: 1px solid $inputBorder;
+  border-radius: 2px;
+  height: 2em;
+  padding: 0;
+  padding-left: .25em;
+  padding-right: .25em;
+  width: 100%;
+
+  &:focus {
+    border-color: rgba(0,0,0,0.05);
+    outline: 1px solid $inputFocus;
+  }
+}
+
+.input-component__field_size_full {
+  width: 100%;
+}
+
+.input-component__field_error {
+  border: 1px solid $inputErrorColor;
+}

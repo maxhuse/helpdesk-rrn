@@ -1,0 +1,41 @@
+.modal-background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 95;
+  visibility: hidden;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+@keyframes modalBackgroundShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+.modal-background_visible {
+  opacity: 0.5;
+  visibility: visible;
+  animation: modalBackgroundShow 0.2s;
+}
+
+@keyframes modalBackgroundHide {
+  from {
+    opacity: 0.5;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.modal-background_hidden {
+  animation: modalBackgroundHide 0.2s;
+}

@@ -1,0 +1,20 @@
+.input {
+  background-color: #fff;
+  border: 1px solid $inputBorder;
+  border-radius: 2px;
+  height: 2em;
+  padding: 0;
+  padding-left: .25em;
+  padding-right: .25em;
+  width: 100%;
+
+  &:focus {
+    border-color: rgba(0,0,0,0.05);
+    outline: 1px solid $inputFocus;
+  }
+}
+
+.input_textarea {
+  display: block;
+  max-width: 100%;
+}

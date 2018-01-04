@@ -1,0 +1,32 @@
+.filter__item {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  min-height: 32px;
+}
+
+.filter__field-name {
+  width: 200px;
+
+  // ie fix
+  display: block;
+  flex: 0 1 auto;
+}
+
+.filter__field-input {
+  flex: 1 0 250px;
+  margin: auto 0;
+
+  // ie fix
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .filter__field-input {
+    flex: 1 0 auto;
+  }
+}
+
+.filter__buttons {
+  text-align: right;
+}

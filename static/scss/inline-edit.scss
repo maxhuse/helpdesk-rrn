@@ -1,0 +1,24 @@
+.inline-edit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.inline-edit__cell {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex: 0 1 auto;
+}
+
+.inline-edit__cell_label {
+  width: 70px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.inline-edit__cell_value {
+  width: 450px;
+  margin-right: 10px;
+}
