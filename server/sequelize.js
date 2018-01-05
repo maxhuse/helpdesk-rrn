@@ -7,7 +7,7 @@ const sequelize = new Sequelize(config.sequelize);
 /*
 * Функция возвращает строку для SET в команде UPDATE
 * @param {object} fields - Объект с полями для вставки
-* @return {string} result - Строка для вставки в UPDATE
+* @returns {string} result - Строка для вставки в UPDATE
 * */
 const generateUpdateFields = (fields) => {
   let result = '';

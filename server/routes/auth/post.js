@@ -8,7 +8,7 @@ const getUser = require('../../middlewares/get-user');
 const getAuth = require('./get');
 
 module.exports = (req, res, next) => co(function* generator() {
-  // Если пользователь уже авторизован, то направим GET
+  // If a user already authorized then go to GET method
   if (req.session.user && req.session.user.id) {
     return getUser(req, res, (error) => {
       if (error) {
@@ -40,12 +40,12 @@ module.exports = (req, res, next) => co(function* generator() {
     return next(new AuthorizeError('server.invalid_login_or_password'));
   }
 
-  // User is blocked
+  // A user is blocked
   if (!user.active) {
     return next(new AuthorizeError('server.user_blocked'));
   }
 
-  // save user in session
+  // Save a user in session
   req.session.user = {
     id: user.id,
     role: user.role,
@@ -61,6 +61,6 @@ module.exports = (req, res, next) => co(function* generator() {
     email: user.email || '',
   };
 
-  // send OK response
+  // Send OK response
   return res.status(httpCodes.OK).send(nullKiller(response));
 }).catch(error => next(error));

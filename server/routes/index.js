@@ -7,8 +7,8 @@ const { sequelize } = require('./../sequelize');
 const SessionStore = require('connect-session-sequelize')(session.Store);
 
 // Middlewares
-const getUser = require('./../middlewares/get-user.js');
-const errorMiddleware = require('./../middlewares/error.js');
+const getUser = require('./../middlewares/get-user');
+const errorMiddleware = require('./../middlewares/error');
 
 // Routes
 const authRoute = require('./auth/index');
@@ -22,7 +22,7 @@ const sessionConfig = config.session;
 
 // Create the session store object
 sessionConfig.store = new SessionStore({ db: sequelize });
-// This will create database for sessions
+// It will create database for sessions
 sessionConfig.store.sync();
 
 // Basic middlewares
@@ -31,7 +31,7 @@ api.use(bodyParser.urlencoded({ extended: false }));
 api.use(bodyParser.json());
 
 // Routes
-api.use('/auth', authRoute); // Method get here required auth
+api.use('/auth', authRoute); // Methods GET and PATCH here are required auth
 
 // Check authorization and get user fields
 api.use(getUser);
@@ -40,7 +40,7 @@ api.use(getUser);
 // api.use('/customers', customersRoute);
 api.use('/staffs', staffsRoute);
 
-// 404 middleware (401 for unauthorized )
+// 404 middleware (401 for unauthorized)
 api.use('*', (req, res) => {
   // Unauthorized user
   if (!req.session.user || !req.session.user.id) {

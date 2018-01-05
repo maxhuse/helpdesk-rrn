@@ -1,13 +1,13 @@
 /*
-* Компонент верхнего уровня.
-* Проверка авторизации и прав пользователя на просмотр страницы
+* High Order Component
+* Verify authorization and rights of the user to view the page
 * */
 import React, { PureComponent } from 'react';
 import { rights } from 'config';
 import Preloader from 'components/preloader';
 import ServerError from 'components/server-error';
 
-export default ComposedComponent => class CheckAuthHoc extends PureComponent {
+export default ComposedComponent => class CheckAuthEnhance extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -41,6 +41,7 @@ export default ComposedComponent => class CheckAuthHoc extends PureComponent {
   checkRights() {
     if (!this.haveRights()) {
       const role = this.props.authDataIm.getIn(['data', 'role']);
+      // Get the first available route for this role
       const startPage = rights[role][0];
 
       this.props.history.push(startPage);
@@ -49,7 +50,7 @@ export default ComposedComponent => class CheckAuthHoc extends PureComponent {
     this.setState({ isReady: true });
   }
 
-  // проверяет имеет ли данная роль права на данный URL
+  // Checks that the role have rights for this URL
   haveRights() {
     const role = this.props.authDataIm.getIn(['data', 'role']);
     const currentPath = this.props.location.pathname;
@@ -60,11 +61,11 @@ export default ComposedComponent => class CheckAuthHoc extends PureComponent {
 
     const allowedPaths = rights[role];
 
-    // находим текущий роут без подпутей
-    // первый элемент пустая строка, т.к. / первый символ
+    // Find current route without subroutes
+    // First element is empty string because "/" is first symbol
     let [, currentRoute] = currentPath.split('/');
 
-    // добавляем /, т.к. в массиве разрешенных путей они записаны со /
+    // Add "/" because in array of available routes they start with "/"
     currentRoute = `/${currentRoute}`;
 
     return allowedPaths.some(allowedPath => allowedPath === currentRoute);

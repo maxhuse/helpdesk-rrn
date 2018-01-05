@@ -6,7 +6,7 @@ const moment = require('moment');
 const logFileName = 'server.log';
 const logPath = `${logsDir}/${logFileName}`;
 
-// create logs dir if not exists
+// Create logs dir if it's not exists
 if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir);
 }
@@ -25,7 +25,7 @@ const formatter = (args) => {
 
   if (stack) {
     msg += `\nStack: ${stack}`;
-    msg += '\n============================================================';
+    msg += '\n============================================================\n';
   }
 
   return msg;

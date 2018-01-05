@@ -2,7 +2,9 @@ const { httpCodes } = require('../constants');
 const i18next = require('i18next');
 const logger = require('../logger');
 
-module.exports = (err, req, res) => {
+// We need "next" here because Express want it for override default error handler
+// eslint-disable-next-line no-unused-vars
+module.exports = (err, req, res, next) => {
   if (!err.name || err.name === 'Error') {
     err.name = err.code;
   }

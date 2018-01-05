@@ -18,7 +18,7 @@ function* errorHandler(dispatch, { status, data, error, method, isAborted, optio
   switch (status) {
     case 401:
     case 403: {
-      // редиректим на страницу авторизации
+      // Redirect to authorization page
       browserHistory.push('/auth');
       dispatch(authDataActions.authDataResetDelta());
 

@@ -10,7 +10,7 @@
     "clean": "rimraf public",
     "lint:client": "eslint client --ext .jsx --ext .js",
     "lint:server": "eslint server",
-    "lint": "npm run lint:client && npm run lint:server && npm run lint:test",
+    "lint": "npm run lint:client && npm run lint:server",
     "hot": "npm run clean && NODE_ENV=hot node server/index.js"
   },
   "author": {
