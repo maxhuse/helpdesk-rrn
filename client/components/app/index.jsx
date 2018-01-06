@@ -6,18 +6,16 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './header';
 import SidebarMenu from './sidebar-menu';
 
-function App(
-  {
-    authDataIm,
-    authDataSetLanguageDelta,
-    location,
-    authDataLogoutSignal,
-    sidebarComponentToggleDelta,
-    sidebarComponentIm,
-    modalComponentHideSignal,
-    modalComponentShowDelta,
-  }
-) {
+function App({
+  authDataIm,
+  authDataSetLanguageDelta,
+  location,
+  authDataLogoutSignal,
+  sidebarComponentToggleDelta,
+  sidebarComponentIm,
+  modalComponentHideSignal,
+  modalComponentShowDelta,
+}) {
   return (
     <div className="wrapper">
       <Header
@@ -37,7 +35,7 @@ function App(
       </aside>
 
       <Switch>
-        {/*<Route path="/customers" component={Customers} />*/}
+        {/* <Route path="/customers" component={Customers} /> */}
         <Route path="/staffs" component={Staffs} />
         <Route path="/profile" component={Profile} />
       </Switch>

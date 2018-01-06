@@ -11,6 +11,7 @@
     "error_by_getting_user": "Error by getting user",
     "illegal_post_data": "Illegal post data",
     "illegal_patch_data": "Illegal patch data",
+    "invalid_user_id": "Invalid user id",
     "invalid_staff_id": "Invalid staff user id",
     "invalid_customer_id": "Invalid customer id",
     "invalid_login_or_password": "Invalid login or password",

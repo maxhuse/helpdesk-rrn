@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 
 export const applicationName = 'helpdesk';
 
-// sidebar menu`s displayed according with this order
+// Sidebar menu`s displayed according with this order
 export const rights = {
   admin: [
     // '/customers',

@@ -12,9 +12,9 @@ const SidebarMenuLink = ({ link }) => (
   </li>
 );
 
-// Здесь нужен Component, а не PureComponent для работы activeClassName в SidebarMenuLink
+// We need here Component but not PureComponent to use activeClassName in SidebarMenuLink
 export default class SidebarMenu extends Component {
-  // return only accessed links for current user role
+  // Return only accessed links for current user role
   getLinks() {
     const role = this.props.authDataIm.getIn(['data', 'role']);
     const accessedPagesUrl = rights[role];

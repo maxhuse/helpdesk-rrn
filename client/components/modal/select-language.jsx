@@ -21,11 +21,11 @@ export default class ModalSelectLanguage extends PureComponent {
       language = 'ru';
     }
 
-    // language not changed
+    // Language not changed
     if (language === currentLanguage) {
       closeAction();
     } else {
-      // language changed
+      // Language changed
       setLanguageDelta(language);
     }
   }

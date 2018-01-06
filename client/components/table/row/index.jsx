@@ -6,7 +6,7 @@ import { TableCell } from '../cell';
 import { TextButtons, IconButtons } from './buttons';
 
 export const TableRow = (props) => {
-  // select component and filter cells
+  // Select component and filter cells
   if (props.item.get('id') === props.openedId) {
     return <TableRowExpanded {...props} />;
   }
@@ -34,7 +34,7 @@ const TableRowShrunk = ({
 }) => {
   const cellsLength = shownCells.length;
 
-  let className = disabled ? 'table__row table__row_disabled' : 'table__row';
+  let className = classnames('table__row', { table__row_disabled: disabled });
 
   if (getClassName) {
     className += ` ${getClassName(item)}`;

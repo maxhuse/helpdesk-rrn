@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const co = require('co');
 const { roles, httpCodes } = require('../../constants');
-const mysql = require('../../sql-module');
+const sequelize = require('../../sequelize');
 const logger = require('../../logger');
 const { VALID_EMAIL_REX } = require('../../../shared/constants');
 const { InputError } = require('../../errors');
@@ -13,7 +13,7 @@ const patchAuth = (req, res, next) => co(function* gen() {
   const { role } = req.user;
   let email = false;
 
-  // field email may be empty
+  // Email field may be empty
   if (Object.prototype.hasOwnProperty.call(req.body, 'email')) {
     email = req.body.email;
   }
@@ -26,50 +26,53 @@ const patchAuth = (req, res, next) => co(function* gen() {
     return res.status(httpCodes.FORBIDDEN).send({});
   }
 
-  const fields = {};
+  const userOptions = { id: req.user.id, fields: {} };
 
+  // Email
   if (email !== false) {
     if (typeof email !== 'string' || (email.length > 0 && !VALID_EMAIL_REX.test(email))) {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    fields.email = email;
+    userOptions.fields.email = email;
   }
 
+  // Login
   if (login !== false) {
     if (typeof login !== 'string' || login.length < 6) {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    fields.login = login;
+    userOptions.fields.login = login;
   }
 
+  // Password
   if (password !== false) {
     if (typeof password !== 'string' || password.length !== 128) {
       return next(new InputError('server.invalid_password'));
     }
 
-    // hashing password
-    fields.salt = (crypto.randomBytes(24)).toString('hex');
-    fields.password = crypto.createHmac('sha512', fields.salt)
+    // Hashing password
+    userOptions.fields.salt = (crypto.randomBytes(24)).toString('hex');
+    userOptions.fields.password = crypto.createHmac('sha512', userOptions.fields.salt)
       .update(password).digest('hex');
   }
 
-  // nothing to patch
-  if (Object.keys(fields).length === 0) {
+  // Nothing to patch
+  if (Object.keys(userOptions.fields).length === 0) {
     return res.status(httpCodes.OK).send({});
   }
 
-  const staffOptions = { id: req.user.id, fields };
-  const updatedStaffUser = yield mysql.updateStaffUser(staffOptions);
+  const updatedUser = yield sequelize.updateUser(userOptions);
 
-  if (updatedStaffUser.affectedRows === 0) {
-    return next(new InputError('server.invalid_staff_id'));
+  // In the second element of response is a number of affected rows
+  if (updatedUser[1] === 0) {
+    return next(new InputError('server.invalid_user_id'));
   }
 
-  const result = staffOptions.fields;
+  const result = userOptions.fields;
 
-  logger.log('info', 'User updated', staffOptions);
+  logger.log('info', 'User updated', userOptions);
 
   return res.status(httpCodes.OK).send(nullKiller({
     login: result.login,

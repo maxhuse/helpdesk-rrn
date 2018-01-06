@@ -123,7 +123,7 @@ module.exports = {
     );
   },
 
-  updateStaffUser(options) {
+  updateUser(options) {
     const id = sequelize.escape(options.id);
     const fields = generateUpdateFields(options.fields);
 

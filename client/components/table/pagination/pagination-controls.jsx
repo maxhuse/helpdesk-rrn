@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 const PaginationControls = ({
   currentPage,
@@ -21,13 +22,13 @@ const PaginationControls = ({
     lastItemOnPage = itemsCount;
   }
 
-  const prevArrowClass = hasPrev ?
-    'table__pagination-arrow table__pagination-arrow_prev' :
-    'table__pagination-arrow table__pagination-arrow_prev table__pagination-arrow_disabled';
+  const prevArrowClass = classnames('table__pagination-arrow', 'table__pagination-arrow_prev', {
+    'table__pagination-arrow_disabled': !hasPrev,
+  });
 
-  const nextArrowClass = hasNext ?
-    'table__pagination-arrow table__pagination-arrow_next' :
-    'table__pagination-arrow table__pagination-arrow_next table__pagination-arrow_disabled';
+  const nextArrowClass = classnames('table__pagination-arrow', 'table__pagination-arrow_next', {
+    'table__pagination-arrow_disabled': !hasNext,
+  });
 
   return (
     <span>

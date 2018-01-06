@@ -12,7 +12,7 @@ export default class ModalEditStaff extends PureComponent {
 
     this.onSubmit = this.onSubmit.bind(this);
 
-    // staff меняться не будет, поэтому сохраним его в стейт
+    // staffIm wouldn't change, so we keep it in state
     this.state = {
       staffIm: props.getStaff(),
     };
@@ -44,7 +44,7 @@ export default class ModalEditStaff extends PureComponent {
   validate({ name, login, email }) {
     let isValid = true;
 
-    // login
+    // Login
     if (login !== undefined) {
       if (!login.length) {
         this.loginRef.error = i18next.t('v.required');
@@ -55,7 +55,7 @@ export default class ModalEditStaff extends PureComponent {
       }
     }
 
-    // name
+    // Name
     if (!name.length) {
       this.nameRef.error = i18next.t('v.required');
       isValid = false;
@@ -64,7 +64,7 @@ export default class ModalEditStaff extends PureComponent {
       isValid = false;
     }
 
-    // email
+    // Email
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
       this.emailRef.error = i18next.t('v.invalid_email');
       isValid = false;

@@ -8,7 +8,7 @@ import ModalAddStaff from './modal-add-staff';
 import ModalEditStaff from './modal-edit-staff';
 import ModalBlockStaff from './modal-block-staff';
 
-// Вызываем modalContainerEnhance, чтобы пробросить в компонент modalComponentIm
+// Call modalContainerEnhance for passing modalComponentIm into the component
 const StaffsModalContainer = modalContainerEnhance(
   class extends PureComponent {
     render() {
@@ -70,7 +70,7 @@ const Staffs = ({
   staffsDataUpdateSignal,
   modalComponentShowDelta,
 }) => {
-  // describe table cells
+  // Describe table cells
   const cells = [
     {
       id: 'name',
@@ -145,7 +145,7 @@ const Staffs = ({
     ],
   };
 
-  // describe filters
+  // Describe filters
   const rolesForFilter = [
     { name: i18next.t(roles.ADMIN), value: roles.ADMIN },
     { name: i18next.t(roles.ENGINEER), value: roles.ENGINEER },

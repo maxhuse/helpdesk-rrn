@@ -4,7 +4,7 @@ import { VALID_EMAIL_REX } from 'shared/constants';
 import Input from 'components/input';
 import ModalHeader from 'components/modal/modal-header';
 import ModalOkCancelButtons from 'components/modal/modal-ok-cancel-buttons';
-import { roles } from 'constants';
+import { roles } from 'constants.js';
 
 export default class ModalAddStaff extends PureComponent {
   constructor(props) {
@@ -35,7 +35,7 @@ export default class ModalAddStaff extends PureComponent {
   validate({ login, password, name, email }) {
     let isValid = true;
 
-    // name
+    // Name
     if (!name.length) {
       this.nameRef.error = i18next.t('v.required');
       isValid = false;
@@ -44,7 +44,7 @@ export default class ModalAddStaff extends PureComponent {
       isValid = false;
     }
 
-    // login
+    // Login
     if (!login.length) {
       this.loginRef.error = i18next.t('v.required');
       isValid = false;
@@ -53,7 +53,7 @@ export default class ModalAddStaff extends PureComponent {
       isValid = false;
     }
 
-    // password
+    // Password
     if (!password.length) {
       this.passwordRef.error = i18next.t('v.required');
       isValid = false;
@@ -63,7 +63,7 @@ export default class ModalAddStaff extends PureComponent {
     }
 
 
-    // email
+    // Email
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
       this.emailRef.error = i18next.t('v.invalid_email');
       isValid = false;

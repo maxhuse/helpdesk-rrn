@@ -2,7 +2,7 @@ const express = require('express');
 const postAuth = require('./post');
 const deleteAuth = require('./delete');
 const getAuth = require('./get');
-// const patchAuth = require('./patch');
+const patchAuth = require('./patch');
 const getUser = require('../../middlewares/get-user');
 
 const auth = express();
@@ -12,6 +12,6 @@ auth.delete('/', deleteAuth);
 
 // this methods require authorization
 auth.get('/', getUser, getAuth);
-// auth.patch('/', getUser, patchAuth);
+auth.patch('/', getUser, patchAuth);
 
 module.exports = auth;

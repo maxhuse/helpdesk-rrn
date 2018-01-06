@@ -77,7 +77,7 @@ export default function reducer(state = initialState, action) {
 * */
 
 const modalComponentShowDelta = (id, options) => (dispatch) => {
-  // lock table rows and show modal
+  // Lock table rows and show modal
   dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(true));
   dispatch({ type: SHOW, payload: { id, options } });
 };
@@ -85,25 +85,25 @@ const modalComponentShowDelta = (id, options) => (dispatch) => {
 const modalComponentDisableDelta = () => ({ type: DISABLE });
 const modalComponentEnableDelta = () => ({ type: ENABLE });
 
-// must be async to lock opened table row
+// Must be async to lock opened table row
 const modalComponentHideSignal = () => (dispatch) => {
   setTimeout(() => {
-    // close modal and unlock table rows
+    // Close modal and unlock table rows
     dispatch({ type: CLOSE });
     dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));
   }, 10);
 };
 
-// must be async to lock opened table row
+// Must be async to lock opened table row
 const modalComponentHideAllSignal = () => (dispatch) => {
   setTimeout(() => {
-    // close modal and unlock table rows
+    // Close modal and unlock table rows
     dispatch({ type: CLOSE_ALL });
     dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));
   }, 10);
 };
 
-// Оборачивает submitSignal логикой дизейбла кнопок и отображения тоста при успехе
+// Wrap submitSignal with logic of button disable and toast display on success
 const modalComponentSubmitWrapperSignal = ({ submitSignal, doneText = false }) =>
   dispatch => Promise.coroutine(function* getWrapper() {
     dispatch(modalComponentDisableDelta());

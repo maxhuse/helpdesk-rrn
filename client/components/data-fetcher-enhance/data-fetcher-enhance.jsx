@@ -1,5 +1,5 @@
 /*
-* HOC для предзагрузки данных для компонента
+* HOC for data preload for a component
 * */
 import React, { PureComponent } from 'react';
 import Preloader from 'components/preloader';

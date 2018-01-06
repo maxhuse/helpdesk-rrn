@@ -24,8 +24,8 @@ export default class Tooltip extends PureComponent {
 
   handleClick(event) {
     try {
-      // Закрываем тултип если произошел клик за пределами тултипа, но внутри root.
-      // (Это защитит от закрытия при клике по дате календаря)
+      // Close the tooltip if there is a click outside the tooltip, but inside root.
+      // This will protect you from closing when clicking on the date of the calendar.
       if (
         !findDOMNode(this).contains(event.target) &&
         document.getElementById('root').contains(event.target)

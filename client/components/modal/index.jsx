@@ -23,8 +23,8 @@ export default class Modal extends PureComponent {
   }
 
   onKeyup(event) {
-    // Закрываем все окна при нажатии Esc.
-    // События слушает только активное окно, что бы избежать лишних вычислений
+    // Close all windows when pressing Esc.
+    // Only the active window listens events to avoid unnecessary computations.
     if (event.keyCode === 27 &&
       this.props.modalComponentIm.get('activeId') === this.props.modalId
     ) {
@@ -33,7 +33,7 @@ export default class Modal extends PureComponent {
   }
 
   onClick(event) {
-    // close when layout was clicked
+    // Close when layout was clicked
     if (event.target === this.layoutRef) {
       this.modalClose();
     }

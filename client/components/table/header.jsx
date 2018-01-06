@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 import { TableCell } from './cell';
 
 export class TableHeader extends PureComponent {
@@ -42,12 +43,10 @@ export class TableHeader extends PureComponent {
     return (
       <div className="table__row table__row_header">
         {cells.map((cell) => {
-          const className = cell.className ? cell.className : '';
-
           return (
             <TableCell
               key={cell.id}
-              className={`table__cell table__cell_header ${className}`}
+              className={classnames('table__cell', 'table__cell_header', cell.className)}
               value={this.getContent(cell)}
             />
           );

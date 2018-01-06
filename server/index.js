@@ -44,19 +44,19 @@ if (process.env.NODE_ENV === 'hot') {
   /* eslint-enable global-require, import/no-extraneous-dependencies */
 }
 
-// dev server provide static files
+// Dev server provide static files
 if (process.env.NODE_ENV === 'hot' || process.env.NODE_ENV === 'development') {
-  // favicon
+  // Favicon
   app.use(favicon(path.join(__dirname, '../static/img/favicon.ico')));
 
-  // public files
+  // Public files
   app.use('/public', express.static(path.join(__dirname, '../public')));
 }
 
-// api
+// API
 app.use('/api', api);
 
-// index file
+// Index file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });

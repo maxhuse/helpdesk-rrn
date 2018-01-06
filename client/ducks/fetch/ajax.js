@@ -2,8 +2,7 @@
 import i18next from 'i18next';
 
 /*
-* Обертка на xhr, которая никогда не реджектится и
-* резолвится объектом вида { status, data, error }
+* A wrapper on xhr that never rejected and resolved with a object { status, data, error }
 * */
 
 const ajax = (url, options = {}) => new Promise((resolve, reject, onCancel) => {

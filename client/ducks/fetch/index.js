@@ -1,5 +1,5 @@
 /*
-* Модуль для работы с rest сервером: загружает, парсит json. Обрабатывает ошибки.
+* Module for working with rest server: loads data, parse json, handles errors.
 * */
 import ajax from './ajax';
 import successHandler from './success-handler';
@@ -20,7 +20,7 @@ export const fetchSignal = (url, options = {}) => (dispatch, getState) => {
 
   return ajax(url, options).then(({ status, data, error, isAborted }) => {
     if (status === 200) {
-      // Применим обработчик успешных ajax запросов
+      // Apply a handler for successful ajax requests
       return Promise.coroutine(successHandler.bind(
         null,
         dispatch,
@@ -28,7 +28,7 @@ export const fetchSignal = (url, options = {}) => (dispatch, getState) => {
       ))();
     }
 
-    // Применим обработчик ajax запросов с ошибками
+    // Apply a handler for error ajax requests
     return Promise.coroutine(errorHandler.bind(
       null,
       dispatch,

@@ -13,7 +13,7 @@ import '../static/scss/app.scss';
 import '../static/img/favicon.ico';
 import * as languages from '../static/translations';
 
-// Подмена Promise из babel на bluebird
+// Substitution Promise from babel to bluebird
 Promise.config({ cancellation: true });
 require('babel-runtime/core-js/promise').default = Promise; // eslint-disable-line
 

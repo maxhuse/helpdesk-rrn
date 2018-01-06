@@ -23,15 +23,15 @@ const TOGGLE_ROWS_LOCKED = `${applicationName}/${MODULE_NAME}/TOGGLE_ROWS_LOCKED
 * */
 
 const initialState = Map({
-  // id открытой row
+  // id of an opened row
   openedId: false,
-  // текущая страница в таблице
+  // Current page in the table
   page: 1,
-  // сколько row отображать на странице
+  // How many rows are displayed on the page
   itemsPerPage: ITEMS_PER_PAGE_OPTIONS.get(0),
   filters: Map(),
   sort: Map(),
-  // Заблокировать закрытие развернутой row. Нужно например при открытии модального окна.
+  // Lock the closing of the expanded row. This is necessary at opening of a modal window.
   isRowsLocked: false,
 });
 

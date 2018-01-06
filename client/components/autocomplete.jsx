@@ -58,7 +58,7 @@ export default class Autocomplete extends PureComponent {
     const { inputText, selectedItem } = this.state;
     const { getText } = this.props;
 
-    // no text in input ( clear all )
+    // No text in input ( clear all )
     if (inputText.trim().length === 0) {
       this.setState({
         selectedItem: false,
@@ -68,12 +68,12 @@ export default class Autocomplete extends PureComponent {
       return;
     }
 
-    // no item selected
+    // No item selected
     if (selectedItem === false) {
-      // try to find item by input text
+      // Try to find item by input text
       const searchedItem = this.findItemByText(inputText);
 
-      // nothing founded (clear all)
+      // Nothing founded (clear all)
       if (searchedItem === false) {
         this.setState({
           selectedItem: false,
@@ -83,7 +83,7 @@ export default class Autocomplete extends PureComponent {
         return;
       }
 
-      // select founded item
+      // Select founded item
       this.setState({
         inputText: getText(searchedItem),
         selectedItem: searchedItem,
@@ -92,11 +92,11 @@ export default class Autocomplete extends PureComponent {
       return;
     }
 
-    // there is selected item
+    // There is selected item
     const selectedItemText = getText(selectedItem);
 
-    // введенный текст совпадает с текстом выбранного item
-    // просто снимем фокус
+    // The entered text matches the text of the selected item.
+    // Just remove focus.
     if (inputText === selectedItemText) {
       this.setState({
         isOnFocus: false,
@@ -104,10 +104,10 @@ export default class Autocomplete extends PureComponent {
       return;
     }
 
-    // try to find item by input text
+    // Try to find item by input text
     const searchedItem = this.findItemByText(inputText);
 
-    // select founded item
+    // Select founded item
     if (searchedItem !== false) {
       this.setState({
         inputText: getText(searchedItem),
@@ -117,8 +117,8 @@ export default class Autocomplete extends PureComponent {
       return;
     }
 
-    // nothing founded
-    // use text of selected item
+    // Nothing founded
+    // Use text of selected item
     this.setState({
       inputText: selectedItemText,
       isOnFocus: false,
@@ -145,7 +145,7 @@ export default class Autocomplete extends PureComponent {
   }
 
   getItemByValue(selectedValue, items, getValue) {
-    // it used inside constructor...
+    // It used inside constructor...
     // Because of that we not use this.props here (IE fix)
     const searchedItem = items.find((item) => {
       if (_isObject(selectedValue)) {
@@ -161,17 +161,17 @@ export default class Autocomplete extends PureComponent {
   getVisibleItems(items, inputText) {
     const { getFilteredString } = this.props;
 
-    // show no items if input not in focus
+    // Show no items if input not in focus
     if (!this.state.isOnFocus) {
       return List();
     }
 
-    // show all items when nothing entered
+    // Show all items when nothing entered
     if (inputText.length === 0) {
       return items;
     }
 
-    // filter items by input text
+    // Filter items by input text
     const normalizedInputText = inputText.toLowerCase().trim();
     const filteredItems = items.filter((item) => {
       const filteredString = getFilteredString(item).toLowerCase().trim();
@@ -187,11 +187,11 @@ export default class Autocomplete extends PureComponent {
   }
 
   resetState({ getText, defaultValue, items, getValue }, options = {}) {
-    // no use this.props here, because it used in constructor ( IE fix )
+    // Not use this.props here, because it used in constructor ( IE fix )
 
-    // choose default item by default value
+    // Choose default item by default value
     if (
-      // hard reset (prevent default value)
+      // Hard reset (prevent default value)
       !options.isHard &&
       (defaultValue !== false) &&
       (defaultValue !== undefined)
@@ -204,7 +204,7 @@ export default class Autocomplete extends PureComponent {
         isOnFocus: false,
       };
     } else {
-      // no default value selected
+      // No default value selected
       this.state = {
         selectedItem: false,
         inputText: '',
@@ -215,15 +215,15 @@ export default class Autocomplete extends PureComponent {
 
   handleClick(event) {
     try {
-      // clicked not an input
+      // Clicked not an input
       if (!findDOMNode(this).contains(event.target)) {
-        // clicked not an autocomplete item
+        // Clicked not an autocomplete item
         if (_indexOf(event.target.classList, 'js-autocomplete-item') === -1) {
           this.onClickOutside();
         }
       }
     } catch (error) {
-      // do nothing, ie fix
+      // Do nothing, ie fix
     }
   }
 

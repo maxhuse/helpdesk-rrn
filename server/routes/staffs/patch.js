@@ -13,20 +13,20 @@ const patchStaffs = (req, res, next) => co(function* gen() {
   const { login, name, role, description, password, email } = req.body;
   const active = req.body.active && parseInt(req.body.active, 10);
 
-  // only admins able to edit staffs
+  // Only admins able to edit staffs
   if (req.user.role !== roles.ADMIN) {
     return res.status(httpCodes.FORBIDDEN).send({});
   }
 
-  // validation and creating update object
+  // Validation and creating update object
   const staffOptions = { id, fields: {} };
 
-  // id
+  // ID
   if (isNaN(staffOptions.id) || staffOptions.id < 1) {
     return next(new InputError('server.illegal_patch_data'));
   }
 
-  // login
+  // Login
   if (login !== undefined) {
     if (typeof login !== 'string' || login.length < 6) {
       return next(new InputError('server.illegal_patch_data'));
@@ -35,19 +35,19 @@ const patchStaffs = (req, res, next) => co(function* gen() {
     staffOptions.fields.login = login;
   }
 
-  // password
+  // Password
   if (password !== undefined) {
     if (typeof password !== 'string' || password.length !== 128) {
       return next(new InputError('server.invalid_password'));
     }
 
-    // hashing password
+    // Hashing password
     staffOptions.fields.salt = (crypto.randomBytes(24)).toString('hex');
     staffOptions.fields.password = crypto.createHmac('sha512', staffOptions.fields.salt)
       .update(password).digest('hex');
   }
 
-  // name
+  // Name
   if (name !== undefined) {
     if (typeof name !== 'string' || name.length < 3) {
       return next(new InputError('server.illegal_patch_data'));
@@ -56,12 +56,12 @@ const patchStaffs = (req, res, next) => co(function* gen() {
     staffOptions.fields.name = name;
   }
 
-  // role
+  // Role
   if (role !== undefined) {
     staffOptions.fields.role = role;
   }
 
-  // active
+  // Active
   if (active !== undefined) {
     if (active !== 1 && active !== 0) {
       return next(new InputError('server.illegal_patch_data'));
@@ -70,12 +70,12 @@ const patchStaffs = (req, res, next) => co(function* gen() {
     staffOptions.fields.active = active;
   }
 
-  // description
+  // Description
   if (description !== undefined) {
     staffOptions.fields.description = description;
   }
 
-  // email
+  // Email
   if (email !== undefined) {
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
       return next(new InputError('server.illegal_patch_data'));
@@ -88,11 +88,11 @@ const patchStaffs = (req, res, next) => co(function* gen() {
     return next(new InputError('server.no_one_field_selected'));
   }
 
-  const updatedStaffUser = yield sequelize.updateStaffUser(staffOptions);
+  const updatedStaffUser = yield sequelize.updateUser(staffOptions);
 
-  // Во втором элементе ответа число affected rows
+  // In the second element of response is a number of affected rows
   if (updatedStaffUser[1] === 0) {
-    return next(new InputError('server.invalid_staff_user_id'));
+    return next(new InputError('server.invalid_staff_id'));
   }
 
   const result = {

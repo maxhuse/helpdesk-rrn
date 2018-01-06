@@ -11,6 +11,7 @@
     "error_by_getting_user": "Ошибка идентификации пользователя",
     "illegal_post_data": "Ошибка входных параметров",
     "illegal_patch_data": "Ошибка входных параметров",
+    "invalid_user_id": "Невалидный id пользователя",
     "invalid_staff_id": "Невалидный id сотрудника",
     "invalid_customer_id": "Невалидный id пользователя",
     "invalid_login_or_password": "Ошибка логина или пароля",

@@ -142,7 +142,7 @@ export default class Table extends PureComponent {
       filteredItems: this.filter(props.items, props.tableComponentIm.get('filters')),
     };
 
-    // извлечем функции фильтрации из filterFields
+    // Extract filter functions from filterFields
     this.filterFunctions = {};
 
     props.filterFields.forEach((filterField) => {
@@ -210,7 +210,7 @@ export default class Table extends PureComponent {
       }
 
       default: {
-        // unknown sort type
+        // Unknown sort type
         return items;
       }
     }
@@ -226,7 +226,7 @@ export default class Table extends PureComponent {
 
       /* eslint consistent-return: "off" */
       filters.forEach((value, fieldName) => {
-        // if there is specific filter function - use it
+        // If there is specific filter function - use it
         const specificFilterFunction = this.filterFunctions[fieldName];
 
         if (specificFilterFunction) {
@@ -235,7 +235,7 @@ export default class Table extends PureComponent {
           return;
         }
 
-        // else use default filters
+        // Else use default filters
         const fieldValue = model.get(fieldName);
 
         if (typeof fieldValue === 'string') {
@@ -281,14 +281,14 @@ export default class Table extends PureComponent {
     const itemsPerPage = tableComponentIm.get('itemsPerPage');
     let { filteredItems } = this.state;
 
-    // sorting
+    // Sorting
     if (!sort.isEmpty()) {
       filteredItems = this.sort(filteredItems, sort);
     } else if (defaultSort && !defaultSort.isEmpty()) {
       filteredItems = this.sort(filteredItems, defaultSort);
     }
 
-    // pagination
+    // Pagination
     const paginationStart = (page - 1) * itemsPerPage;
     const paginationEnd = paginationStart + itemsPerPage;
     let slicedItems;
@@ -299,7 +299,7 @@ export default class Table extends PureComponent {
       slicedItems = filteredItems;
     }
 
-    // this cells shows when row is not opened
+    // This cells shows when row is not opened
     const shownCells = cells.filter(cell => cell.isHiddenOnClosed !== true);
 
     return (
