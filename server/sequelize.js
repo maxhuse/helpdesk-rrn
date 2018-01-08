@@ -81,7 +81,6 @@ module.exports = {
         id,
         name,
         login,
-        password,
         role,
         description,
         active,
@@ -95,7 +94,7 @@ module.exports = {
     );
   },
 
-  addStaffUsers(options) {
+  addUser(options) {
     const login = sequelize.escape(options.login);
     const password = sequelize.escape(options.password);
     const name = sequelize.escape(options.name);
@@ -134,6 +133,25 @@ module.exports = {
       `,
       {
         type: sequelize.QueryTypes.UPDATE,
+      }
+    );
+  },
+
+  getCustomers() {
+    return sequelize.query(
+      `SELECT 
+        id,
+        name,
+        login,
+        role,
+        description,
+        active,
+        email
+      FROM users 
+      WHERE role=:customer`,
+      {
+        replacements: { customer: roles.CUSTOMER },
+        type: sequelize.QueryTypes.SELECT,
       }
     );
   },

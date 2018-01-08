@@ -12,7 +12,7 @@ const errorMiddleware = require('./../middlewares/error');
 
 // Routes
 const authRoute = require('./auth/index');
-// const customersRoute = require('./customers/index');
+const customersRoute = require('./customers/index');
 const staffsRoute = require('./staffs/index');
 
 const api = express();
@@ -37,7 +37,7 @@ api.use('/auth', authRoute); // Methods GET and PATCH here are required auth
 api.use(getUser);
 
 // Routes that require authorization
-// api.use('/customers', customersRoute);
+api.use('/customers', customersRoute);
 api.use('/staffs', staffsRoute);
 
 // 404 middleware (401 for unauthorized)

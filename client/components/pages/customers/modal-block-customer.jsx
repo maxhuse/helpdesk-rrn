@@ -9,7 +9,7 @@ export default class ModalBlockStaff extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      staffIm: props.getStaff(),
+      customerIm: props.getCustomer(),
     };
   }
 
@@ -22,33 +22,33 @@ export default class ModalBlockStaff extends Component {
       submitSignal,
       modalComponentSubmitWrapperSignal,
     } = this.props;
-    const { staffIm } = this.state;
+    const { customerIm } = this.state;
 
     modalComponentSubmitWrapperSignal({
-      doneText: i18next.t('staff_edited', { name: staffIm.get('name') }),
+      doneText: i18next.t('customer_edited', { name: customerIm.get('name') }),
       submitSignal: () => submitSignal({
-        id: staffIm.get('id'),
+        id: customerIm.get('id'),
         data: { active: this.isActive() ? 0 : 1 },
       }),
     });
   }
 
   isActive() {
-    return this.state.staffIm.get('active') === 1;
+    return this.state.customerIm.get('active') === 1;
   }
 
   render() {
     const { modalComponentHideSignal, modalComponentIm } = this.props;
-    const { staffIm } = this.state;
+    const { customerIm } = this.state;
 
-    const name = staffIm.get('name');
+    const name = customerIm.get('name');
     const isActive = this.isActive();
     const isDisabled = modalComponentIm.get('isDisabled');
 
     return (
       <Fragment>
         <div className="modal__content modal__content_alert">
-          {i18next.t(isActive ? 'confirm.block_staff' : 'confirm.unblock_staff', { name })}
+          {i18next.t(isActive ? 'confirm.block_customer' : 'confirm.unblock_customer', { name })}
         </div>
 
         <ModalOkCancelButtons

@@ -8,21 +8,34 @@ const nullKiller = require('../../helpers/null-killer');
 const _ = require('lodash');
 const co = require('co');
 
-const patchStaffs = (req, res, next) => co(function* gen() {
-  const id = parseInt(req.params.staffId, 10);
-  const { login, name, role, description, password, email } = req.body;
+const patchCustomers = (req, res, next) => co(function* gen() {
+  const id = parseInt(req.params.customerId, 10);
+  const { login, name, description, password, email } = req.body;
   const active = req.body.active && parseInt(req.body.active, 10);
+  const userRole = req.user.role;
 
-  // Only admins able to edit staffs
-  if (req.user.role !== roles.ADMIN) {
+  if (userRole !== roles.ADMIN && userRole !== roles.ENGINEER) {
     return res.status(httpCodes.FORBIDDEN).send({});
   }
 
   // Validation and creating update object
-  const newStaffOptions = { id, fields: {} };
+  const newCustomerOptions = { id, fields: {} };
 
   // ID
-  if (isNaN(newStaffOptions.id) || newStaffOptions.id < 1) {
+  if (isNaN(newCustomerOptions.id) || newCustomerOptions.id < 1) {
+    return next(new InputError('server.illegal_patch_data'));
+  }
+
+  // Check that user with this ID has customer role
+  const customerDataResult = yield sequelize.getUserById({ id });
+
+  // When don't find user with that ID
+  if (!customerDataResult.length || !customerDataResult[0].id) {
+    return next(new InputError('server.illegal_patch_data'));
+  }
+
+  // If that user not a customer
+  if (customerDataResult[0].role !== roles.CUSTOMER) {
     return next(new InputError('server.illegal_patch_data'));
   }
 
@@ -32,7 +45,7 @@ const patchStaffs = (req, res, next) => co(function* gen() {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    newStaffOptions.fields.login = login;
+    newCustomerOptions.fields.login = login;
   }
 
   // Password
@@ -42,8 +55,8 @@ const patchStaffs = (req, res, next) => co(function* gen() {
     }
 
     // Hashing password
-    newStaffOptions.fields.salt = (crypto.randomBytes(24)).toString('hex');
-    newStaffOptions.fields.password = crypto.createHmac('sha512', newStaffOptions.fields.salt)
+    newCustomerOptions.fields.salt = (crypto.randomBytes(24)).toString('hex');
+    newCustomerOptions.fields.password = crypto.createHmac('sha512', newCustomerOptions.fields.salt)
       .update(password).digest('hex');
   }
 
@@ -53,12 +66,7 @@ const patchStaffs = (req, res, next) => co(function* gen() {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    newStaffOptions.fields.name = name;
-  }
-
-  // Role
-  if (role !== undefined) {
-    newStaffOptions.fields.role = role;
+    newCustomerOptions.fields.name = name;
   }
 
   // Active
@@ -67,12 +75,12 @@ const patchStaffs = (req, res, next) => co(function* gen() {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    newStaffOptions.fields.active = active;
+    newCustomerOptions.fields.active = active;
   }
 
   // Description
   if (description !== undefined) {
-    newStaffOptions.fields.description = description;
+    newCustomerOptions.fields.description = description;
   }
 
   // Email
@@ -81,33 +89,32 @@ const patchStaffs = (req, res, next) => co(function* gen() {
       return next(new InputError('server.illegal_patch_data'));
     }
 
-    newStaffOptions.fields.email = email;
+    newCustomerOptions.fields.email = email;
   }
 
-  if (_.isEmpty(newStaffOptions.fields)) {
+  if (_.isEmpty(newCustomerOptions.fields)) {
     return next(new InputError('server.no_one_field_selected'));
   }
 
-  const updatedStaffUser = yield sequelize.updateUser(newStaffOptions);
+  const updatedCustomer = yield sequelize.updateUser(newCustomerOptions);
 
   // In the second element of response is a number of affected rows
-  if (updatedStaffUser[1] === 0) {
-    return next(new InputError('server.invalid_staff_id'));
+  if (updatedCustomer[1] === 0) {
+    return next(new InputError('server.invalid_customer_id'));
   }
 
   const result = {
     id,
-    login: newStaffOptions.fields.login,
-    name: newStaffOptions.fields.name,
-    active: newStaffOptions.fields.active,
-    role: newStaffOptions.fields.role,
-    description: newStaffOptions.fields.description,
-    email: newStaffOptions.fields.email,
+    login: newCustomerOptions.fields.login,
+    name: newCustomerOptions.fields.name,
+    active: newCustomerOptions.fields.active,
+    description: newCustomerOptions.fields.description,
+    email: newCustomerOptions.fields.email,
   };
 
-  logger.log('info', 'Staff updated', result);
+  logger.log('info', 'Customer updated', result);
 
   return res.status(httpCodes.OK).send(nullKiller(result));
 }).catch(error => next(error));
 
-module.exports = patchStaffs;
+module.exports = patchCustomers;

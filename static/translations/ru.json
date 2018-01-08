@@ -7,7 +7,7 @@
   },
 
   "server": {
-    "duplicate_unique_fields": "Дублирование уникальных полей",
+    "duplicate_unique_fields": "Дублирование уникальных полей: {{fields}}",
     "error_by_getting_user": "Ошибка идентификации пользователя",
     "illegal_post_data": "Ошибка входных параметров",
     "illegal_patch_data": "Ошибка входных параметров",
@@ -19,7 +19,8 @@
     "no_one_field_selected": "Не выбрано ни одного поля",
     "permissions_denied": "Недостаточно прав",
     "user_blocked": "Пользователь заблокирован",
-    "unknown_error": "Неизвестная ошибка"
+    "unknown_error": "Неизвестная ошибка",
+    "user_with_same_login_exists": "Пользователь с таким логином уже существует"
   },
 
   "v": {

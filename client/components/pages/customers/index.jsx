@@ -1,61 +1,61 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { Table } from 'containers';
-import { roles } from 'constants.js';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
-import ModalAddStaff from './modal-add-staff';
-import ModalEditStaff from './modal-edit-staff';
-import ModalBlockStaff from './modal-block-staff';
+import ModalAddCustomer from './modal-add-customer';
+import ModalEditCustomer from './modal-edit-customer';
+import ModalBlockCustomer from './modal-block-customer';
 
 // Call modalContainerEnhance for passing modalComponentIm into the component
-const StaffsModalContainer = modalContainerEnhance(
+const CustomersModalContainer = modalContainerEnhance(
   class extends PureComponent {
     render() {
       const {
-        staffsDataIm,
+        customersDataIm,
         modalComponentIm,
-        staffsDataAddSignal,
-        staffsDataUpdateSignal,
+        customersDataAddSignal,
+        customersDataUpdateSignal,
       } = this.props;
 
       return (
         <Fragment>
-          <Modal modalId="addStaff">
-            <ModalAddStaff submitSignal={staffsDataAddSignal} />
+          <Modal modalId="addCustomer">
+            <ModalAddCustomer submitSignal={customersDataAddSignal} />
           </Modal>
 
-          <Modal modalId="editStaff">
-            <ModalEditStaff
-              getStaff={() => {
-                const staffId = modalComponentIm.get('options').id;
+          <Modal modalId="editCustomer">
+            <ModalEditCustomer
+              getCustomer={() => {
+                const customerId = modalComponentIm.get('options').id;
 
-                return staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                return customersDataIm.get('data').find(model => model.get('id') === customerId);
               }}
-              submitSignal={staffsDataUpdateSignal}
+              submitSignal={customersDataUpdateSignal}
             />
           </Modal>
 
-          <Modal modalId="blockStaff">
-            <ModalBlockStaff
-              getStaff={() => {
-                const staffId = modalComponentIm.get('options').id;
+          <Modal modalId="blockCustomer">
+            <ModalBlockCustomer
+              getCustomer={() => {
+                const customerId = modalComponentIm.get('options').id;
 
-                return staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                return customersDataIm.get('data').find(model => model.get('id') === customerId);
               }}
-              submitSignal={staffsDataUpdateSignal}
+              submitSignal={customersDataUpdateSignal}
             />
           </Modal>
 
           <Modal modalId="changePassword">
             <ModalChangePassword
               doneText={() => {
-                const staffId = modalComponentIm.get('options').id;
-                const staffIm = staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                const customerId = modalComponentIm.get('options').id;
+                const customerIm = customersDataIm.get('data')
+                  .find(model => model.get('id') === customerId);
 
-                return i18next.t('staff_edited', { name: staffIm.get('name') });
+                return i18next.t('customer_edited', { name: customerIm.get('name') });
               }}
-              submitSignal={staffsDataUpdateSignal}
+              submitSignal={customersDataUpdateSignal}
             />
           </Modal>
         </Fragment>
@@ -64,10 +64,10 @@ const StaffsModalContainer = modalContainerEnhance(
   }
 );
 
-const Staffs = ({
-  staffsDataIm,
-  staffsDataAddSignal,
-  staffsDataUpdateSignal,
+const Customers = ({
+  customersDataIm,
+  customersDataAddSignal,
+  customersDataUpdateSignal,
   modalComponentShowDelta,
 }) => {
   // Describe table cells
@@ -93,24 +93,14 @@ const Staffs = ({
       },
     },
     {
-      id: 'role',
-      getValue: model => i18next.t(model.get('role')),
-      className: 'table__cell_3',
-      name: i18next.t('role'),
-      sort: {
-        type: 'alphabetic',
-        field: 'role',
-      },
-    },
-    {
       id: 'email',
-      getValue: model => model.get('email') || '\u2014',
+      getValue: model => (model.get('email') || '\u2014'),
       name: i18next.t('email'),
-      className: 'table__cell_4',
+      className: 'table__cell_3',
     },
     {
       id: 'notes',
-      getValue: model => model.get('description') || '\u2014',
+      getValue: model => (model.get('description') || '\u2014'),
       name: i18next.t('notes'),
       isHiddenOnClosed: true,
     },
@@ -123,7 +113,7 @@ const Staffs = ({
         getIcon: () => 'edit',
         getTitle: () => i18next.t('edit'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta('editStaff', { id: item.get('id') }),
+        onClick: item => modalComponentShowDelta('editCustomer', { id: item.get('id') }),
       },
       {
         getIcon: () => 'account_circle',
@@ -132,21 +122,15 @@ const Staffs = ({
         onClick: item => modalComponentShowDelta('changePassword', { id: item.get('id') }),
       },
       {
-        isShown: item => item.get('role') !== roles.ADMIN,
         getIcon: item => (item.get('active') ? 'enhanced_encryption' : 'no_encryption'),
         getTitle: item => i18next.t(item.get('active') ? 'block' : 'unblock'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta('blockStaff', { id: item.get('id') }),
+        onClick: item => modalComponentShowDelta('blockCustomer', { id: item.get('id') }),
       },
     ],
   };
 
   // Describe filters
-  const rolesForFilter = [
-    { name: i18next.t(roles.ADMIN), value: roles.ADMIN },
-    { name: i18next.t(roles.ENGINEER), value: roles.ENGINEER },
-  ];
-
   const filterFields = [
     {
       type: 'text',
@@ -158,36 +142,30 @@ const Staffs = ({
       key: 'login',
       name: i18next.t('login'),
     },
-    {
-      type: 'select',
-      key: 'role',
-      name: i18next.t('role'),
-      options: rolesForFilter,
-    },
   ];
 
   return (
     <div className="content">
       <div className="content__body">
         <Table
-          items={staffsDataIm.get('data')}
+          items={customersDataIm.get('data')}
           cells={cells}
           row={row}
           filterFields={filterFields}
           showHeader
           createButton={{
-            onClick: () => modalComponentShowDelta('addStaff', false),
+            onClick: () => modalComponentShowDelta('addCustomer', false),
           }}
         />
 
-        <StaffsModalContainer
-          staffsDataIm={staffsDataIm}
-          staffsDataAddSignal={staffsDataAddSignal}
-          staffsDataUpdateSignal={staffsDataUpdateSignal}
+        <CustomersModalContainer
+          customersDataIm={customersDataIm}
+          customersDataAddSignal={customersDataAddSignal}
+          customersDataUpdateSignal={customersDataUpdateSignal}
         />
       </div>
     </div>
   );
 };
 
-export default Staffs;
+export default Customers;

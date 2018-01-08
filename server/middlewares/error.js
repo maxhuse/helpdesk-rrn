@@ -42,6 +42,25 @@ module.exports = (err, req, res, next) => {
       break;
     }
 
+    // Error while there is a duplicate of the unique field
+    case 'SequelizeUniqueConstraintError': {
+      logger.log('error', i18next.t('server.duplicate_unique_fields', { fields: err.fields }), err);
+
+      let message = 'server.duplicate_unique_fields';
+
+      if (err.fields.some(field => field === 'login')) {
+        message = 'server.user_with_same_login_exists';
+      }
+
+      res.status(httpCodes.INTERNAL_ERROR).send({
+        message,
+        arguments: {
+          fields: err.fields,
+        },
+      });
+      break;
+    }
+
     default: {
       logger.log('error', err);
       res.status(httpCodes.INTERNAL_ERROR).send({

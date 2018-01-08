@@ -5,7 +5,7 @@ export const applicationName = 'helpdesk';
 // Sidebar menu`s displayed according with this order
 export const rights = {
   admin: [
-    // '/customers',
+    '/customers',
     '/staffs',
     '/profile',
   ],

@@ -7,7 +7,7 @@
   },
 
   "server": {
-    "duplicate_unique_fields": "Duplicate unique fields",
+    "duplicate_unique_fields": "Duplicate unique fields: {{fields}}",
     "error_by_getting_user": "Error by getting user",
     "illegal_post_data": "Illegal post data",
     "illegal_patch_data": "Illegal patch data",
@@ -19,7 +19,8 @@
     "no_one_field_selected": "No one field selected",
     "permissions_denied": "Permissions denied",
     "user_blocked": "User blocked",
-    "unknown_error": "Unknown error"
+    "unknown_error": "Unknown error",
+    "user_with_same_login_exists": "User with the same login already exists"
   },
 
   "v": {

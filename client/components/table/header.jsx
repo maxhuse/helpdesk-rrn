@@ -42,15 +42,13 @@ export class TableHeader extends PureComponent {
 
     return (
       <div className="table__row table__row_header">
-        {cells.map((cell) => {
-          return (
-            <TableCell
-              key={cell.id}
-              className={classnames('table__cell', 'table__cell_header', cell.className)}
-              value={this.getContent(cell)}
-            />
-          );
-        })}
+        {cells.map(cell => (
+          <TableCell
+            key={cell.id}
+            className={classnames('table__cell', 'table__cell_header', cell.className)}
+            value={this.getContent(cell)}
+          />
+        ))}
       </div>
     );
   }

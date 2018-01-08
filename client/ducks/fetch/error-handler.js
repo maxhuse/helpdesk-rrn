@@ -34,7 +34,7 @@ function* errorHandler(dispatch, { status, data, error, method, isAborted, optio
       if (method !== 'GET') {
         dispatch(toastsComponentActions.toastsComponentAddDelta({
           type: 'error',
-          content: i18next.t(data.message || 'server.unknown_error'),
+          content: i18next.t(data.message || 'server.unknown_error', data.arguments),
         }));
       }
 

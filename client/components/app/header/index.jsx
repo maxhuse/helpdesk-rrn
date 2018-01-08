@@ -21,7 +21,7 @@ const Language = ({ onClick }) => (
 
 const Logout = ({ onClick }) => (
   <div className="header__tooltip-item" onClick={onClick}>
-    <span className="">{i18next.t('log_out')}</span>
+    <span>{i18next.t('log_out')}</span>
     <i className="material-icons material-icons__size_20">exit_to_app</i>
   </div>
 );

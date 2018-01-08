@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Auth from 'components/pages/auth';
+import { Auth } from 'components/pages';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';
 
