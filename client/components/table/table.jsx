@@ -238,14 +238,16 @@ export default class Table extends PureComponent {
         // Else use default filters
         const fieldValue = model.get(fieldName);
 
+        // If model value is string then check if it contains filter value
         if (typeof fieldValue === 'string') {
           if (fieldValue.toLowerCase().indexOf(value.toLowerCase()) === -1) {
             isFiltered = false;
-
-            return;
           }
+
+          return;
         }
 
+        // If model value has other type
         // eslint-disable-next-line eqeqeq
         if (fieldValue != value) {
           isFiltered = false;

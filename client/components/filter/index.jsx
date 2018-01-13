@@ -79,7 +79,7 @@ export default class Filter extends PureComponent {
         }
 
         case 'autocomplete': {
-          fieldRef.reset({ isHard: true });
+          fieldRef.reset();
           break;
         }
 

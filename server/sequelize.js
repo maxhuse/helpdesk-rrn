@@ -30,7 +30,7 @@ module.exports = {
     const login = sequelize.escape(options.login);
 
     return sequelize.query(
-      `SELECT         
+      `SELECT
         id,
         name,
         login,
@@ -40,7 +40,7 @@ module.exports = {
         salt,
         active,
         email
-      FROM users 
+      FROM users
       WHERE login=${login} LIMIT 1`,
       {
         type: sequelize.QueryTypes.SELECT,
@@ -77,7 +77,7 @@ module.exports = {
 
   getStaffUsers() {
     return sequelize.query(
-      `SELECT 
+      `SELECT
         id,
         name,
         login,
@@ -85,7 +85,7 @@ module.exports = {
         description,
         active,
         email
-      FROM users 
+      FROM users
       WHERE role=:admin OR role=:engineer`,
       {
         replacements: { admin: roles.ADMIN, engineer: roles.ENGINEER },
@@ -105,7 +105,7 @@ module.exports = {
     const active = sequelize.escape(options.active);
 
     return sequelize.query(
-      `INSERT INTO users VALUES ( 
+      `INSERT INTO users VALUES (
         NULL,
         ${name},
         ${login},
@@ -127,7 +127,7 @@ module.exports = {
     const fields = generateUpdateFields(options.fields);
 
     return sequelize.query(
-      `UPDATE users 
+      `UPDATE users
         SET ${fields}
         WHERE id=${id}
       `,
@@ -139,7 +139,7 @@ module.exports = {
 
   getCustomers() {
     return sequelize.query(
-      `SELECT 
+      `SELECT
         id,
         name,
         login,
@@ -147,7 +147,7 @@ module.exports = {
         description,
         active,
         email
-      FROM users 
+      FROM users
       WHERE role=:customer`,
       {
         replacements: { customer: roles.CUSTOMER },

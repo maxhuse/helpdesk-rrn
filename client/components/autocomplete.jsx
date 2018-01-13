@@ -182,20 +182,19 @@ export default class Autocomplete extends PureComponent {
     return filteredItems;
   }
 
-  reset(options = {}) {
-    this.resetState(this.props, options);
+  reset() {
+    this.setState({
+      selectedItem: false,
+      inputText: '',
+      isOnFocus: false,
+    });
   }
 
-  resetState({ getText, defaultValue, items, getValue }, options = {}) {
+  resetState({ getText, defaultValue, items, getValue }) {
     // Not use this.props here, because it used in constructor ( IE fix )
 
     // Choose default item by default value
-    if (
-      // Hard reset (prevent default value)
-      !options.isHard &&
-      (defaultValue !== false) &&
-      (defaultValue !== undefined)
-    ) {
+    if (defaultValue !== false && defaultValue !== undefined) {
       const selectedItem = this.getItemByValue(defaultValue, items, getValue);
 
       this.state = {

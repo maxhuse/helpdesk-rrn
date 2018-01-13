@@ -7,7 +7,7 @@ export class TableHeader extends PureComponent {
     const { sortChangeAction, currentSort } = this.props;
 
     let className = 'table__header-text';
-    let onClick = false;
+    let onClick;
 
     if (cell.sort) {
       const currentOrder = currentSort.get('order');
