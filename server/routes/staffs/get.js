@@ -1,5 +1,6 @@
 const nullKiller = require('../../helpers/null-killer');
-const { roles, httpCodes } = require('../../constants');
+const { httpCodes } = require('../../constants');
+const { roles } = require('../../../shared/constants');
 const sequelize = require('../../sequelize');
 const co = require('co');
 

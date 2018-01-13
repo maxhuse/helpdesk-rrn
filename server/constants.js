@@ -7,9 +7,4 @@ module.exports = {
     SERVICE_UNAVAILABLE: 503,
     OK: 200,
   },
-  roles: {
-    ADMIN: 'admin',
-    ENGINEER: 'engineer',
-    CUSTOMER: 'customer',
-  },
 };

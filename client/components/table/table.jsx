@@ -146,6 +146,11 @@ export default class Table extends PureComponent {
     this.filterFunctions = {};
 
     props.filterFields.forEach((filterField) => {
+      //
+      if (filterField.type === 'dateInterval') {
+        this.filterFunctions[filterField.key] = this.dateIntervalFilterFunction;
+      }
+
       if (_isFunction(filterField.filterFunction)) {
         this.filterFunctions[filterField.key] = filterField.filterFunction;
       }
@@ -214,6 +219,24 @@ export default class Table extends PureComponent {
         return items;
       }
     }
+  }
+
+  // Filter function for 'dateInterval' filter
+  dateIntervalFilterFunction({ model, fieldName, value }) {
+    const fieldValue = model.get(fieldName);
+    const fromTimestamp = Number(value[0]);
+    const toTimestamp = Number(value[1]);
+    const fieldValueTimestamp = Number(fieldValue);
+
+    if (fromTimestamp && toTimestamp) {
+      return (fromTimestamp <= fieldValueTimestamp) && (fieldValueTimestamp <= toTimestamp);
+    } else if (fromTimestamp) {
+      return fromTimestamp <= fieldValueTimestamp;
+    } else if (toTimestamp) {
+      return fieldValueTimestamp <= toTimestamp;
+    }
+
+    return true;
   }
 
   filter(items, filters) {

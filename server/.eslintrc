@@ -8,7 +8,6 @@
     "max-len": [2, {"code": 100, "tabWidth": 2}],
     "no-param-reassign": 0,
     "consistent-return": 0,
-    "no-plusplus": 0,
     "comma-dangle": ["error", "only-multiline"],
     "jsx-a11y/href-no-hash": "off",
     "object-curly-newline": ["error", { "consistent": true, "multiline": true }],

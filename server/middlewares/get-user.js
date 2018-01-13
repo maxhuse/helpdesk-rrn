@@ -1,7 +1,8 @@
 // this module get user from DB and put into req.user
 const express = require('express');
 const sequelize = require('../sequelize');
-const { roles, httpCodes } = require('../constants');
+const { httpCodes } = require('../constants');
+const { roles } = require('../../shared/constants');
 const { AuthorizeError } = require('../errors');
 const logger = require('../logger');
 const i18next = require('i18next');

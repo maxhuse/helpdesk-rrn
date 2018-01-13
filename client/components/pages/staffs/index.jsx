@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { Table } from 'containers';
-import { roles } from 'constants.js';
+import { roles } from 'shared/constants';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
 import ModalAddStaff from './modal-add-staff';
@@ -104,13 +104,13 @@ const Staffs = ({
     },
     {
       id: 'email',
-      getValue: model => model.get('email') || '\u2014',
+      getValue: model => model.get('email'),
       name: i18next.t('email'),
       className: 'table__cell_4',
     },
     {
       id: 'notes',
-      getValue: model => model.get('description') || '\u2014',
+      getValue: model => model.get('description'),
       name: i18next.t('notes'),
       isHiddenOnClosed: true,
     },

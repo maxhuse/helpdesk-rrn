@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const config = require('./config');
-const { roles } = require('./constants');
+const { roles } = require('../shared/constants');
 
 const sequelize = new Sequelize(config.sequelize);
 

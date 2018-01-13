@@ -94,13 +94,13 @@ const Customers = ({
     },
     {
       id: 'email',
-      getValue: model => (model.get('email') || '\u2014'),
+      getValue: model => model.get('email'),
       name: i18next.t('email'),
       className: 'table__cell_3',
     },
     {
       id: 'notes',
-      getValue: model => (model.get('description') || '\u2014'),
+      getValue: model => model.get('description'),
       name: i18next.t('notes'),
       isHiddenOnClosed: true,
     },

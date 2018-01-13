@@ -1,8 +1,8 @@
-const { roles, httpCodes } = require('../../constants');
+const { httpCodes } = require('../../constants');
 const sequelize = require('../../sequelize');
 const logger = require('../../logger');
 const crypto = require('crypto');
-const { VALID_EMAIL_REX } = require('../../../shared/constants');
+const { VALID_EMAIL_REX, roles } = require('../../../shared/constants');
 const { InputError } = require('../../errors');
 const nullKiller = require('../../helpers/null-killer');
 const _ = require('lodash');

@@ -5,6 +5,9 @@ import classnames from 'classnames';
 import { TableCell } from '../cell';
 import { TextButtons, IconButtons } from './buttons';
 
+// If value is undefined, put a dash
+const getCellValue = value => (value === undefined ? '\u2014' : value);
+
 export const TableRow = (props) => {
   // Select component and filter cells
   if (props.item.get('id') === props.openedId) {
@@ -45,7 +48,7 @@ const TableRowShrunk = ({
       {shownCells.map((cell, index) => {
         const CellComponent = cell.component || TableCell;
         const componentProps = cell.componentProps || {};
-        const cellClassName = cell.className ? cell.className : '';
+        const value = getCellValue(cell.getValue(item));
 
         if (index === cellsLength - 1 && iconButtons) {
           const LastCellComponent = getLastCellComponent(CellComponent, iconButtons);
@@ -53,8 +56,8 @@ const TableRowShrunk = ({
           return (
             <LastCellComponent
               key={cell.id}
-              className={`table__cell table__cell_buttons ${cellClassName}`}
-              value={cell.getValue(item)}
+              className={classnames('table__cell', 'table__cell_buttons', cell.className)}
+              value={value}
               componentProps={componentProps}
               item={item}
             />
@@ -64,8 +67,8 @@ const TableRowShrunk = ({
         return (
           <CellComponent
             key={cell.name + cell.className}
-            className={`table__cell ${cellClassName}`}
-            value={cell.getValue(item)}
+            className={classnames('table__cell', cell.className)}
+            value={value}
             isExpanded={false}
             {...componentProps}
           />
@@ -77,10 +80,10 @@ const TableRowShrunk = ({
 
 const CellBlock = ({ cell, item }) => (
   cell.component ?
-    <cell.component name={cell.name} value={cell.getValue(item)} isExpanded /> :
+    <cell.component name={cell.name} value={getCellValue(cell.getValue(item))} isExpanded /> :
     <div className="table__row-parameter">
       <strong>{cell.name}: </strong>
-      <span>{cell.getValue(item)}</span>
+      <span>{getCellValue(cell.getValue(item))}</span>
     </div>
 );
 
