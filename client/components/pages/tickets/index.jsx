@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
 import { sortType, sortOrder, filterType } from 'constants.js';
+import TicketStatusCell from './status-cell';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import { getFormatDate } from 'helpers';
 
@@ -77,13 +78,14 @@ const Tickets = ({
 
   cells.push({
     id: 'status',
-    getValue: model => i18next.t(model.get('status')),
+    getValue: model => model.get('status'),
     name: i18next.t('status'),
     className: 'table__cell_3',
     sort: {
       type: sortType.ALPHABETIC,
       field: 'status',
     },
+    component: TicketStatusCell,
   });
 
   // describe table row

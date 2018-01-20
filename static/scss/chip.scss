@@ -1,0 +1,27 @@
+@import "base.scss";
+
+@mixin chip-color($color) {
+  color: $color;
+  background: lighten($color, 45%);
+}
+
+.chip {
+  padding: 4px 9px;
+  border-radius: 4px;
+}
+
+.chip_yellow {
+  @include chip-color($statusYellow);
+}
+
+.chip_green {
+  @include chip-color($statusGreen);
+}
+
+.chip_purple {
+  @include chip-color($statusPurple);
+}
+
+.chip_gray {
+  @include chip-color($statusGray);
+}

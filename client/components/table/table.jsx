@@ -4,7 +4,7 @@ import { isFunction as _isFunction } from 'lodash';
 import Tooltip from 'components/tooltip';
 import IconButton from 'components/icon-button';
 import Filter from 'components/filter';
-import { sortType } from 'constants.js';
+import { sortType, sortOrder } from 'constants.js';
 import { TableRow } from './row';
 import { TableHeader } from './header';
 import Pagination from './pagination';
@@ -187,7 +187,7 @@ export default class Table extends PureComponent {
           const fieldA = a.get(field);
           const fieldB = b.get(field);
 
-          if (order === 'asc') {
+          if (order === sortOrder.ASC) {
             return fieldA - fieldB;
           }
           return fieldB - fieldA;
@@ -199,7 +199,7 @@ export default class Table extends PureComponent {
           const fieldA = a.get(field);
           const fieldB = b.get(field);
 
-          if (order === 'asc') {
+          if (order === sortOrder.ASC) {
             if (fieldA === '' && fieldB !== '') return 1;
             if (fieldB === '' && fieldA !== '') return -1;
             if (fieldA < fieldB) return -1;
