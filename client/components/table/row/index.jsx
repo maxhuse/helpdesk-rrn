@@ -5,8 +5,8 @@ import classnames from 'classnames';
 import { TableCell } from '../cell';
 import { TextButtons, IconButtons } from './buttons';
 
-// If value is undefined, put a dash
-const getCellValue = value => (value === undefined ? '\u2014' : value);
+// If value is undefined or empty string, put a dash
+const getCellValue = value => (value === undefined || value === '' ? '\u2014' : value);
 
 export const TableRow = (props) => {
   // Select component and filter cells

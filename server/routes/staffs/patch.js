@@ -72,6 +72,10 @@ const patchStaffs = (req, res, next) => co(function* gen() {
 
   // Description
   if (description !== undefined) {
+    if (typeof description !== 'string') {
+      return next(new InputError('server.illegal_patch_data'));
+    }
+
     newStaffOptions.fields.description = description;
   }
 

@@ -6,4 +6,10 @@ module.exports = {
     ENGINEER: 'engineer',
     CUSTOMER: 'customer',
   },
+  ticketStatus: {
+    NEW: 'new',
+    ASSIGNED: 'assigned',
+    PENDING: 'pending',
+    CLOSED: 'closed',
+  },
 };

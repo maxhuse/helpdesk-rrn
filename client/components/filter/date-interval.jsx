@@ -14,7 +14,7 @@ class InputDate extends PureComponent {
 
     this.onChangeDate = this.onChangeDate.bind(this);
 
-    const initialDate = props.value ? moment(props.value, 'X') : undefined;
+    const initialDate = props.value ? moment(props.value, 'X') : '';
 
     this.state = { date: initialDate };
   }
@@ -24,11 +24,12 @@ class InputDate extends PureComponent {
   }
 
   get value() {
-    return this.state.date ? this.state.date.format('X') : undefined;
+    return this.state.date ? this.state.date.format('X') : '';
   }
 
   set value(newValue) {
-    const newDate = newValue ? moment(newValue, 'X') : undefined;
+    // DatePicker want empty string as empty value
+    const newDate = newValue ? moment(newValue, 'X') : '';
 
     this.setState({ date: newDate });
   }
@@ -43,7 +44,7 @@ class InputDate extends PureComponent {
           dateFormat="DD MMM YYYY"
           onChange={this.onChangeDate}
           id={id}
-          selected={date}
+          selected={date || undefined}
           className="input"
           popoverTargetOffset="10px -50px"
           placeholderText={placeholderText}

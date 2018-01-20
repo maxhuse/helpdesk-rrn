@@ -155,4 +155,41 @@ module.exports = {
       }
     );
   },
+
+  getTickets() {
+    return sequelize.query(
+      `SELECT
+        tickets.id,
+        tickets.customer_id AS customerId,
+        tickets.status,
+        tickets.creation_date AS creationDate,
+        tickets.staff_id AS staffId,
+        tickets.subject,
+        tickets.message,
+        customers.name AS customerName
+      FROM tickets
+      LEFT JOIN users AS customers ON customers.id = tickets.customer_id`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+  },
+
+  getTicketsForCustomer(options) {
+    const id = sequelize.escape(options.id);
+
+    return sequelize.query(
+      `SELECT
+        tickets.id,
+        tickets.status,
+        tickets.creation_date AS creationDate,
+        tickets.subject,
+        tickets.message
+      FROM tickets
+      WHERE tickets.customer_id=${id}`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+  },
 };

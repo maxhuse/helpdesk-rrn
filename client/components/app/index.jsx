@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toasts, Staffs, Profile, Customers } from 'containers';
+import { Toasts, Staffs, Profile, Customers, Tickets } from 'containers';
 import checkAuthEnhance from 'components/check-auth-enhance';
 import { ModalBackground } from 'containers/modal';
 import { Switch, Route } from 'react-router-dom';
@@ -35,6 +35,7 @@ function App({
       </aside>
 
       <Switch>
+        <Route path="/tickets" component={Tickets} />
         <Route path="/customers" component={Customers} />
         <Route path="/staffs" component={Staffs} />
         <Route path="/profile" component={Profile} />

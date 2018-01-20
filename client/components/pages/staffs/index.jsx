@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
+import { sortType, filterType } from 'constants.js';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
 import ModalAddStaff from './modal-add-staff';
@@ -78,7 +79,7 @@ const Staffs = ({
       className: 'table__cell_2',
       name: i18next.t('name'),
       sort: {
-        type: 'alphabetic',
+        type: sortType.ALPHABETIC,
         field: 'name',
       },
     },
@@ -88,7 +89,7 @@ const Staffs = ({
       className: 'table__cell_1',
       name: i18next.t('login'),
       sort: {
-        type: 'alphabetic',
+        type: sortType.ALPHABETIC,
         field: 'login',
       },
     },
@@ -98,7 +99,7 @@ const Staffs = ({
       className: 'table__cell_3',
       name: i18next.t('role'),
       sort: {
-        type: 'alphabetic',
+        type: sortType.ALPHABETIC,
         field: 'role',
       },
     },
@@ -149,17 +150,17 @@ const Staffs = ({
 
   const filterFields = [
     {
-      type: 'text',
+      type: filterType.TEXT,
       key: 'name',
       name: i18next.t('name'),
     },
     {
-      type: 'text',
+      type: filterType.TEXT,
       key: 'login',
       name: i18next.t('login'),
     },
     {
-      type: 'select',
+      type: filterType.SELECT,
       key: 'role',
       name: i18next.t('role'),
       options: rolesForFilter,

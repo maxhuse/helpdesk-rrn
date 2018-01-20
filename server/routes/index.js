@@ -14,6 +14,7 @@ const errorMiddleware = require('./../middlewares/error');
 const authRoute = require('./auth/index');
 const customersRoute = require('./customers/index');
 const staffsRoute = require('./staffs/index');
+const ticketsRoute = require('./tickets/index');
 
 const api = express();
 
@@ -39,6 +40,7 @@ api.use(getUser);
 // Routes that require authorization
 api.use('/customers', customersRoute);
 api.use('/staffs', staffsRoute);
+api.use('/tickets', ticketsRoute);
 
 // 404 middleware (401 for unauthorized)
 api.use('*', (req, res) => {

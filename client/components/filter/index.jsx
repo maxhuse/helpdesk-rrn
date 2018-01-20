@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import i18next from 'i18next';
-import { indexOf as _indexOf } from 'lodash';
+import { indexOf as _indexOf, isFunction as _isFunction } from 'lodash';
+import { filterType } from 'constants.js';
 import Switch from 'components/switch';
 import Autocomplete from 'components/autocomplete';
 import DateInterval from './date-interval';
@@ -41,7 +42,7 @@ export default class Filter extends PureComponent {
       const fieldRef = this[refName];
       let fieldValue;
 
-      if (field.type === 'checkbox') {
+      if (field.type === filterType.CHECKBOX) {
         fieldValue = fieldRef.checked;
       } else {
         fieldValue = fieldRef.value;
@@ -63,27 +64,27 @@ export default class Filter extends PureComponent {
       const fieldRef = this[refName];
 
       switch (field.type) {
-        case 'text': {
+        case filterType.TEXT: {
           fieldRef.value = '';
           break;
         }
 
-        case 'checkbox': {
+        case filterType.CHECKBOX: {
           fieldRef.checked = false;
           break;
         }
 
-        case 'select': {
+        case filterType.SELECT: {
           fieldRef.value = 'all';
           break;
         }
 
-        case 'autocomplete': {
+        case filterType.AUTOCOMPLETE: {
           fieldRef.reset();
           break;
         }
 
-        case 'dateInterval': {
+        case filterType.DATE_INTERVAL: {
           fieldRef.value = [undefined, undefined];
           break;
         }
@@ -104,7 +105,7 @@ export default class Filter extends PureComponent {
     let inputBlock;
 
     switch (filterField.type) {
-      case 'text': {
+      case filterType.TEXT: {
         inputBlock = (
           <input
             className="input input_filter"
@@ -116,7 +117,7 @@ export default class Filter extends PureComponent {
         break;
       }
 
-      case 'checkbox': {
+      case filterType.CHECKBOX: {
         inputBlock = (
           <Switch
             ref={(ref) => { this[refName] = ref; }}
@@ -127,7 +128,7 @@ export default class Filter extends PureComponent {
         break;
       }
 
-      case 'select': {
+      case filterType.SELECT: {
         inputBlock = (
           <select
             className="select"
@@ -145,7 +146,7 @@ export default class Filter extends PureComponent {
         break;
       }
 
-      case 'dateInterval': {
+      case filterType.DATE_INTERVAL: {
         inputBlock = (
           <DateInterval
             ref={(ref) => { this[refName] = ref; }}
@@ -155,7 +156,11 @@ export default class Filter extends PureComponent {
         break;
       }
 
-      case 'autocomplete': {
+      case filterType.AUTOCOMPLETE: {
+        const filterFieldItems = _isFunction(filterField.items) ?
+          filterField.items() :
+          filterField.items;
+
         inputBlock = (
           <Autocomplete
             defaultValue={currentValue}
@@ -164,7 +169,7 @@ export default class Filter extends PureComponent {
             getText={filterField.getText}
             getFilteredString={filterField.getFilteredString}
             placeholder={filterField.placeholder}
-            items={filterField.items}
+            items={filterFieldItems}
             emptyValue={0}
             onClick={(event) => {
               // prevent bubbling when autocomplete item clicked

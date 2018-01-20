@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
+import { sortType, filterType } from 'constants.js';
 import { Table } from 'containers';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
@@ -78,7 +79,7 @@ const Customers = ({
       className: 'table__cell_2',
       name: i18next.t('name'),
       sort: {
-        type: 'alphabetic',
+        type: sortType.ALPHABETIC,
         field: 'name',
       },
     },
@@ -88,7 +89,7 @@ const Customers = ({
       className: 'table__cell_1',
       name: i18next.t('login'),
       sort: {
-        type: 'alphabetic',
+        type: sortType.ALPHABETIC,
         field: 'login',
       },
     },
@@ -133,12 +134,12 @@ const Customers = ({
   // Describe filters
   const filterFields = [
     {
-      type: 'text',
+      type: filterType.TEXT,
       key: 'name',
       name: i18next.t('name'),
     },
     {
-      type: 'text',
+      type: filterType.TEXT,
       key: 'login',
       name: i18next.t('login'),
     },

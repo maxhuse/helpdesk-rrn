@@ -4,6 +4,7 @@ import { isFunction as _isFunction } from 'lodash';
 import Tooltip from 'components/tooltip';
 import IconButton from 'components/icon-button';
 import Filter from 'components/filter';
+import { sortType } from 'constants.js';
 import { TableRow } from './row';
 import { TableHeader } from './header';
 import Pagination from './pagination';
@@ -146,7 +147,7 @@ export default class Table extends PureComponent {
     this.filterFunctions = {};
 
     props.filterFields.forEach((filterField) => {
-      //
+      // If the filter type is dateInterval, we use specific filter function
       if (filterField.type === 'dateInterval') {
         this.filterFunctions[filterField.key] = this.dateIntervalFilterFunction;
       }
@@ -181,7 +182,7 @@ export default class Table extends PureComponent {
     const order = sort.get('order');
 
     switch (type) {
-      case 'arithmetic': {
+      case sortType.ARITHMETIC: {
         return items.sort((a, b) => {
           const fieldA = a.get(field);
           const fieldB = b.get(field);
@@ -193,7 +194,7 @@ export default class Table extends PureComponent {
         });
       }
 
-      case 'alphabetic': {
+      case sortType.ALPHABETIC: {
         return items.sort((a, b) => {
           const fieldA = a.get(field);
           const fieldB = b.get(field);

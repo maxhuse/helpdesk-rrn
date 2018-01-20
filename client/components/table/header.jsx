@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+import { sortOrder } from 'constants.js';
 import { TableCell } from './cell';
 
 export class TableHeader extends PureComponent {
@@ -11,12 +12,12 @@ export class TableHeader extends PureComponent {
 
     if (cell.sort) {
       const currentOrder = currentSort.get('order');
-      let order = 'asc';
+      let order = sortOrder.ASC;
       let sortArrow = '';
 
       if (currentSort.get('field') === cell.sort.field) {
-        order = currentOrder === 'asc' ? 'desc' : 'asc';
-        sortArrow = order === 'asc' ?
+        order = currentOrder === sortOrder.ASC ? sortOrder.DESC : sortOrder.ASC;
+        sortArrow = order === sortOrder.ASC ?
           ' table__header-text_sorted_asc' :
           ' table__header-text_sorted_desc';
       }
