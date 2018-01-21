@@ -26,10 +26,11 @@ npm run start
 
 #### User Credentials
 
-* Role: __admin__: `admin1 : qwerty`
-* Role: __engineer__: `engineer : qwerty`
-* Role: __customer__: `customer1 : qwerty`
-
+| Role          | Login           | Password  |
+| ------------- |:---------------:| ---------:|
+| __admin__     | `admin1`        | `qwerty`  |
+| __engineer__  | `engineer`      |  `qwerty` |
+| __customer__  | `customer1`     |  `qwerty` |
 
 ### Available Scripts
 
