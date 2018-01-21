@@ -44,10 +44,13 @@ export default class Input extends PureComponent {
       onBlur,
       onFocus,
       type = 'text',
+      tagName = 'input',
       autoComplete = undefined,
       disabled = false,
       autoFocus = false,
     } = this.props;
+
+    const isTextArea = tagName === 'textarea';
 
     const childProps = {
       id,
@@ -63,16 +66,20 @@ export default class Input extends PureComponent {
       autoFocus,
       className: classnames(
         'input-component__field',
-        { 'input-component__field_error': this.state.error },
+        {
+          'input-component__field_textarea': isTextArea,
+          'input-component__field_error': this.state.error
+        },
         className
       ),
     };
 
     const errorClassName = classnames('input-component__error', this.props.errorClassName);
+    const TagName = isTextArea ? 'textarea' : 'input';
 
     return (
       <div className="input-component">
-        <input
+        <TagName
           {...childProps}
           onFocus={(event) => {
             this.clearError();

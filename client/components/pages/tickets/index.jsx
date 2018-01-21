@@ -3,16 +3,41 @@ import i18next from 'i18next';
 import { Map } from 'immutable';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
-import { sortType, sortOrder, filterType } from 'constants.js';
-import TicketStatusCell from './status-cell';
-import Modal, { modalContainerEnhance } from 'containers/modal';
 import { getFormatDate } from 'helpers';
+import { sortType, sortOrder, filterType } from 'constants.js';
+import Modal, { modalContainerEnhance } from 'containers/modal';
+import TicketStatusCell from './status-cell';
+import ModalAddTicket from './modal-add-ticket';
+
+const modalId = {
+  ADD: 'addTicket',
+};
+
+// Call modalContainerEnhance for passing modalComponentIm into the component
+const TicketsModalContainer = modalContainerEnhance(
+  class extends PureComponent {
+    render() {
+      const {
+        ticketsDataAddSignal,
+      } = this.props;
+
+      return (
+        <Fragment>
+          <Modal modalId={modalId.ADD}>
+            <ModalAddTicket submitSignal={ticketsDataAddSignal} />
+          </Modal>
+        </Fragment>
+      );
+    }
+  }
+);
 
 const Tickets = ({
   authDataIm,
   ticketsDataIm,
   customersDataIm,
   staffsDataIm,
+  ticketsDataAddSignal,
   modalComponentShowDelta,
 }) => {
   const userRole = authDataIm.getIn(['data', 'role']);
@@ -142,6 +167,17 @@ const Tickets = ({
           filterFields={filterFields}
           showHeader
           defaultSort={defaultSort}
+          createButton={userRole === roles.CUSTOMER ?
+            {
+              text: 'create',
+              onClick: () => modalComponentShowDelta(modalId.ADD, false),
+            } :
+            null
+          }
+        />
+
+        <TicketsModalContainer
+          ticketsDataAddSignal={ticketsDataAddSignal}
         />
       </div>
     </div>

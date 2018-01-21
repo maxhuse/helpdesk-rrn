@@ -26,7 +26,7 @@ CREATE TABLE `tickets` (
   `customer_id` INTEGER NOT NULL,
   `status` varchar(10) DEFAULT 'new',            /*  new, assigned, pending, closed */
   `creation_date` INTEGER NOT NULL,
-  `staff_id` INTEGER DEFAULT NULL,
+  `staff_id` INTEGER DEFAULT NULL,               /* staff who works with the tickets */
   `subject` text DEFAULT NULL,
   `message` text DEFAULT NULL,
   FOREIGN KEY (customer_id) REFERENCES users(id),

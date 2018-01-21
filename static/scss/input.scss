@@ -1,11 +1,11 @@
+@import "base.scss";
+
 .input {
   background-color: #fff;
   border: 1px solid $inputBorder;
   border-radius: 2px;
   height: 2em;
-  padding: 0;
-  padding-left: .25em;
-  padding-right: .25em;
+  padding: 0 .25em;
   width: 100%;
 
   &:focus {

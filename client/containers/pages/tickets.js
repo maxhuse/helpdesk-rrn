@@ -5,6 +5,7 @@ import { actions as ticketsDataActions } from 'ducks/data/tickets';
 import { actions as staffsDataActions } from 'ducks/data/staffs';
 import { actions as customersDataActions } from 'ducks/data/customers';
 import { actions as modalComponentActions } from 'ducks/components/modal';
+import { roles } from 'shared/constants';
 
 const mapDispatchToProps = Object.assign(
   {},
@@ -14,14 +15,18 @@ const mapDispatchToProps = Object.assign(
   modalComponentActions
 );
 
-// TODO: split fetchActions by roles
 function mapStateToProps(state) {
+  const userRole = state.data.authDataIm.getIn(['data', 'role']);
+  const fetchActionNames = userRole === roles.CUSTOMER ?
+    ['ticketsDataGetSignal'] :
+    ['staffsDataGetSignal', 'customersDataGetSignal', 'ticketsDataGetSignal'];
+
   return {
     authDataIm: state.data.authDataIm,
     ticketsDataIm: state.data.ticketsDataIm,
     staffsDataIm: state.data.staffsDataIm,
     customersDataIm: state.data.customersDataIm,
-    fetchActionNames: ['staffsDataGetSignal', 'customersDataGetSignal', 'ticketsDataGetSignal'],
+    fetchActionNames,
   };
 }
 

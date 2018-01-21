@@ -192,4 +192,27 @@ module.exports = {
       }
     );
   },
+
+  addTicket(options) {
+    const customerId = sequelize.escape(options.customerId);
+    const status = sequelize.escape(options.status);
+    const creationDate = sequelize.escape(options.creationDate);
+    const subject = sequelize.escape(options.subject);
+    const message = sequelize.escape(options.message);
+
+    return sequelize.query(
+      `INSERT INTO tickets VALUES (
+        NULL,
+        ${customerId},
+        ${status},
+        ${creationDate},
+        NULL,
+        ${subject},
+        ${message}
+      )`,
+      {
+        type: sequelize.QueryTypes.INSERT,
+      }
+    );
+  },
 };

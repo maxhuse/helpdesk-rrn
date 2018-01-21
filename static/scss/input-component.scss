@@ -1,3 +1,5 @@
+@import "base";
+
 .input-component {
   width: 100%;
 }
@@ -20,9 +22,7 @@
   border: 1px solid $inputBorder;
   border-radius: 2px;
   height: 2em;
-  padding: 0;
-  padding-left: .25em;
-  padding-right: .25em;
+  padding: 0 .25em;
   width: 100%;
 
   &:focus {
@@ -31,8 +31,13 @@
   }
 }
 
-.input-component__field_size_full {
-  width: 100%;
+.input-component__field_textarea {
+  max-width: 100%;
+  display: block;
+}
+
+.input-component__field_order-message {
+  height: 150px;
 }
 
 .input-component__field_error {

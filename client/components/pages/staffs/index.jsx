@@ -9,6 +9,13 @@ import ModalAddStaff from './modal-add-staff';
 import ModalEditStaff from './modal-edit-staff';
 import ModalBlockStaff from './modal-block-staff';
 
+const modalId = {
+  ADD: 'addStaff',
+  EDIT: 'editStaff',
+  BLOCK: 'blockStaff',
+  CHANGE_PASSWORD: 'changePassword',
+};
+
 // Call modalContainerEnhance for passing modalComponentIm into the component
 const StaffsModalContainer = modalContainerEnhance(
   class extends PureComponent {
@@ -22,11 +29,11 @@ const StaffsModalContainer = modalContainerEnhance(
 
       return (
         <Fragment>
-          <Modal modalId="addStaff">
+          <Modal modalId={modalId.ADD}>
             <ModalAddStaff submitSignal={staffsDataAddSignal} />
           </Modal>
 
-          <Modal modalId="editStaff">
+          <Modal modalId={modalId.EDIT}>
             <ModalEditStaff
               getStaff={() => {
                 const staffId = modalComponentIm.get('options').id;
@@ -37,7 +44,7 @@ const StaffsModalContainer = modalContainerEnhance(
             />
           </Modal>
 
-          <Modal modalId="blockStaff">
+          <Modal modalId={modalId.BLOCK}>
             <ModalBlockStaff
               getStaff={() => {
                 const staffId = modalComponentIm.get('options').id;
@@ -48,7 +55,7 @@ const StaffsModalContainer = modalContainerEnhance(
             />
           </Modal>
 
-          <Modal modalId="changePassword">
+          <Modal modalId={modalId.CHANGE_PASSWORD}>
             <ModalChangePassword
               doneText={() => {
                 const staffId = modalComponentIm.get('options').id;
@@ -124,20 +131,20 @@ const Staffs = ({
         getIcon: () => 'edit',
         getTitle: () => i18next.t('edit'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta('editStaff', { id: item.get('id') }),
+        onClick: item => modalComponentShowDelta(modalId.EDIT, { id: item.get('id') }),
       },
       {
         getIcon: () => 'account_circle',
         getTitle: () => i18next.t('change_password'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta('changePassword', { id: item.get('id') }),
+        onClick: item => modalComponentShowDelta(modalId.CHANGE_PASSWORD, { id: item.get('id') }),
       },
       {
         isShown: item => item.get('role') !== roles.ADMIN,
         getIcon: item => (item.get('active') ? 'enhanced_encryption' : 'no_encryption'),
         getTitle: item => i18next.t(item.get('active') ? 'block' : 'unblock'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta('blockStaff', { id: item.get('id') }),
+        onClick: item => modalComponentShowDelta(modalId.BLOCK, { id: item.get('id') }),
       },
     ],
   };
@@ -177,7 +184,7 @@ const Staffs = ({
           filterFields={filterFields}
           showHeader
           createButton={{
-            onClick: () => modalComponentShowDelta('addStaff', false),
+            onClick: () => modalComponentShowDelta(modalId.ADD, false),
           }}
         />
 

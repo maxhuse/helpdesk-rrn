@@ -1,5 +1,5 @@
 module.exports = {
-  // проверка валидного email
+  // check valid email
   VALID_EMAIL_REX: /^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@[-a-z0-9~!$%^&*_=+}{'?]{2,}\.([a-z]{2,10})$/i,
   roles: {
     ADMIN: 'admin',

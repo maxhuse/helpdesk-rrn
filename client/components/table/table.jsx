@@ -22,9 +22,9 @@ const EmptyTableContent = ({ isEmpty }) => (
   </div>
 );
 
-const CreateButton = ({ onClick }) => (
+const CreateButton = ({ onClick, text }) => (
   <button className="button button_flat button_flat_blue" onClick={onClick}>
-    {i18next.t('add')}
+    {i18next.t(text || 'add')}
   </button>
 );
 
@@ -332,7 +332,10 @@ export default class Table extends PureComponent {
       <div className="table">
         <div className="table__controls">
           <div className="table__controls-buttons">
-            {createButton ? <CreateButton onClick={createButton.onClick} /> : null}
+            {createButton ?
+              <CreateButton text={createButton.text} onClick={createButton.onClick} /> :
+              null
+            }
           </div>
           <div className="table__controls-buttons">
             <ControlButtons
