@@ -12,7 +12,7 @@ npm install
 npm run init
 ```
 
-3. Build production mode
+3. Build client code
 ```sh
 npm run build:production
 ```
@@ -49,7 +49,7 @@ There are a few scripts that you can use.
 
 - Use to compile client side code in production mode
 
-#### 👉  `npm run lint`
+#### 👉  `npm run lint` 🔍
 
 - Use to run linting
 
