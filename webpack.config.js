@@ -41,7 +41,7 @@ module.exports = {
     aggregateTimeout: 100
   },
   entry: process.env.NODE_ENV === 'hot' ?
-    ['react-hot-loader/patch', 'webpack-hot-middleware/client', './client/index'] :
+    ['webpack-hot-middleware/client', './client/index'] :
     './client/index',
   output: {
     path: path.join(__dirname, 'public'),
