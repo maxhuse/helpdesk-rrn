@@ -33,9 +33,11 @@ const TableRowShrunk = ({
   shownCells,
   disabled,
   getClassName,
+  onRowClick,
   iconButtons,
 }) => {
   const cellsLength = shownCells.length;
+  const itemId = item.get('id');
 
   let className = classnames('table__row', { table__row_disabled: disabled });
 
@@ -43,8 +45,13 @@ const TableRowShrunk = ({
     className += ` ${getClassName(item)}`;
   }
 
+  // We can override default onClick action on the row
+  const onRowClickAction = onRowClick ?
+    () => onRowClick(itemId) :
+    () => openRowAction(itemId);
+
   return (
-    <div className={className} onClick={() => openRowAction(item.get('id'))}>
+    <div className={className} onClick={onRowClickAction}>
       {shownCells.map((cell, index) => {
         const CellComponent = cell.component || TableCell;
         const componentProps = cell.componentProps || {};

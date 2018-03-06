@@ -28,7 +28,19 @@ CREATE TABLE `tickets` (
   `creation_date` INTEGER NOT NULL,
   `staff_id` INTEGER DEFAULT NULL,               /* staff who works with the tickets */
   `subject` text DEFAULT NULL,
-  `message` text DEFAULT NULL,
   FOREIGN KEY (customer_id) REFERENCES users(id),
   FOREIGN KEY (staff_id) REFERENCES users(id)
+);
+
+/* Table structure for table `messages` */
+DROP TABLE IF EXISTS `messages`;
+
+CREATE TABLE `messages` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `user_id` INTEGER NOT NULL,
+  `ticket_id` INTEGER NOT NULL,
+  `date` INTEGER NOT NULL,
+  `text` text NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id)
 );

@@ -8,9 +8,11 @@ import { sortType, sortOrder, filterType } from 'constants.js';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import TicketStatusCell from './status-cell';
 import ModalAddTicket from './modal-add-ticket';
+import ModalShowTicket from './modal-show-ticket';
 
 const modalId = {
   ADD: 'addTicket',
+  SHOW_TICKET: 'showTicket',
 };
 
 // Call modalContainerEnhance for passing modalComponentIm into the component
@@ -18,6 +20,8 @@ const TicketsModalContainer = modalContainerEnhance(
   class extends PureComponent {
     render() {
       const {
+        modalComponentIm,
+        ticketsDataIm,
         ticketsDataAddSignal,
       } = this.props;
 
@@ -25,6 +29,19 @@ const TicketsModalContainer = modalContainerEnhance(
         <Fragment>
           <Modal modalId={modalId.ADD}>
             <ModalAddTicket submitSignal={ticketsDataAddSignal} />
+          </Modal>
+
+          <Modal
+            modalId={modalId.SHOW_TICKET}
+            modalWrapperClassName="modal__wrapper modal__wrapper_dialog"
+          >
+            <ModalShowTicket
+              getTicket={() => {
+                const ticketId = modalComponentIm.get('options').id;
+
+                return ticketsDataIm.get('data').find(model => model.get('id') === ticketId);
+              }}
+            />
           </Modal>
         </Fragment>
       );
@@ -115,8 +132,7 @@ const Tickets = ({
 
   // describe table row
   const row = {
-    iconButtons: [
-    ],
+    onRowClick: id => modalComponentShowDelta(modalId.SHOW_TICKET, { id }),
   };
 
   // Describe filters
@@ -177,6 +193,7 @@ const Tickets = ({
         />
 
         <TicketsModalContainer
+          ticketsDataIm={ticketsDataIm}
           ticketsDataAddSignal={ticketsDataAddSignal}
         />
       </div>

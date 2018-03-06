@@ -1,0 +1,39 @@
+@import "base.scss";
+
+.message-dialog {
+
+}
+
+.message-dialog__header {
+  background-color: $dialogHeader;
+  border-bottom: 2px solid $dialogHeaderBorder;
+  padding: 24px 24px 8px 24px;
+}
+
+.message-dialog__header-subject {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.message-dialog__header-customer {
+  font-size: 0.76em;
+  margin-top: 8px;
+  color: $statusGray;
+}
+
+.message-dialog__content {
+  padding: 10px 24px 10px 24px;
+}
+
+.message-dialog__send-button {
+  margin-top: 5px;
+}
+
+.message-dialog__send-button-text {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.message-dialog__footer {
+  padding: 0 24px 8px 24px;
+}

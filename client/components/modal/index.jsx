@@ -62,6 +62,7 @@ export default class Modal extends PureComponent {
       modalComponentHideSignal,
       modalComponentSubmitWrapperSignal,
       modalId,
+      modalWrapperClassName = 'modal__wrapper',
     } = this.props;
     let modalBlock = null;
 
@@ -73,7 +74,7 @@ export default class Modal extends PureComponent {
             ref={(ref) => { this.layoutRef = ref; }}
             onClick={this.onClick}
           >
-            <div className="modal__wrapper">
+            <div className={modalWrapperClassName}>
               {React.cloneElement(children, {
                 modalComponentIm,
                 modalComponentHideSignal,

@@ -105,8 +105,17 @@ module.exports = {
     const active = sequelize.escape(options.active);
 
     return sequelize.query(
-      `INSERT INTO users VALUES (
-        NULL,
+      `INSERT INTO users (
+        name,
+        login,
+        password,
+        role,
+        description,
+        salt,
+        active,
+        email
+      ) 
+      VALUES (
         ${name},
         ${login},
         ${password},
@@ -165,7 +174,6 @@ module.exports = {
         tickets.creation_date AS creationDate,
         tickets.staff_id AS staffId,
         tickets.subject,
-        tickets.message,
         customers.name AS customerName
       FROM tickets
       LEFT JOIN users AS customers ON customers.id = tickets.customer_id`,
@@ -183,8 +191,7 @@ module.exports = {
         tickets.id,
         tickets.status,
         tickets.creation_date AS creationDate,
-        tickets.subject,
-        tickets.message
+        tickets.subject
       FROM tickets
       WHERE tickets.customer_id=${id}`,
       {
@@ -193,26 +200,64 @@ module.exports = {
     );
   },
 
-  addTicket(options) {
+  addTicketTransaction(options) {
     const customerId = sequelize.escape(options.customerId);
     const status = sequelize.escape(options.status);
     const creationDate = sequelize.escape(options.creationDate);
     const subject = sequelize.escape(options.subject);
     const message = sequelize.escape(options.message);
+    let newTicketId;
+    let newMessageId;
 
-    return sequelize.query(
-      `INSERT INTO tickets VALUES (
-        NULL,
-        ${customerId},
-        ${status},
-        ${creationDate},
-        NULL,
-        ${subject},
-        ${message}
-      )`,
-      {
-        type: sequelize.QueryTypes.INSERT,
-      }
-    );
+    return sequelize.transaction(t => (
+      sequelize.query(
+        `INSERT INTO tickets (
+          customer_id,
+          status,
+          creation_date,
+          staff_id,
+          subject
+        )
+        VALUES (
+          ${customerId},
+          ${status},
+          ${creationDate},
+          NULL,
+          ${subject}
+        )`,
+        {
+          type: sequelize.QueryTypes.INSERT,
+          transaction: t,
+        }
+      ).then((ticketResult) => {
+        // In the first element of result is ID of new ticket
+        newTicketId = ticketResult[0];
+
+        return sequelize.query(
+          `INSERT INTO messages (
+            user_id,
+            ticket_id,
+            date,
+            text
+          )
+          VALUES (
+            ${customerId},
+            ${newTicketId},
+            ${creationDate},
+            ${message}
+          )`,
+          {
+            type: sequelize.QueryTypes.INSERT,
+            transaction: t,
+          }
+        ).then((messageResult) => {
+          // In the first element of result is ID of new message
+          newMessageId = messageResult[0];
+        });
+      })
+    )).then(() => ({
+      ticketId: newTicketId,
+      messageId: newMessageId,
+    }));
   },
 };

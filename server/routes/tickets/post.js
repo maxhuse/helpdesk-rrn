@@ -2,7 +2,6 @@ const { httpCodes } = require('../../constants');
 const sequelize = require('../../sequelize');
 const logger = require('../../logger');
 const { roles, ticketStatus } = require('../../../shared/constants');
-const { InputError } = require('../../errors');
 const nullKiller = require('../../helpers/null-killer');
 const co = require('co');
 const i18next = require('i18next');
@@ -34,14 +33,9 @@ const postTickets = (req, res, next) => co(function* gen() {
     message,
   };
 
-  const newTicket = yield sequelize.addTicket(newTicketFields);
+  const addTicketTransactionResult = yield sequelize.addTicketTransaction(newTicketFields);
 
-  // In the second element of response is a number of inserted rows
-  if (newTicket[1] === 0) {
-    return next(new InputError('server.illegal_post_data'));
-  }
-
-  const newTicketId = newTicket[0];
+  const newTicketId = addTicketTransactionResult.ticketId;
 
   // In the first element of response is ID of new ticket
   if (newTicketId === 0 || newTicketId === undefined) {
