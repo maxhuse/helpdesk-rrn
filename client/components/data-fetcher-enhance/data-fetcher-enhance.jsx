@@ -17,10 +17,15 @@ const ServerErrorPage = () => (
 
 const isErrorStatus = status => (status !== 200 && status !== 401 && status !== 403);
 
-export default (ComposedComponent, CustomPreloader) =>
+export default (ComposedComponent, customOptions = {}) =>
   class DataFetcherWrapper extends PureComponent {
     static propTypes = {
-      fetchActionNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+      fetchActionAttributes: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          options: PropTypes.object,
+        })
+      ).isRequired,
     };
 
     constructor(props) {
@@ -31,7 +36,10 @@ export default (ComposedComponent, CustomPreloader) =>
         isError: false,
       };
 
+      const { CustomPreloader = false, CustomServerError = false } = customOptions;
+
       this.Preloader = CustomPreloader || Preloader;
+      this.ServerError = CustomServerError || ServerErrorPage;
     }
 
     componentWillMount() {
@@ -40,16 +48,20 @@ export default (ComposedComponent, CustomPreloader) =>
       const promises = [];
       const fetchedData = fetchedDataManager.getFetchedData();
 
-      this.props.fetchActionNames.forEach((fetchActionName) => {
-        if (!fetchedData[fetchActionName]) {
-          fetchedData[fetchActionName] = this.props[fetchActionName]();
+      this.props.fetchActionAttributes.forEach(({ name, options }) => {
+        if (!fetchedData[name]) {
+          fetchedData[name] = this.props[name](options);
         }
 
-        promises.push(fetchedData[fetchActionName]);
+        promises.push(fetchedData[name]);
       });
 
       Promise.all(promises).then((data) => {
         const isError = data.some(({ status }) => isErrorStatus(status));
+
+        if (this.mounted !== true) {
+          return;
+        }
 
         if (isError) {
           this.setState({ isError: true });
@@ -61,9 +73,17 @@ export default (ComposedComponent, CustomPreloader) =>
       });
     }
 
+    componentDidMount() {
+      this.mounted = true;
+    }
+
+    componentWillUnmount() {
+      this.mounted = false;
+    }
+
     render() {
       if (this.state.isError) {
-        return <ServerErrorPage />;
+        return <this.ServerError />;
       }
 
       return this.state.isLoading ?

@@ -23,6 +23,9 @@ const TicketsModalContainer = modalContainerEnhance(
         modalComponentIm,
         ticketsDataIm,
         ticketsDataAddSignal,
+        messagesDataIm,
+        messagesDataGetSignal,
+        messagesDataAddSignal,
       } = this.props;
 
       return (
@@ -41,6 +44,9 @@ const TicketsModalContainer = modalContainerEnhance(
 
                 return ticketsDataIm.get('data').find(model => model.get('id') === ticketId);
               }}
+              messagesDataIm={messagesDataIm}
+              messagesDataGetSignal={messagesDataGetSignal}
+              messagesDataAddSignal={messagesDataAddSignal}
             />
           </Modal>
         </Fragment>
@@ -54,7 +60,10 @@ const Tickets = ({
   ticketsDataIm,
   customersDataIm,
   staffsDataIm,
+  messagesDataIm,
   ticketsDataAddSignal,
+  messagesDataGetSignal,
+  messagesDataAddSignal,
   modalComponentShowDelta,
 }) => {
   const userRole = authDataIm.getIn(['data', 'role']);
@@ -195,6 +204,9 @@ const Tickets = ({
         <TicketsModalContainer
           ticketsDataIm={ticketsDataIm}
           ticketsDataAddSignal={ticketsDataAddSignal}
+          messagesDataIm={messagesDataIm}
+          messagesDataGetSignal={messagesDataGetSignal}
+          messagesDataAddSignal={messagesDataAddSignal}
         />
       </div>
     </div>

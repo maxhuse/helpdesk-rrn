@@ -1,4 +1,5 @@
 @import "base.scss";
+$contentPadding: 10px;
 
 .message-dialog {
 
@@ -6,13 +7,14 @@
 
 .message-dialog__header {
   background-color: $dialogHeader;
-  border-bottom: 2px solid $dialogHeaderBorder;
+  border-bottom: 2px solid $dialogBorder;
   padding: 24px 24px 8px 24px;
 }
 
 .message-dialog__header-subject {
   font-size: 1.3em;
   font-weight: bold;
+  color: $dialogText;
 }
 
 .message-dialog__header-customer {
@@ -22,7 +24,44 @@
 }
 
 .message-dialog__content {
-  padding: 10px 24px 10px 24px;
+  padding: 0 24px;
+  min-height: 150px;
+  position: relative;
+}
+
+.message-dialog__messages-area {
+  min-height: 100px;
+}
+
+.message-dialog__message {
+  padding-left: $contentPadding;
+  border-bottom: 1px solid $dialogBorder;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.message-dialog__message-user {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: $dialogText;
+}
+
+.message-dialog__message-text {
+  padding: 5px 0;
+}
+
+.message-dialog__message-date {
+  font-size: 0.76em;
+  color: $statusGray;
+}
+
+.message-dialog__input-area {
+  padding-left: $contentPadding;
+  padding-top: 10px;
+}
+
+.message-dialog__textarea {
+  min-height: 50px;
 }
 
 .message-dialog__send-button {
@@ -35,5 +74,12 @@
 }
 
 .message-dialog__footer {
-  padding: 0 24px 8px 24px;
+  padding: 8px 24px 8px 24px;
+}
+
+.message-dialog__error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
 }

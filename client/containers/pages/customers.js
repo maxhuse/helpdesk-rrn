@@ -13,7 +13,7 @@ const mapDispatchToProps = Object.assign(
 function mapStateToProps(state) {
   return {
     customersDataIm: state.data.customersDataIm,
-    fetchActionNames: ['customersDataGetSignal'],
+    fetchActionAttributes: [{ name: 'customersDataGetSignal' }],
   };
 }
 

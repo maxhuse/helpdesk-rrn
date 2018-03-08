@@ -59,7 +59,8 @@ $modalAlertColor: rgba(0,0,0,.5);
 $tableSelectBackgroundColor: #e8eaf6;
 
 $dialogHeader: #e3f2fd;
-$dialogHeaderBorder: #e0e0e0;
+$dialogBorder: #e0e0e0;
+$dialogText: #1565c0;
 
 @mixin shadow($number) {
   @if $number == 0 {

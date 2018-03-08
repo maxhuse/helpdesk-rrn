@@ -183,6 +183,25 @@ module.exports = {
     );
   },
 
+  getTicketById(options) {
+    const id = sequelize.escape(options.id);
+
+    return sequelize.query(
+      `SELECT
+        id,
+        customer_id AS customerId,
+        status,
+        creation_date AS creationDate,
+        staff_id AS staffId,
+        subject
+      FROM tickets
+      WHERE id=${id} LIMIT 1`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+  },
+
   getTicketsForCustomer(options) {
     const id = sequelize.escape(options.id);
 
@@ -259,5 +278,24 @@ module.exports = {
       ticketId: newTicketId,
       messageId: newMessageId,
     }));
+  },
+
+  getMessagesForTicket(options) {
+    const id = sequelize.escape(options.id);
+
+    return sequelize.query(
+      `SELECT
+        messages.id,
+        users.name AS userName,
+        messages.date,
+        messages.text
+      FROM messages
+      LEFT JOIN users ON messages.user_id = users.id
+      WHERE ticket_id=${id}
+      ORDER BY date ASC`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
   },
 };

@@ -7,3 +7,11 @@ export const getFormatDate = (timestamp) => {
 
   return moment(timestamp, 'X').format('DD MMMM YYYY');
 };
+
+export const getFormatDateTime = (timestamp) => {
+  if (!timestamp) {
+    return undefined;
+  }
+
+  return moment(timestamp, 'X').format('DD MMMM YYYY hh:mm');
+};

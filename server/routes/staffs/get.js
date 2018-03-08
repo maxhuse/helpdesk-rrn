@@ -5,7 +5,7 @@ const sequelize = require('../../sequelize');
 const co = require('co');
 
 const getStaffs = (req, res, next) => co(function* gen() {
-  const role = req.user ? req.user.role : false;
+  const { role } = req.user;
 
   if (role !== roles.ADMIN) {
     // access denied

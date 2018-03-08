@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';
+import { actions as modalComponentActions } from 'ducks/components/modal';
 import browserHistory from 'browser-history';
 
 /* eslint-disable require-yield */
@@ -21,6 +22,7 @@ function* errorHandler(dispatch, { status, data, error, method, isAborted, optio
       // Redirect to authorization page
       browserHistory.push('/auth');
       dispatch(authDataActions.authDataResetDelta());
+      dispatch(modalComponentActions.modalComponentHideAllSignal());
 
       return {
         status,

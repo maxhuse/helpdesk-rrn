@@ -63,6 +63,7 @@
   "engineer": "Инженер",
   "english": "English",
   "enter_new_password": "Введите новый пароль",
+  "error_by_getting_messages": "Не удалось получить сообщения",
   "filter": "Фильтр",
   "filter_results_empty": "Фильтр ничего не нашел",
   "from": "От",
