@@ -26,6 +26,7 @@ const TicketsModalContainer = modalContainerEnhance(
         messagesDataIm,
         messagesDataGetSignal,
         messagesDataAddSignal,
+        authDataIm,
       } = this.props;
 
       return (
@@ -47,6 +48,7 @@ const TicketsModalContainer = modalContainerEnhance(
               messagesDataIm={messagesDataIm}
               messagesDataGetSignal={messagesDataGetSignal}
               messagesDataAddSignal={messagesDataAddSignal}
+              authDataIm={authDataIm}
             />
           </Modal>
         </Fragment>
@@ -59,7 +61,6 @@ const Tickets = ({
   authDataIm,
   ticketsDataIm,
   customersDataIm,
-  staffsDataIm,
   messagesDataIm,
   ticketsDataAddSignal,
   messagesDataGetSignal,
@@ -163,16 +164,6 @@ const Tickets = ({
       getFilteredString: elem => elem.get('name'),
       placeholder: i18next.t('all'),
       items: () => customersDataIm.get('data'),
-    },
-    {
-      type: filterType.AUTOCOMPLETE,
-      key: 'staffId',
-      name: i18next.t('engineer'),
-      getValue: elem => elem.get('id'),
-      getText: elem => elem.get('name'),
-      getFilteredString: elem => elem.get('name'),
-      placeholder: i18next.t('all'),
-      items: () => staffsDataIm.get('data'),
     });
   }
 
@@ -207,6 +198,7 @@ const Tickets = ({
           messagesDataIm={messagesDataIm}
           messagesDataGetSignal={messagesDataGetSignal}
           messagesDataAddSignal={messagesDataAddSignal}
+          authDataIm={authDataIm}
         />
       </div>
     </div>

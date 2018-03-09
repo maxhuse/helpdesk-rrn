@@ -298,4 +298,29 @@ module.exports = {
       }
     );
   },
+
+  addMessage(options) {
+    const userId = sequelize.escape(options.userId);
+    const ticketId = sequelize.escape(options.ticketId);
+    const date = sequelize.escape(options.date);
+    const text = sequelize.escape(options.text);
+
+    return sequelize.query(
+      `INSERT INTO messages (
+        user_id,
+        ticket_id,
+        date,
+        text
+      )
+      VALUES (
+        ${userId},
+        ${ticketId},
+        ${date},
+        ${text}
+      )`,
+      {
+        type: sequelize.QueryTypes.INSERT,
+      }
+    );
+  },
 };

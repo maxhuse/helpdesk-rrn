@@ -13,5 +13,5 @@ export const getFormatDateTime = (timestamp) => {
     return undefined;
   }
 
-  return moment(timestamp, 'X').format('DD MMMM YYYY hh:mm');
+  return moment(timestamp, 'X').format('DD MMMM YYYY HH:mm');
 };

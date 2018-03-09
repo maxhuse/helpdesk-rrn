@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import dataFetcherEnhance from 'components/data-fetcher-enhance/data-fetcher-enhance';
 import Preloader from 'components/preloader';
 import { getFormatDateTime } from 'helpers';
+import { roles, ticketStatus } from 'shared/constants';
 
 const Message = ({ userName, text, date }) => (
   <div className="message-dialog__message">
@@ -21,11 +22,35 @@ class ShowTicketMessages extends PureComponent {
 
   onSend() {
     const text = this.textRef.value;
-    const { ticketId } = this.props;
+    const { ticketIm } = this.props;
+    const ticketId = ticketIm.get('id');
 
     if (text.length > 0) {
-      this.props.messagesDataAddSignal({ ticketId, text });
+      this.props.messagesDataAddSignal({ data: { ticketId, text } }).then(({ status }) => {
+        switch (status) {
+          case 200:
+            this.clearTextarea();
+            break;
+
+          default:
+            break;
+        }
+      });
     }
+  }
+
+  clearTextarea() {
+    this.textRef.value = '';
+  }
+
+  isInputAvailable() {
+    const { ticketIm, authDataIm } = this.props;
+    const isClosed = ticketIm.get('status') === ticketStatus.CLOSED;
+    const userRole = authDataIm.getIn(['data', 'role']);
+    const userId = authDataIm.getIn(['data', 'id']);
+    const isAssignedToEngineer = userRole === roles.ENGINEER && ticketIm.get('staffId') === userId;
+
+    return !isClosed && (isAssignedToEngineer || userRole === roles.ADMIN);
   }
 
   render() {
@@ -44,22 +69,25 @@ class ShowTicketMessages extends PureComponent {
           ))}
         </div>
 
-        <div className="message-dialog__input-area">
-          <textarea
-            id="modal_show-ticket_text"
-            className="input input_textarea message-dialog__textarea"
-            ref={(ref) => { this.textRef = ref; }}
-          />
-          <div className="message-dialog__send-button">
-            <button
-              className="button button_raised button_raised_green"
-              onClick={this.onSend}
-            >
-              <span className="message-dialog__send-button-text">{i18next.t('send')}</span>
-              <i className="material-icons material-icons__size_20">send</i>
-            </button>
-          </div>
-        </div>
+        {this.isInputAvailable() ?
+          <div className="message-dialog__input-area">
+            <textarea
+              id="modal_show-ticket_text"
+              className="input input_textarea message-dialog__textarea"
+              ref={(ref) => { this.textRef = ref; }}
+            />
+            <div className="message-dialog__send-button">
+              <button
+                className="button button_raised button_raised_green"
+                onClick={this.onSend}
+              >
+                <span className="message-dialog__send-button-text">{i18next.t('send')}</span>
+                <i className="material-icons material-icons__size_20">send</i>
+              </button>
+            </div>
+          </div> :
+          null
+        }
       </Fragment>
     );
   }
@@ -99,6 +127,8 @@ export default class ModalShowTicket extends PureComponent {
       modalComponentHideSignal,
       messagesDataIm,
       messagesDataGetSignal,
+      messagesDataAddSignal,
+      authDataIm,
     } = this.props;
     const { ticketIm } = this.state;
     const customerName = ticketIm.get('customerName');
@@ -119,7 +149,9 @@ export default class ModalShowTicket extends PureComponent {
             <FetchedTicketMessages
               messagesDataIm={messagesDataIm}
               messagesDataGetSignal={messagesDataGetSignal}
-              ticketId={ticketId}
+              messagesDataAddSignal={messagesDataAddSignal}
+              ticketIm={ticketIm}
+              authDataIm={authDataIm}
               fetchActionAttributes={[
                 {
                   name: 'messagesDataGetSignal',
