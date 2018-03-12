@@ -73,7 +73,7 @@ const Tickets = ({
     {
       id: 'id',
       getValue: model => model.get('id'),
-      className: 'table__cell_2',
+      className: 'table_tickets__cell_id',
       name: i18next.t('id'),
       sort: {
         type: sortType.ARITHMETIC,
@@ -83,7 +83,7 @@ const Tickets = ({
     {
       id: 'subject',
       getValue: model => model.get('subject'),
-      className: 'table__cell_1',
+      className: 'table_tickets__cell_subject',
       name: i18next.t('subject'),
     },
   ];
@@ -92,7 +92,7 @@ const Tickets = ({
     cells.push({
       id: 'customerName',
       getValue: model => model.get('customerName'),
-      className: 'table__cell_2',
+      className: 'table_tickets__cell_customer',
       name: i18next.t('customer'),
       sort: {
         type: sortType.ALPHABETIC,
@@ -104,7 +104,7 @@ const Tickets = ({
   cells.push({
     id: 'creationDate',
     getValue: model => getFormatDate(model.get('creationDate')),
-    className: 'table__cell_4',
+    className: 'table_tickets__cell_date',
     name: i18next.t('creation_date'),
     sort: {
       type: sortType.ARITHMETIC,
@@ -116,7 +116,7 @@ const Tickets = ({
     cells.push({
       id: 'staffName',
       getValue: model => model.get('staffName'),
-      className: 'table__cell_4',
+      className: 'table_tickets__cell_engineer',
       name: i18next.t('engineer'),
       sort: {
         type: sortType.ARITHMETIC,
@@ -129,7 +129,7 @@ const Tickets = ({
     id: 'status',
     getValue: model => model.get('status'),
     name: i18next.t('status'),
-    className: 'table__cell_3',
+    className: 'table_tickets__cell_status',
     sort: {
       type: sortType.ALPHABETIC,
       field: 'status',

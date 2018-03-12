@@ -1,0 +1,38 @@
+.table_tickets__cell_id {
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.table_tickets__cell_subject {
+  width: 200px;
+}
+
+.table_tickets__cell_status {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.table_tickets__cell_date {
+  width: 140px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .table_tickets__cell_date {
+    display: none;
+  }
+}
+
+.table_tickets__cell_customer {
+  width: 150px;
+}
+
+.table_tickets__cell_engineer {
+  width: 150px;
+}
+
+@media (max-width: 768px) {
+  .table_tickets__cell_engineer {
+    display: none;
+  }
+}
