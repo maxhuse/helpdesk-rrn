@@ -9,6 +9,12 @@ $contentPadding: 10px;
   background-color: $dialogHeader;
   border-bottom: 2px solid $dialogBorder;
   padding: 24px 24px 8px 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-dialog__header-item {
+  width: 250px;
 }
 
 .message-dialog__header-subject {
@@ -21,6 +27,26 @@ $contentPadding: 10px;
   font-size: 0.76em;
   margin-top: 8px;
   color: $statusGray;
+}
+
+.message-dialog__header-assignee {
+  font-size: 0.76em;
+  color: $statusGray;
+}
+
+.message-dialog__header-action-link {
+  border-bottom: 1px dashed $dialogText;
+  color: $dialogText;
+  cursor: pointer;
+}
+
+.message-dialog__change-status {
+  display: inline-block;
+}
+
+.message-dialog__change-link {
+  color: $dialogText;
+  cursor: pointer;
 }
 
 .message-dialog__content {
@@ -82,4 +108,20 @@ $contentPadding: 10px;
   justify-content: center;
   align-items: center;
   height: 150px;
+}
+
+.message-dialog__tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  align-items: center;
+  padding: 10px 15px;
+
+  & + & {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 }

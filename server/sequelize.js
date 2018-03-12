@@ -174,9 +174,11 @@ module.exports = {
         tickets.creation_date AS creationDate,
         tickets.staff_id AS staffId,
         tickets.subject,
-        customers.name AS customerName
+        customers.name AS customerName,
+        staffs.name AS staffName
       FROM tickets
-      LEFT JOIN users AS customers ON customers.id = tickets.customer_id`,
+      LEFT JOIN users AS customers ON customers.id = tickets.customer_id
+      LEFT JOIN users AS staffs ON staffs.id = tickets.staff_id`,
       {
         type: sequelize.QueryTypes.SELECT,
       }
@@ -210,8 +212,10 @@ module.exports = {
         tickets.id,
         tickets.status,
         tickets.creation_date AS creationDate,
-        tickets.subject
+        tickets.subject,
+        staffs.name AS staffName
       FROM tickets
+      LEFT JOIN users AS staffs ON staffs.id = tickets.staff_id
       WHERE tickets.customer_id=${id}`,
       {
         type: sequelize.QueryTypes.SELECT,
@@ -279,6 +283,22 @@ module.exports = {
       messageId: newMessageId,
     }));
   },
+
+  updateTicket(options) {
+    const id = sequelize.escape(options.id);
+    const fields = generateUpdateFields(options.fields);
+
+    return sequelize.query(
+      `UPDATE tickets
+        SET ${fields}
+        WHERE id=${id}
+      `,
+      {
+        type: sequelize.QueryTypes.UPDATE,
+      }
+    );
+  },
+
 
   getMessagesForTicket(options) {
     const id = sequelize.escape(options.id);

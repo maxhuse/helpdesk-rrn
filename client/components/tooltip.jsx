@@ -28,7 +28,10 @@ export default class Tooltip extends PureComponent {
       // This will protect you from closing when clicking on the date of the calendar.
       if (
         !findDOMNode(this).contains(event.target) &&
-        document.getElementById('root').contains(event.target)
+        (
+          document.getElementById('root').contains(event.target) ||
+          document.getElementById('modal-root').contains(event.target)
+        )
       ) {
         if (!this.state.isHidden) {
           this.toggleHide();

@@ -20,9 +20,9 @@ const TicketsModalContainer = modalContainerEnhance(
   class extends PureComponent {
     render() {
       const {
-        modalComponentIm,
         ticketsDataIm,
         ticketsDataAddSignal,
+        ticketsDataUpdateSignal,
         messagesDataIm,
         messagesDataGetSignal,
         messagesDataAddSignal,
@@ -40,15 +40,12 @@ const TicketsModalContainer = modalContainerEnhance(
             modalWrapperClassName="modal__wrapper modal__wrapper_dialog"
           >
             <ModalShowTicket
-              getTicket={() => {
-                const ticketId = modalComponentIm.get('options').id;
-
-                return ticketsDataIm.get('data').find(model => model.get('id') === ticketId);
-              }}
               messagesDataIm={messagesDataIm}
               messagesDataGetSignal={messagesDataGetSignal}
               messagesDataAddSignal={messagesDataAddSignal}
               authDataIm={authDataIm}
+              ticketsDataIm={ticketsDataIm}
+              ticketsDataUpdateSignal={ticketsDataUpdateSignal}
             />
           </Modal>
         </Fragment>
@@ -63,6 +60,7 @@ const Tickets = ({
   customersDataIm,
   messagesDataIm,
   ticketsDataAddSignal,
+  ticketsDataUpdateSignal,
   messagesDataGetSignal,
   messagesDataAddSignal,
   modalComponentShowDelta,
@@ -116,14 +114,13 @@ const Tickets = ({
 
   if (isStaff) {
     cells.push({
-      id: 'staffId',
-      // TODO: get staff name
-      getValue: model => model.get('staffId'),
+      id: 'staffName',
+      getValue: model => model.get('staffName'),
       className: 'table__cell_4',
       name: i18next.t('engineer'),
       sort: {
         type: sortType.ARITHMETIC,
-        field: 'staffId',
+        field: 'staffName',
       },
     });
   }
@@ -195,6 +192,7 @@ const Tickets = ({
         <TicketsModalContainer
           ticketsDataIm={ticketsDataIm}
           ticketsDataAddSignal={ticketsDataAddSignal}
+          ticketsDataUpdateSignal={ticketsDataUpdateSignal}
           messagesDataIm={messagesDataIm}
           messagesDataGetSignal={messagesDataGetSignal}
           messagesDataAddSignal={messagesDataAddSignal}
