@@ -1,4 +1,3 @@
-/* global document */
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';

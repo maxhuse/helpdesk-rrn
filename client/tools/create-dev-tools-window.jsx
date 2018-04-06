@@ -1,4 +1,3 @@
-/* global window, document */
 /* eslint no-console:0 */
 import React from 'react';
 import { render } from 'react-dom';

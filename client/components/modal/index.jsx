@@ -1,4 +1,3 @@
-/* global document */
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransitionGroup } from 'react-transition-group';

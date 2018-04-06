@@ -1,5 +1,3 @@
-/* global document */
-
 /*
 * This component should be rendered only once,
 * somewhere in the top level of DOM

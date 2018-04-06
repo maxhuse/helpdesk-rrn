@@ -1,4 +1,3 @@
-/* global window */
 import { Map, fromJS } from 'immutable';
 import { applicationName } from 'config';
 import { fetchSignal } from 'ducks/fetch';
