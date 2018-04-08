@@ -20,12 +20,6 @@ const plugins = [
   new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru|en/)
 ];
 
-if (process.env.NODE_ENV === 'production') {
-  plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ sourceMap: true })
-  );
-}
-
 // HMR only on development
 if (process.env.NODE_ENV === 'hot') {
   plugins.push(
