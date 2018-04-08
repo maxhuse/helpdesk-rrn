@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === 'hot') {
 
 module.exports = {
   devtool: sourceMapType,
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   watchOptions: {
     aggregateTimeout: 100
   },

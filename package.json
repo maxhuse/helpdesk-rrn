@@ -6,8 +6,8 @@
   "scripts": {
     "init": "sqlite3 sql/_helpdesk.sqlite < sql/dump.sql",
     "start": "NODE_ENV=development nodemon --watch server server/index.js",
-    "watch": "npm run clean && NODE_ENV=development webpack --watch --progress --mode development",
-    "build:production": "npm run clean && NODE_ENV=production webpack --progress --mode production",
+    "watch": "npm run clean && NODE_ENV=development webpack --watch --progress",
+    "build:production": "npm run clean && NODE_ENV=production webpack --progress",
     "clean": "rimraf public",
     "lint:client": "eslint client --ext .jsx --ext .js",
     "lint:server": "eslint server",
