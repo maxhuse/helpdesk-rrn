@@ -22,12 +22,12 @@
   transition: opacity 300ms ease-in-out, padding 300ms ease-in-out;
 }
 
-.modal-leave .modal__layout {
+.modal-exit .modal__layout {
   opacity: 1;
   padding-top: 5%;
 }
 
-.modal-leave.modal-leave-active .modal__layout {
+.modal-exit.modal-exit-active .modal__layout {
   opacity: 0.01;
   padding-top: 3%;
   transition: opacity 200ms ease-in-out, padding 200ms ease-in-out;

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 const modalRoot = document.getElementById('modal-root');
 
@@ -63,10 +63,14 @@ export default class Modal extends PureComponent {
       modalId,
       modalWrapperClassName = 'modal__wrapper',
     } = this.props;
-    let modalBlock = null;
 
-    if (modalComponentIm.get('activeId') === modalId) {
-      modalBlock = (
+    return ReactDOM.createPortal((
+      <CSSTransition
+        in={modalComponentIm.get('activeId') === modalId}
+        classNames="modal"
+        timeout={{ enter: 300, exit: 200 }}
+        unmountOnExit
+      >
         <div className="modal">
           <div
             className="modal__layout"
@@ -82,18 +86,7 @@ export default class Modal extends PureComponent {
             </div>
           </div>
         </div>
-      );
-    }
-
-    return ReactDOM.createPortal((
-      <CSSTransitionGroup
-        component="div"
-        transitionName="modal"
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={200}
-      >
-        {modalBlock}
-      </CSSTransitionGroup>
+      </CSSTransition>
     ), modalRoot);
   }
 }

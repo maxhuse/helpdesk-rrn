@@ -1,3 +1,5 @@
+@import "base";
+
 .tooltip {
   position: relative;
 }
@@ -23,12 +25,12 @@
   transition: opacity 200ms ease-in-out, margin 200ms ease-in-out;
 }
 
-.tooltip__content_leave {
+.tooltip__content_exit {
   margin-top: 5px;
   opacity: 1;
 }
 
-.tooltip__content_leave.tooltip__content_leave_active {
+.tooltip__content_exit.tooltip__content_exit_active {
   margin-top: -5px;
   opacity: 0.01;
   transition: opacity 200ms ease-in-out, margin 200ms ease-in-out;

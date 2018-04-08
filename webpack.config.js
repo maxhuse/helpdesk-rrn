@@ -22,7 +22,6 @@ const plugins = [
 
 if (process.env.NODE_ENV === 'production') {
   plugins.push(
-    new webpack.LoaderOptionsPlugin({ minimize: true }),
     new webpack.optimize.UglifyJsPlugin({ sourceMap: true })
   );
 }
@@ -39,6 +38,9 @@ module.exports = {
   devtool: sourceMapType,
   watchOptions: {
     aggregateTimeout: 100
+  },
+  performance: {
+    hints: false,
   },
   entry: process.env.NODE_ENV === 'hot' ?
     ['webpack-hot-middleware/client', './client/index'] :

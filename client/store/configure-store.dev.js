@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { persistState } from 'redux-devtools';
 import rootReducer from 'ducks';
-import DevTools from 'containers/dev-tools';
+
+// Setup for Redux Devtool Extension
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 /*
 * Creates a preconfigured store.
@@ -11,10 +13,8 @@ const configureStore = (initialState) => {
   const store = createStore(
     rootReducer,
     initialState,
-    compose(
+    composeEnhancers(
       applyMiddleware(thunkMiddleware),
-      DevTools.instrument(),
-      persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )
   );
 

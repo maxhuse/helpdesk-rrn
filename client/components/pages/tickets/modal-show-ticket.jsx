@@ -135,9 +135,11 @@ export default class ModalShowTicket extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (('ticketsDataIm' in nextProps) || ('modalComponentIm' in nextProps)) {
-      this.setState({
-        ticketIm: this.getTicket(nextProps.ticketsDataIm, nextProps.modalComponentIm),
-      });
+      if (nextProps.modalComponentIm.get('activeId')) {
+        this.setState({
+          ticketIm: this.getTicket(nextProps.ticketsDataIm, nextProps.modalComponentIm),
+        });
+      }
     }
   }
 

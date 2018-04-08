@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 export default class Tooltip extends PureComponent {
   constructor(props) {
@@ -55,26 +55,23 @@ export default class Tooltip extends PureComponent {
           {children}
         </div>
 
-        <CSSTransitionGroup
-          component="div"
-          transitionName={{
+        <CSSTransition
+          in={!this.state.isHidden}
+          classNames={{
             enter: 'tooltip__content_enter',
             enterActive: 'tooltip__content_enter_active',
-            leave: 'tooltip__content_leave',
-            leaveActive: 'tooltip__content_leave_active',
+            exit: 'tooltip__content_exit',
+            exitActive: 'tooltip__content_exit_active',
             appear: 'tooltip__content_appear',
             appearActive: 'tooltip__content_appear_active',
           }}
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}
+          timeout={{ enter: 200, exit: 200 }}
+          unmountOnExit
         >
-          {this.state.isHidden ?
-            null :
-            <div className={`tooltip__content ${className}`}>
-              {content}
-            </div>
-          }
-        </CSSTransitionGroup>
+          <div className={`tooltip__content ${className}`}>
+            {content}
+          </div>
+        </CSSTransition>
       </div>
     );
   }
