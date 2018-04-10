@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import Root from 'containers/root';
@@ -12,9 +11,8 @@ import '../static/scss/app.scss';
 import '../static/img/favicon.ico';
 import * as languages from '../static/translations';
 
-// Substitution Promise from babel to bluebird
+// Replace native Promise to bluebird
 Promise.config({ cancellation: true });
-require('babel-runtime/core-js/promise').default = Promise; // eslint-disable-line
 
 const { en, ru } = languages;
 

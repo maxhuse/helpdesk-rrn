@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { Map } from 'immutable';
+import Promise from 'bluebird';
 import { applicationName } from 'config';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';

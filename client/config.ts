@@ -1,9 +1,9 @@
 import { Map } from 'immutable';
 
-export const applicationName = 'helpdesk';
+export const applicationName: string = 'helpdesk';
 
 // Sidebar menu`s displayed according with this order
-export const rights = {
+export const rights: { [key: string]: string[] } = {
   admin: [
     '/tickets',
     '/customers',
@@ -23,7 +23,10 @@ export const rights = {
   ],
 };
 
-export const menu = Map({
+type MenuItem = Map<string, string>;
+type Menu = Map<string, MenuItem>;
+
+export const menu: Menu = Map({
   '/tickets': Map({
     icon: 'dvr',
     text: 'tickets',

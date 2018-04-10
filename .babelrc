@@ -1,9 +1,0 @@
-{
-  "presets": ["react", "env", "stage-1"],
-  "env": {
-    "hot": {
-      "plugins": ["react-hot-loader/babel"]
-    }
-  },
-  "plugins": ["transform-runtime"]
-}

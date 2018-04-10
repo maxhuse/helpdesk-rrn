@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, StatelessComponent } from 'react';
 import classnames from 'classnames';
 
-const PreloaderCircle = ({ className }) => (
+type PreloaderCircleProps = { className: string };
+const PreloaderCircle: StatelessComponent<PreloaderCircleProps> = ({ className }) => (
   <div className={className}>
     <div className="preloader__loader">
       <svg className="preloader__circular" viewBox="25 25 50 50">
@@ -18,7 +19,15 @@ const PreloaderCircle = ({ className }) => (
   </div>
 );
 
-export default class Preloader extends PureComponent {
+interface IPreloaderProps {
+  className: string;
+}
+interface IPreloaderState {
+  isShow: boolean;
+}
+export default class Preloader extends PureComponent<IPreloaderProps, IPreloaderState> {
+  private readonly timer: number;
+
   constructor(props) {
     super(props);
 
@@ -41,11 +50,9 @@ export default class Preloader extends PureComponent {
     clearInterval(this.timer);
   }
 
-  show() {
+  show(): void {
     if (!this.state.isShow) {
-      this.setState({
-        isShow: true,
-      });
+      this.setState({ isShow: true });
     }
   }
 

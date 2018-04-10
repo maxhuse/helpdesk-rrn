@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Tickets } from 'components/pages';
-import dataFetcherEnhance from 'components/data-fetcher-enhance/data-fetcher-enhance';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import { actions as ticketsDataActions } from 'ducks/data/tickets';
 import { actions as customersDataActions } from 'ducks/data/customers';
 import { actions as messagesDataActions } from 'ducks/data/messages';

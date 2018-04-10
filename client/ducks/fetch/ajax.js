@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import Promise from 'bluebird';
+
 
 /*
 * A wrapper on xhr that never rejected and resolved with a object { status, data, error }

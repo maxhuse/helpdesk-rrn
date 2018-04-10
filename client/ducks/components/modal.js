@@ -1,4 +1,5 @@
 import { Map, List } from 'immutable';
+import Promise from 'bluebird';
 import { applicationName } from 'config';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';
 import { actions as tableComponentActions } from 'ducks/components/table';

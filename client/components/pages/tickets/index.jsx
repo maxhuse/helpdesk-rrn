@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
 import { getFormatDate } from 'helpers';
-import { sortType, sortOrder, filterType } from 'constants.js';
+import { sortType, sortOrder, filterType } from 'constants.ts';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import TicketStatusCell from './status-cell';
 import ModalAddTicket from './modal-add-ticket';

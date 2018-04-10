@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
-import { sortType, filterType } from 'constants.js';
+import { sortType, filterType } from 'constants.ts';
 import { Table } from 'containers';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';

@@ -1,8 +1,8 @@
 /* eslint-disable new-cap */
-const CryptoJS = require('crypto-js');
+import CryptoJS from 'crypto-js';
 
-const getHashedPassword = (password) => {
-  let newPassword = CryptoJS.enc.Hex.stringify(
+const getHashedPassword = (password: string): string => {
+  let newPassword: string = CryptoJS.enc.Hex.stringify(
     CryptoJS.HmacSHA512(password, 'PG83_@kF,VE#@NYy!lfP}vGeG^2N.dk')
   );
 
@@ -13,4 +13,4 @@ const getHashedPassword = (password) => {
   return newPassword;
 };
 
-module.exports = getHashedPassword;
+export default getHashedPassword;

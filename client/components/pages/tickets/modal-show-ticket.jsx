@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
-import dataFetcherEnhance from 'components/data-fetcher-enhance/data-fetcher-enhance';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import Preloader from 'components/preloader';
 import { getFormatDateTime } from 'helpers';
 import { roles, ticketStatus } from 'shared/constants';

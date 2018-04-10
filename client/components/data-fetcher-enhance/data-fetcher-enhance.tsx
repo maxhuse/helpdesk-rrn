@@ -1,13 +1,13 @@
 /*
 * HOC for data preload for a component
 * */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, StatelessComponent, ComponentClass } from 'react';
+import Promise from 'bluebird';
 import Preloader from 'components/preloader';
 import ServerError from 'components/server-error';
-import PropTypes from 'prop-types';
 import fetchedDataManager from './fetched-data-manager';
 
-const ServerErrorPage = () => (
+const ServerErrorPage: StatelessComponent = () => (
   <div className="content">
     <div className="content__body">
       <ServerError />
@@ -15,18 +15,28 @@ const ServerErrorPage = () => (
   </div>
 );
 
-const isErrorStatus = status => (status !== 200 && status !== 401 && status !== 403);
+type IsErrorStatus = (status: number) => boolean;
+const isErrorStatus: IsErrorStatus = status => (status !== 200 && status !== 401 && status !== 403);
 
-export default (ComposedComponent, customOptions = {}) =>
-  class DataFetcherWrapper extends PureComponent {
-    static propTypes = {
-      fetchActionAttributes: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          options: PropTypes.object,
-        })
-      ).isRequired,
-    };
+type ReactComponent = ComponentClass | StatelessComponent;
+interface IDataFetcherEnhance {
+  (
+    ComposedComponent: ReactComponent,
+    customOptions?: { CustomPreloader?: ReactComponent, CustomServerError?: ReactComponent },
+  ): ComponentClass;
+}
+interface IWrapperProps {
+  fetchActionAttributes: { name: string, options?: object }[];
+}
+interface IWrapperState {
+  isLoading: boolean;
+  isError: boolean;
+}
+const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOptions = {}) =>
+  class DataFetcherWrapper extends PureComponent<IWrapperProps, IWrapperState> {
+    private mounted: boolean;
+    private readonly Preloader: ReactComponent;
+    private readonly ServerError: ReactComponent;
 
     constructor(props) {
       super(props);
@@ -45,7 +55,7 @@ export default (ComposedComponent, customOptions = {}) =>
     componentWillMount() {
       fetchedDataManager.clearFetchedData();
 
-      const promises = [];
+      const promises: Promise<any>[] = [];
       const fetchedData = fetchedDataManager.getFetchedData();
 
       this.props.fetchActionAttributes.forEach(({ name, options }) => {
@@ -56,10 +66,10 @@ export default (ComposedComponent, customOptions = {}) =>
         promises.push(fetchedData[name]);
       });
 
-      Promise.all(promises).then((data) => {
+      Promise.all(promises).then((data: { status: number }[]) => {
         const isError = data.some(({ status }) => isErrorStatus(status));
 
-        if (this.mounted !== true) {
+        if (!this.mounted) {
           return;
         }
 
@@ -91,3 +101,5 @@ export default (ComposedComponent, customOptions = {}) =>
         <ComposedComponent {...this.props} />;
     }
   };
+
+export default dataFetcherEnhance;

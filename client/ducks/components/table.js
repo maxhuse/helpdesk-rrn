@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { ITEMS_PER_PAGE_OPTIONS } from 'constants';
+import { ITEMS_PER_PAGE_OPTIONS } from 'constants.ts';
 import { applicationName } from 'config';
 
 /*

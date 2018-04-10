@@ -4,7 +4,7 @@ import { isFunction as _isFunction } from 'lodash';
 import Tooltip from 'components/tooltip';
 import IconButton from 'components/icon-button';
 import Filter from 'components/filter';
-import { sortType, sortOrder } from 'constants.js';
+import { sortType, sortOrder } from 'constants.ts';
 import { TableRow } from './row';
 import { TableHeader } from './header';
 import Pagination from './pagination';

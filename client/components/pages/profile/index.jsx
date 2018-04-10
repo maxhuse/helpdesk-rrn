@@ -58,10 +58,9 @@ export default class Profile extends PureComponent {
   }
 
   onClickTerminateAllSessions() {
-    return this.props.authDataLogoutAllSignal().then(
-      () => this.props.modalComponentHideSignal(),
-      () => this.props.modalComponentHideSignal()
-    );
+    return this.props.authDataLogoutAllSignal()
+      .then(() => this.props.modalComponentHideSignal())
+      .catch(() => this.props.modalComponentHideSignal());
   }
 
   validateLogin(login) {

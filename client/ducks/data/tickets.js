@@ -1,4 +1,5 @@
 import { Map, fromJS } from 'immutable';
+import Promise from 'bluebird';
 import { applicationName } from 'config';
 import { fetchSignal } from 'ducks/fetch';
 

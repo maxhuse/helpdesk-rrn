@@ -1,15 +1,15 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, Store } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from 'ducks';
 
 // Setup for Redux Devtool Extension
 // eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 /*
 * Creates a preconfigured store.
 * */
-const configureStore = (initialState) => {
+const configureStore = (initialState?: any): Store<any> => {
   const store = createStore(
     rootReducer,
     initialState,

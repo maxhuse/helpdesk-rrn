@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Customers } from 'components/pages';
-import dataFetcherEnhance from 'components/data-fetcher-enhance/data-fetcher-enhance';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import { actions as customersDataActions } from 'ducks/data/customers';
 import { actions as modalComponentActions } from 'ducks/components/modal';
 

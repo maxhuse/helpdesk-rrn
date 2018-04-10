@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
-import { sortType, filterType } from 'constants.js';
+import { sortType, filterType } from 'constants.ts';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
 import ModalAddStaff from './modal-add-staff';

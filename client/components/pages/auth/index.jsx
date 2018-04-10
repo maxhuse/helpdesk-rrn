@@ -4,7 +4,7 @@ import { rights } from 'config';
 import { Toasts } from 'containers';
 import ServerError from 'components/server-error';
 import Preloader from 'components/preloader';
-import fetchedDataManager from 'components/data-fetcher-enhance/fetched-data-manager';
+import { fetchedDataManager } from 'components/data-fetcher-enhance';
 import AuthForm from './auth-form';
 
 export default class Auth extends PureComponent {

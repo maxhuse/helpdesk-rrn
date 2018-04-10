@@ -49,19 +49,15 @@ module.exports = {
   resolve: {
     modules: [
       path.join(__dirname, 'client'),
-      "node_modules"
+      'node_modules'
     ],
     alias: { shared: path.join(__dirname, 'shared') },
-    extensions: ['.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
   node: { constants: false },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        use: ['babel-loader'],
-        exclude: /node_modules/
-      },
+      { test: /\.(js|jsx|ts|tsx)$/, use: ['awesome-typescript-loader'], exclude: /node_modules/ },
       {
         test: /\.s?css$/,
         use: ExtractTextPlugin.extract({
@@ -82,5 +78,5 @@ module.exports = {
         }]
       }
     ]
-  }
+  },
 };

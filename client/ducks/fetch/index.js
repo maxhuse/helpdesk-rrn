@@ -1,6 +1,7 @@
 /*
 * Module for working with rest server: loads data, parse json, handles errors.
 * */
+import Promise from 'bluebird';
 import ajax from './ajax';
 import successHandler from './success-handler';
 import errorHandler from './error-handler';
