@@ -1,6 +1,14 @@
 import React, { PureComponent } from 'react';
 
-export default class ToastsItem extends PureComponent {
+interface IToastsItemProps {
+  type: string;
+  clickAction: () => void;
+  initDeleteTimeout: () => number;
+}
+
+export default class ToastsItem extends PureComponent<IToastsItemProps> {
+  private timerId: number;
+
   componentDidMount() {
     this.timerId = this.props.initDeleteTimeout();
   }

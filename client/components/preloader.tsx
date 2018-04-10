@@ -31,7 +31,7 @@ export default class Preloader extends PureComponent<IPreloaderProps, IPreloader
   constructor(props) {
     super(props);
 
-    let delay = 1500;
+    let delay: number = 1500;
 
     if (props.delay !== undefined) {
       delay = Number(props.delay);
@@ -42,7 +42,7 @@ export default class Preloader extends PureComponent<IPreloaderProps, IPreloader
       this.show();
     } else {
       this.state = { isShow: false };
-      this.timer = setTimeout(this.show.bind(this), delay);
+      this.timer = window.setTimeout(this.show.bind(this), delay);
     }
   }
 

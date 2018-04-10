@@ -1,9 +1,9 @@
-import { Map } from 'immutable';
+import { Map, Record } from 'immutable';
 
 export const applicationName: string = 'helpdesk';
 
 // Sidebar menu`s displayed according with this order
-export const rights: { [key: string]: string[] } = {
+export const rights: { [key in 'admin' | 'customer' | 'engineer']: string[] } = {
   admin: [
     '/tickets',
     '/customers',
@@ -23,23 +23,27 @@ export const rights: { [key: string]: string[] } = {
   ],
 };
 
-type MenuItem = Map<string, string>;
-type Menu = Map<string, MenuItem>;
+class MenuItem extends Record({ icon: '', text: '' }) {
+  icon: string;
+  text: string;
+}
 
-export const menu: Menu = Map({
-  '/tickets': Map({
+type TMenu = Map<string, MenuItem>;
+
+export const menu: TMenu = Map({
+  '/tickets': new MenuItem({
     icon: 'dvr',
     text: 'tickets',
   }),
-  '/customers': Map({
+  '/customers': new MenuItem({
     icon: 'group',
     text: 'customers',
   }),
-  '/staffs': Map({
+  '/staffs': new MenuItem({
     icon: 'directions_run',
     text: 'staffs',
   }),
-  '/profile': Map({
+  '/profile': new MenuItem({
     icon: 'account_box',
     text: 'profile',
   }),

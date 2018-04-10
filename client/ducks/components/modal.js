@@ -88,7 +88,7 @@ const modalComponentEnableDelta = () => ({ type: ENABLE });
 
 // Must be async to lock opened table row
 const modalComponentHideSignal = () => (dispatch) => {
-  setTimeout(() => {
+  window.setTimeout(() => {
     // Close modal and unlock table rows
     dispatch({ type: CLOSE });
     dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));
@@ -97,7 +97,7 @@ const modalComponentHideSignal = () => (dispatch) => {
 
 // Must be async to lock opened table row
 const modalComponentHideAllSignal = () => (dispatch) => {
-  setTimeout(() => {
+  window.setTimeout(() => {
     // Close modal and unlock table rows
     dispatch({ type: CLOSE_ALL });
     dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));

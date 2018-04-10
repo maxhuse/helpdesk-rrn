@@ -50,7 +50,7 @@
     "extract-text-webpack-plugin": "4.0.0-beta.0",
     "history": "4.7.2",
     "file-loader": "1.1.11",
-    "immutable": "3.8.1",
+    "immutable": "4.0.0-rc.9",
     "isomorphic-fetch": "2.2.1",
     "jsdom": "11.2.0",
     "node-sass": "4.8.3",

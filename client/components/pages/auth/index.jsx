@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { rights } from 'config';
-import { Toasts } from 'containers';
+import Toasts from 'components/toasts';
 import ServerError from 'components/server-error';
 import Preloader from 'components/preloader';
 import { fetchedDataManager } from 'components/data-fetcher-enhance';
