@@ -1,11 +1,33 @@
 import i18next from 'i18next';
+import { Dispatch } from 'redux';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';
 import { actions as modalComponentActions } from 'ducks/components/modal';
 import browserHistory from 'browser-history';
 
-/* eslint-disable require-yield */
-function* errorHandler(dispatch, { status, data, error, method, isAborted, options }) {
+export type TErrorResult = { status?: number, data: object, originalData: object, error?: Error };
+/* eslint-disable indent */
+interface IErrorHandler {
+  (
+    dispatch: Dispatch<any>,
+    options: {
+      status?: number,
+      data?: { message?: string, arguments?: object },
+      error?: Error,
+      method: string,
+      isAborted?: boolean,
+      options: {
+        method?: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE',
+        body?: object,
+        silent?: boolean,
+      }
+    }
+  ): TErrorResult;
+}
+/* eslint-enable indent */
+
+const errorHandler: IErrorHandler =
+(dispatch, { status, data = {}, error, method, isAborted, options }) => {
   // Ignore aborts and silent
   if (isAborted || options.silent) {
     return {
@@ -48,6 +70,6 @@ function* errorHandler(dispatch, { status, data, error, method, isAborted, optio
       };
     }
   }
-}
+};
 
 export default errorHandler;
