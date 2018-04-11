@@ -52,7 +52,9 @@ const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOption
       this.ServerError = CustomServerError || ServerErrorPage;
     }
 
-    componentWillMount() {
+    componentDidMount() {
+      this.mounted = true;
+
       fetchedDataManager.clearFetchedData();
 
       const promises: Promise<any>[] = [];
@@ -81,10 +83,6 @@ const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOption
 
         this.setState({ isLoading: false });
       });
-    }
-
-    componentDidMount() {
-      this.mounted = true;
     }
 
     componentWillUnmount() {

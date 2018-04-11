@@ -1,11 +1,30 @@
 import React, { PureComponent } from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
+import { actions as profilePageActions } from 'ducks/components/pages/profile';
+import { actions as modalComponentActions } from 'ducks/components/modal';
+import { actions as authDataActions } from 'ducks/data/auth';
 import { VALID_EMAIL_REX } from 'shared/constants';
 import ModalChangePassword from 'components/modal/change-password';
 import Modal from 'containers/modal';
 import InlineEdit from 'components/inline-edit';
 import ModalTerminateSessions from './modal-terminate-sessions';
 
+const mapDispatchToProps = Object.assign(
+  {},
+  profilePageActions,
+  modalComponentActions,
+  authDataActions,
+);
+
+function mapStateToProps(state) {
+  return {
+    authDataIm: state.data.authDataIm,
+    profilePageIm: state.components.pages.profilePageIm,
+  };
+}
+
+/* Components */
 const ProfileSecurityCard = ({ onClickTerminate }) => (
   <div className="card">
     <h3 className="card__header">{i18next.t('security')}</h3>
@@ -23,7 +42,7 @@ const ProfileSecurityCard = ({ onClickTerminate }) => (
   </div>
 );
 
-export default class Profile extends PureComponent {
+class Profile extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -169,3 +188,5 @@ export default class Profile extends PureComponent {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

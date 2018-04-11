@@ -1,6 +1,7 @@
 import React from 'react';
-import { Staffs, Profile, Customers, Tickets } from 'containers';
+import { Staffs, Customers, Tickets } from 'containers';
 import Toasts from 'components/toasts';
+import { Profile } from 'components/pages';
 import checkAuthEnhance from 'components/check-auth-enhance';
 import { ModalBackground } from 'containers/modal';
 import { Switch, Route } from 'react-router-dom';

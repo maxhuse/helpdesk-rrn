@@ -17,7 +17,7 @@ export default class Auth extends PureComponent {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     fetchedDataManager.clearFetchedData();
 
     this.props.authDataGetWithNoErrorsSignal().then(({ status }) => {
