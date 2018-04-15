@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import i18next from 'i18next';
-import ModalButtons from 'components/modal/modal-ok-cancel-buttons';
-import ModalHeader from 'components/modal/modal-header';
+import { ModalOkCancelButtons, ModalHeader } from 'components/modal';
 
 const ModalTerminateSessions = ({
   modalComponentIm,
@@ -16,7 +15,7 @@ const ModalTerminateSessions = ({
       {i18next.t('terminate_sessions_modal_description')}
     </div>
 
-    <ModalButtons
+    <ModalOkCancelButtons
       onSubmit={() => modalComponentSubmitWrapperSignal({ submitSignal })}
       isDisabled={modalComponentIm.get('isDisabled')}
       closeAction={modalComponentHideSignal}

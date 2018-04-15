@@ -1,10 +1,22 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
+import { actions as modalComponentActions } from 'ducks/components/modal';
+
+const mapDispatchToProps = Object.assign(
+  {},
+  modalComponentActions
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
+
 
 const modalRoot = document.getElementById('modal-root');
 
-export default class Modal extends PureComponent {
+class Modal extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -90,3 +102,5 @@ export default class Modal extends PureComponent {
     ), modalRoot);
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

@@ -1,8 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import Radio from 'components/radio';
-import ModalHeader from './modal-header';
-import ModalOkCancelButtons from './modal-ok-cancel-buttons';
+import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
 
 export default class ModalSelectLanguage extends PureComponent {
   constructor(props) {

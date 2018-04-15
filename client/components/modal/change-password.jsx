@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import getHashedPassword from 'tools/get-hashed-password';
 import Input from 'components/input';
-import ModalHeader from 'components/modal/modal-header';
-import ModalOkCancelButtons from 'components/modal/modal-ok-cancel-buttons';
+import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
 
 export default class ModalChangePassword extends PureComponent {
   static propTypes = {

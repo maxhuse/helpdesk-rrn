@@ -2,8 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import { VALID_EMAIL_REX } from 'shared/constants';
 import Input from 'components/input';
-import ModalHeader from 'components/modal/modal-header';
-import ModalOkCancelButtons from 'components/modal/modal-ok-cancel-buttons';
+import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
 
 export default class ModalEditCustomer extends PureComponent {
   constructor(props) {

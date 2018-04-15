@@ -5,8 +5,7 @@ import { actions as profilePageActions } from 'ducks/components/pages/profile';
 import { actions as modalComponentActions } from 'ducks/components/modal';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { VALID_EMAIL_REX } from 'shared/constants';
-import ModalChangePassword from 'components/modal/change-password';
-import Modal from 'containers/modal';
+import Modal, { ModalChangePassword } from 'components/modal';
 import InlineEdit from 'components/inline-edit';
 import ModalTerminateSessions from './modal-terminate-sessions';
 

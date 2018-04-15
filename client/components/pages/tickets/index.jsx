@@ -6,7 +6,7 @@ import { Table } from 'containers';
 import { roles } from 'shared/constants';
 import { getFormatDate } from 'helpers';
 import { sortType, sortOrder, filterType } from 'client-constants';
-import Modal, { modalContainerEnhance } from 'containers/modal';
+import Modal, { modalContainerEnhance } from 'components/modal';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import { actions as ticketsDataActions } from 'ducks/data/tickets';
 import { actions as customersDataActions } from 'ducks/data/customers';

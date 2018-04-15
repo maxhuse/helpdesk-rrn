@@ -4,15 +4,20 @@
 * */
 
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
 import ReactDOM from 'react-dom';
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
 
 const modalRoot = document.getElementById('modal-root');
 
 // Protection against the closing animation of an unopened window
 let isModalBackgroundWasOpened = false;
 
-export default class ModalBackground extends PureComponent {
+class ModalBackground extends PureComponent {
   render() {
     const { modalComponentIm } = this.props;
     // Displayed only if there are active modal windows
@@ -32,3 +37,5 @@ export default class ModalBackground extends PureComponent {
     return ReactDOM.createPortal(<div className={className} />, modalRoot);
   }
 }
+
+export default connect(mapStateToProps)(ModalBackground);

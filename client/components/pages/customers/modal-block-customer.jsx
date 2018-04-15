@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import i18next from 'i18next';
-import ModalOkCancelButtons from 'components/modal/modal-ok-cancel-buttons';
+import { ModalOkCancelButtons } from 'components/modal';
 
 export default class ModalBlockStaff extends Component {
   constructor(props) {

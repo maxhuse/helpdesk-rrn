@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 import { menu } from 'config';
 import i18next from 'i18next';
 import Tooltip from 'components/tooltip';
-import Modal from 'containers/modal';
-import ModalSelectLanguage from 'components/modal/select-language';
+import Modal, { ModalSelectLanguage } from 'components/modal';
 
 const HeaderTooltipContent = ({ onLanguageClick, onLogoutClick }) => (
   <Fragment>

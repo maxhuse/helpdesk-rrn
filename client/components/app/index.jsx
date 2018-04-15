@@ -2,7 +2,7 @@ import React from 'react';
 import Toasts from 'components/toasts';
 import { Profile, Tickets, Customers, Staffs } from 'components/pages';
 import checkAuthEnhance from 'components/check-auth-enhance';
-import { ModalBackground } from 'containers/modal';
+import { ModalBackground } from 'components/modal';
 import { Switch, Route } from 'react-router-dom';
 import Header from './header';
 import SidebarMenu from './sidebar-menu';
