@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { StatelessComponent } from 'react';
 
-const ModalButtons = ({
+interface IProps {
+  isDisabled: boolean;
+  okText: string;
+  cancelText: string;
+  onSubmit: () => void;
+  closeAction: () => void;
+}
+const ModalButtons: StatelessComponent<IProps> = ({
   isDisabled = false,
   closeAction,
   onSubmit,

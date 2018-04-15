@@ -73,6 +73,7 @@ class Profile extends PureComponent {
     }
   }
 
+  // TODO: wrap with dispatch
   onClickTerminateAllSessions() {
     return this.props.authDataLogoutAllSignal()
       .then(() => this.props.modalComponentHideSignal())

@@ -1,13 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, { MouseEvent, PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
-import { actions as modalComponentActions } from 'ducks/components/modal';
+import { actions as modalComponentActions, TState } from 'ducks/components/modal';
 
-const mapDispatchToProps = Object.assign(
-  {},
-  modalComponentActions
-);
+const mapDispatchToProps = ({
+  modalComponentHideSignal: modalComponentActions.modalComponentHideSignal,
+  modalComponentHideAllSignal: modalComponentActions.modalComponentHideAllSignal,
+  modalComponentSubmitWrapperSignal: modalComponentActions.modalComponentSubmitWrapperSignal,
+});
 
 const mapStateToProps = state => ({
   modalComponentIm: state.components.modalComponentIm,
@@ -16,7 +17,19 @@ const mapStateToProps = state => ({
 
 const modalRoot = document.getElementById('modal-root');
 
-class Modal extends PureComponent {
+interface IProps {
+  modalId: string;
+  modalWrapperClassName: string;
+  onClose?: () => void;
+  modalComponentIm: TState,
+  modalComponentHideSignal: typeof modalComponentActions.modalComponentHideSignal,
+  modalComponentHideAllSignal: typeof modalComponentActions.modalComponentHideAllSignal,
+  modalComponentSubmitWrapperSignal: typeof modalComponentActions.modalComponentSubmitWrapperSignal,
+  children: ReactElement<any>;
+}
+class Modal extends PureComponent<IProps> {
+  private layoutRef: HTMLDivElement | null;
+
   constructor(props) {
     super(props);
 
@@ -33,31 +46,30 @@ class Modal extends PureComponent {
     document.removeEventListener('keyup', this.onKeyup, false);
   }
 
-  onKeyup(event) {
+  private onKeyup(event): void {
     // Close all windows when pressing Esc.
     // Only the active window listens events to avoid unnecessary computations.
     if (event.keyCode === 27 &&
-      this.props.modalComponentIm.get('activeId') === this.props.modalId
+      this.props.modalComponentIm.activeId === this.props.modalId
     ) {
       this.modalClose();
     }
   }
 
-  onClick(event) {
+  private onClick(event: MouseEvent<HTMLDivElement>): void {
     // Close when layout was clicked
     if (event.target === this.layoutRef) {
       this.modalClose();
     }
   }
 
-  modalClose() {
+  private modalClose(): void {
     const {
       modalComponentIm,
       modalComponentHideAllSignal,
       onClose
     } = this.props;
-
-    if (!modalComponentIm.get('isDisabled')) {
+    if (!modalComponentIm.isDisabled) {
       if (onClose !== undefined) {
         onClose();
       } else {
@@ -67,6 +79,10 @@ class Modal extends PureComponent {
   }
 
   render() {
+    if (!modalRoot) {
+      return null;
+    }
+
     const {
       children,
       modalComponentIm,
@@ -78,7 +94,7 @@ class Modal extends PureComponent {
 
     return ReactDOM.createPortal((
       <CSSTransition
-        in={modalComponentIm.get('activeId') === modalId}
+        in={modalComponentIm.activeId === modalId}
         classNames="modal"
         timeout={{ enter: 300, exit: 200 }}
         unmountOnExit
