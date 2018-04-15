@@ -1,8 +1,8 @@
 import { combineReducers, ReducersMapObject } from 'redux';
-import profilePageIm, { State as ProfileState } from './profile';
+import profilePageIm, { TState as TProfileState } from './profile';
 
 const reducersMap: ReducersMapObject = { profilePageIm };
 
-const pagesReducers = combineReducers<ProfileState>(reducersMap);
+const pagesReducers = combineReducers<TProfileState>(reducersMap);
 
 export default pagesReducers;

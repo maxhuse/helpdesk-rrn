@@ -17,12 +17,10 @@ const mapDispatchToProps = Object.assign(
   authDataActions,
 );
 
-function mapStateToProps(state) {
-  return {
-    authDataIm: state.data.authDataIm,
-    profilePageIm: state.components.pages.profilePageIm,
-  };
-}
+const mapStateToProps = state => ({
+  authDataIm: state.data.authDataIm,
+  profilePageIm: state.components.pages.profilePageIm,
+});
 
 /* Components */
 const ProfileSecurityCard = ({ onClickTerminate }) => (

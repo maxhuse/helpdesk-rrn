@@ -1,13 +1,28 @@
 import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
-import { sortType, filterType } from 'constants.ts';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
+import { sortType, filterType } from 'client-constants.ts';
 import Modal, { modalContainerEnhance } from 'containers/modal';
+import { actions as staffsDataActions } from 'ducks/data/staffs';
+import { actions as modalComponentActions } from 'ducks/components/modal';
 import ModalChangePassword from 'components/modal/change-password';
 import ModalAddStaff from './modal-add-staff';
 import ModalEditStaff from './modal-edit-staff';
 import ModalBlockStaff from './modal-block-staff';
+
+const mapDispatchToProps = Object.assign(
+  {},
+  staffsDataActions,
+  modalComponentActions
+);
+
+const mapStateToProps = state => ({
+  staffsDataIm: state.data.staffsDataIm,
+  fetchActionAttributes: [{ name: 'staffsDataGetSignal' }],
+});
 
 const modalId = {
   ADD: 'addStaff',
@@ -198,4 +213,6 @@ const Staffs = ({
   );
 };
 
-export default Staffs;
+const StaffsWithFetch = dataFetcherEnhance(Staffs);
+
+export default connect(mapStateToProps, mapDispatchToProps)(StaffsWithFetch);

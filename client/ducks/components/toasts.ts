@@ -1,20 +1,11 @@
 import { List, Record } from 'immutable';
+import { Reducer } from 'redux';
 
 // Action types
 enum ActionTypeToast {
   ADD = 'toasts-component/ADD',
   DELETE = 'toasts-component/DELETE',
   RESET = 'toasts-component/RESET',
-}
-
-export class ToastItem extends Record({ id: 0, type: '', content: '' }) {
-  id: number;
-  type: string;
-  content: string;
-}
-export class State extends Record({ nextId: 0, items: List() }) {
-  nextId: number;
-  items: List<ToastItem>;
 }
 
 /*
@@ -47,17 +38,34 @@ export const actions = {
   toastsComponentResetDelta,
 };
 
+// State
+interface IToastItemFactory {
+  id: number;
+  type: string;
+  content: string;
+}
+const ToastItemFactory = Record<IToastItemFactory>({ id: 0, type: '', content: '' });
+// Temporary item for getting ToastItem type
+const tempToastItem = new ToastItemFactory();
+
+interface IStateFactory {
+  nextId: number;
+  items: List<typeof tempToastItem>;
+}
+const StateFactory = Record<IStateFactory>({ nextId: 0, items: List() });
+
+const initialState = new StateFactory();
+export type TState = typeof initialState;
+
 /*
 * Reducer
 * */
-const initialState = new State();
-
-export default function reducer(state: State = initialState, action: TActions): State {
+const reducer: Reducer<TState> = (state = initialState, action: TActions) => {
   switch (action.type) {
     case ActionTypeToast.ADD: {
       return state.withMutations((mutable) => {
         const { nextId } = state;
-        const items = state.items.push(new ToastItem({
+        const items = state.items.push(new ToastItemFactory({
           id: nextId,
           type: action.payload.type,
           content: action.payload.content,
@@ -80,4 +88,6 @@ export default function reducer(state: State = initialState, action: TActions): 
     default:
       return state;
   }
-}
+};
+
+export default reducer;

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import i18next from 'i18next';
 import { indexOf as _indexOf, isFunction as _isFunction } from 'lodash';
-import { filterType } from 'constants.ts';
+import { filterType } from 'client-constants.ts';
 import Switch from 'components/switch';
 import Autocomplete from 'components/autocomplete';
 import DateInterval from './date-interval';

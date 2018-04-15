@@ -7,9 +7,12 @@ import ajax from './ajax';
 import successHandler, { TSuccessResult } from './success-handler';
 import errorHandler, { TErrorResult } from './error-handler';
 
-type TFetchResult = Promise<TSuccessResult | TErrorResult>;
+type TFetchData = { [key: string]: any };
+export type TFetchResult =
+  { isSuccess?: boolean, status?: number, data?: TFetchData, error?: Error };
+type TFetchPromise = Promise<TSuccessResult | TErrorResult>;
 interface IFetchDispatch<D> {
-  (dispatch: Dispatch<D>): TFetchResult;
+  (dispatch: Dispatch<D>): TFetchPromise;
 }
 /* eslint-disable indent */
 interface IFetchSignal {

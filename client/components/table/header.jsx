@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import { sortOrder } from 'constants.ts';
+import { sortOrder } from 'client-constants.ts';
 import { TableCell } from './cell';
 
 export class TableHeader extends PureComponent {

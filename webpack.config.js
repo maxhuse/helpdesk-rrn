@@ -11,13 +11,13 @@ const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }
+    },
   }),
   new ExtractTextPlugin({
     filename: 'styles.css',
     disable: process.env.NODE_ENV === 'hot'
   }),
-  new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru|en/)
+  new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ru|en/),
 ];
 
 // HMR only on development

@@ -20,7 +20,7 @@ const PreloaderCircle: StatelessComponent<PreloaderCircleProps> = ({ className }
 );
 
 interface IPreloaderProps {
-  className: string;
+  className?: string;
 }
 interface IPreloaderState {
   isShow: boolean;

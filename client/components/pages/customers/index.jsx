@@ -1,12 +1,27 @@
 import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
-import { sortType, filterType } from 'constants.ts';
+import { sortType, filterType } from 'client-constants.ts';
 import { Table } from 'containers';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
+import { actions as customersDataActions } from 'ducks/data/customers';
+import { actions as modalComponentActions } from 'ducks/components/modal';
 import Modal, { modalContainerEnhance } from 'containers/modal';
 import ModalChangePassword from 'components/modal/change-password';
 import ModalAddCustomer from './modal-add-customer';
 import ModalEditCustomer from './modal-edit-customer';
 import ModalBlockCustomer from './modal-block-customer';
+
+const mapDispatchToProps = Object.assign(
+  {},
+  customersDataActions,
+  modalComponentActions
+);
+
+const mapStateToProps = state => ({
+  customersDataIm: state.data.customersDataIm,
+  fetchActionAttributes: [{ name: 'customersDataGetSignal' }],
+});
 
 const modalId = {
   ADD: 'addCustomer',
@@ -176,4 +191,6 @@ const Customers = ({
   );
 };
 
-export default Customers;
+const CustomersWithFetch = dataFetcherEnhance(Customers);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomersWithFetch);

@@ -1,14 +1,46 @@
 import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Map } from 'immutable';
 import { Table } from 'containers';
 import { roles } from 'shared/constants';
 import { getFormatDate } from 'helpers';
-import { sortType, sortOrder, filterType } from 'constants.ts';
+import { sortType, sortOrder, filterType } from 'client-constants';
 import Modal, { modalContainerEnhance } from 'containers/modal';
+import dataFetcherEnhance from 'components/data-fetcher-enhance';
+import { actions as ticketsDataActions } from 'ducks/data/tickets';
+import { actions as customersDataActions } from 'ducks/data/customers';
+import { actions as messagesDataActions } from 'ducks/data/messages';
+import { actions as modalComponentActions } from 'ducks/components/modal';
 import TicketStatusCell from './status-cell';
 import ModalAddTicket from './modal-add-ticket';
 import ModalShowTicket from './modal-show-ticket';
+
+const mapDispatchToProps = Object.assign(
+  {},
+  ticketsDataActions,
+  customersDataActions,
+  messagesDataActions,
+  modalComponentActions
+);
+
+function mapStateToProps(state) {
+  const userRole = state.data.authDataIm.getIn(['data', 'role']);
+  const fetchActionAttributes = userRole === roles.CUSTOMER ?
+    [{ name: 'ticketsDataGetSignal' }] :
+    [
+      { name: 'customersDataGetSignal' },
+      { name: 'ticketsDataGetSignal' }
+    ];
+
+  return {
+    authDataIm: state.data.authDataIm,
+    ticketsDataIm: state.data.ticketsDataIm,
+    customersDataIm: state.data.customersDataIm,
+    messagesDataIm: state.data.messagesDataIm,
+    fetchActionAttributes,
+  };
+}
 
 const modalId = {
   ADD: 'addTicket',
@@ -203,4 +235,6 @@ const Tickets = ({
   );
 };
 
-export default Tickets;
+const TicketsWithFetch = dataFetcherEnhance(Tickets);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicketsWithFetch);

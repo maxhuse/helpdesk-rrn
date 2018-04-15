@@ -1,8 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, MouseEvent } from 'react';
 import i18next from 'i18next';
 import Input from 'components/input';
 
-export default class AuthForm extends PureComponent {
+interface IAuthFormProps {
+  onSubmit: (e: MouseEvent<HTMLButtonElement>) => void;
+}
+export default class AuthForm extends PureComponent<IAuthFormProps> {
+  private loginRef: Input | null;
+  private passwordRef: Input | null;
+
   get login() {
     return this.loginRef;
   }

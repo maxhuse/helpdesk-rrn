@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { Record } from 'immutable';
 import Promise from 'bluebird';
 import { Dispatch, Reducer } from 'redux';
+import { TFetchResult } from 'ducks/fetch';
 import { actions as authDataActions } from 'ducks/data/auth';
 import { actions as toastsComponentActions } from 'ducks/components/toasts';
 
@@ -10,12 +11,6 @@ enum ActionTypeProfile {
   SET_OPENED_NAME = 'profile-page/SET_OPENED_NAME',
   TOGGLE_BLOCKED = 'profile-page/TOGGLE_BLOCKED',
   RESET = 'profile-page/RESET',
-}
-
-// State
-export class State extends Record({ isBlocked: false, openedInlineEditName: '' }) {
-  isBlocked: boolean;
-  openedInlineEditName: string;
 }
 
 /*
@@ -43,14 +38,12 @@ const profilePageResetDelta = (): IProfileReset => ({ type: ActionTypeProfile.RE
 
 /* Signals */
 interface IProfileUpdateDispatch<D> {
-  (dispatch: Dispatch<D>):
-    Promise<{ isSuccess?: boolean, status?: number, data?: object, error?: Error }>;
+  (dispatch: Dispatch<D>): Promise<TFetchResult>;
 }
 interface IProfileUpdate {
   <T>(options: { data: object }): IProfileUpdateDispatch<T>;
 }
 
-// TODO: Mend after authDataUpdateSignal will be described
 const profilePageUpdateSignal: IProfileUpdate = ({ data }) => dispatch =>
   Promise.coroutine(function* updateProfile() {
     dispatch(profilePageToggleBlockedDelta(true));
@@ -79,12 +72,20 @@ export const actions = {
   profilePageUpdateSignal,
 };
 
+// State
+interface IStateFactory {
+  isBlocked: boolean;
+  openedInlineEditName: string;
+}
+const StateFactory = Record<IStateFactory>({ isBlocked: false, openedInlineEditName: '' });
+
+const initialState = new StateFactory();
+export type TState = typeof initialState;
+
 /*
 * Reducer
 * */
-const initialState = new State();
-
-const reducer: Reducer<State> = (state = initialState, action: TActions) => {
+const reducer: Reducer<TState> = (state = initialState, action: TActions) => {
   switch (action.type) {
     case ActionTypeProfile.SET_OPENED_NAME:
       return state.set('openedInlineEditName', action.payload);

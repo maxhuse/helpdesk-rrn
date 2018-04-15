@@ -1,6 +1,6 @@
 import React from 'react';
 import i18next from 'i18next';
-import { ITEMS_PER_PAGE_OPTIONS } from 'constants.ts';
+import { ITEMS_PER_PAGE_OPTIONS } from 'client-constants.ts';
 
 const ItemsPerPage = ({ itemsPerPage, itemsCount, onChange }) => {
   const itemsPerPageOptions = ITEMS_PER_PAGE_OPTIONS.filter(value => (value < itemsCount));

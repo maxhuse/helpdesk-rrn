@@ -1,19 +1,19 @@
 import React, { PureComponent, ReactElement, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import Animate from 'rc-animate';
-import { State, actions as toastsComponentActions } from 'ducks/components/toasts';
+import { TState, actions as toastsComponentActions } from 'ducks/components/toasts';
 import ToastsItem from './toasts-item';
 
-const mapDispatchToProps = Object.assign({}, {
+const mapDispatchToProps = {
   toastsComponentDeleteDelta: toastsComponentActions.toastsComponentDeleteDelta,
-});
+};
 
 const mapStateToProps = state => ({
   toastsComponentIm: state.components.toastsComponentIm,
 });
 
 interface IToastsProps {
-  toastsComponentIm: State;
+  toastsComponentIm: TState;
   toastsComponentDeleteDelta: typeof toastsComponentActions.toastsComponentDeleteDelta;
 }
 

@@ -35,8 +35,8 @@ interface IWrapperState {
 const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOptions = {}) =>
   class DataFetcherWrapper extends PureComponent<IWrapperProps, IWrapperState> {
     private mounted: boolean;
-    private readonly Preloader: ReactComponent;
-    private readonly ServerError: ReactComponent;
+    private readonly Preloader: ReactComponent | typeof Preloader;
+    private readonly ServerError: ReactComponent | typeof ServerErrorPage;
 
     constructor(props) {
       super(props);
@@ -52,9 +52,7 @@ const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOption
       this.ServerError = CustomServerError || ServerErrorPage;
     }
 
-    componentDidMount() {
-      this.mounted = true;
-
+    componentWillMount() {
       fetchedDataManager.clearFetchedData();
 
       const promises: Promise<any>[] = [];
@@ -83,6 +81,10 @@ const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOption
 
         this.setState({ isLoading: false });
       });
+    }
+
+    componentDidMount() {
+      this.mounted = true;
     }
 
     componentWillUnmount() {
