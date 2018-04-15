@@ -15,7 +15,7 @@ function App({
   sidebarComponentToggleDelta,
   sidebarComponentIm,
   modalComponentHideSignal,
-  modalComponentShowDelta,
+  modalComponentShowSignal,
 }) {
   return (
     <div className="wrapper">
@@ -25,7 +25,7 @@ function App({
         location={location}
         authDataIm={authDataIm}
         authDataSetLanguageDelta={authDataSetLanguageDelta}
-        modalComponentShowDelta={modalComponentShowDelta}
+        modalComponentShowSignal={modalComponentShowSignal}
         modalComponentHideSignal={modalComponentHideSignal}
       />
 

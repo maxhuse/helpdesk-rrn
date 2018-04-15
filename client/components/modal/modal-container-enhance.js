@@ -6,10 +6,8 @@
 
 import { connect } from 'react-redux';
 
-function mapStateToProps(state) {
-  return {
-    modalComponentIm: state.components.modalComponentIm,
-  };
-}
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
 
 export default ComposedComponent => connect(mapStateToProps)(ComposedComponent);

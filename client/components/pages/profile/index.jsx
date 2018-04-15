@@ -108,7 +108,7 @@ class Profile extends PureComponent {
       profilePageIm,
       profilePageSetOpenedNameDelta,
       profilePageUpdateSignal,
-      modalComponentShowDelta,
+      modalComponentShowSignal,
     } = this.props;
     const isBlocked = profilePageIm.get('isBlocked');
     const openedInlineEditName = profilePageIm.get('openedInlineEditName');
@@ -156,7 +156,7 @@ class Profile extends PureComponent {
                 <div className="card__buttons">
                   <button
                     className="button button_flat_blue button_in-card"
-                    onClick={() => modalComponentShowDelta('changePassword', false)}
+                    onClick={() => modalComponentShowSignal('changePassword', false)}
                   >
                     {i18next.t('change_password')}
                   </button>
@@ -172,7 +172,7 @@ class Profile extends PureComponent {
 
             <div className="profile__section profile__section_security">
               <ProfileSecurityCard
-                onClickTerminate={() => modalComponentShowDelta('terminateSessions', false)}
+                onClickTerminate={() => modalComponentShowSignal('terminateSessions', false)}
               />
 
               <Modal modalId="terminateSessions">

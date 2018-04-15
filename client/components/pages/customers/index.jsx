@@ -90,7 +90,7 @@ const Customers = ({
   customersDataIm,
   customersDataAddSignal,
   customersDataUpdateSignal,
-  modalComponentShowDelta,
+  modalComponentShowSignal,
 }) => {
   // Describe table cells
   const cells = [
@@ -135,19 +135,19 @@ const Customers = ({
         getIcon: () => 'edit',
         getTitle: () => i18next.t('edit'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta(modalId.EDIT, { id: item.get('id') }),
+        onClick: item => modalComponentShowSignal(modalId.EDIT, { id: item.get('id') }),
       },
       {
         getIcon: () => 'account_circle',
         getTitle: () => i18next.t('change_password'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta(modalId.CHANGE_PASSWORD, { id: item.get('id') }),
+        onClick: item => modalComponentShowSignal(modalId.CHANGE_PASSWORD, { id: item.get('id') }),
       },
       {
         getIcon: item => (item.get('active') ? 'enhanced_encryption' : 'no_encryption'),
         getTitle: item => i18next.t(item.get('active') ? 'block' : 'unblock'),
         getClassName: () => 'button_flat button_icon',
-        onClick: item => modalComponentShowDelta(modalId.BLOCK, { id: item.get('id') }),
+        onClick: item => modalComponentShowSignal(modalId.BLOCK, { id: item.get('id') }),
       },
     ],
   };
@@ -176,7 +176,7 @@ const Customers = ({
           filterFields={filterFields}
           showHeader
           createButton={{
-            onClick: () => modalComponentShowDelta(modalId.ADD, false),
+            onClick: () => modalComponentShowSignal(modalId.ADD, false),
           }}
         />
 

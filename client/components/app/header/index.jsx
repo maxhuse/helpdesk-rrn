@@ -44,13 +44,13 @@ export default function Header(
     authDataLogoutSignal,
     location,
     authDataSetLanguageDelta,
-    modalComponentShowDelta,
+    modalComponentShowSignal,
   }
 ) {
   const { pathname } = location;
   const headerTooltipContentBlock = (
     <HeaderTooltipContent
-      onLanguageClick={() => modalComponentShowDelta('selectLanguage')}
+      onLanguageClick={() => modalComponentShowSignal('selectLanguage')}
       onLogoutClick={authDataLogoutSignal}
     />
   );

@@ -95,7 +95,7 @@ const Tickets = ({
   ticketsDataUpdateSignal,
   messagesDataGetSignal,
   messagesDataAddSignal,
-  modalComponentShowDelta,
+  modalComponentShowSignal,
 }) => {
   const userRole = authDataIm.getIn(['data', 'role']);
   const isStaff = userRole === roles.ADMIN || userRole === roles.ENGINEER;
@@ -171,7 +171,7 @@ const Tickets = ({
 
   // describe table row
   const row = {
-    onRowClick: id => modalComponentShowDelta(modalId.SHOW_TICKET, { id }),
+    onRowClick: id => modalComponentShowSignal(modalId.SHOW_TICKET, { id }),
   };
 
   // Describe filters
@@ -215,7 +215,7 @@ const Tickets = ({
           createButton={userRole === roles.CUSTOMER ?
             {
               text: 'create',
-              onClick: () => modalComponentShowDelta(modalId.ADD, false),
+              onClick: () => modalComponentShowSignal(modalId.ADD, false),
             } :
             null
           }
