@@ -1,8 +1,8 @@
 import { List, Record } from 'immutable';
 import { Reducer, Dispatch } from 'redux';
 import Promise from 'bluebird';
-import { actions as toastsComponentActions } from 'ducks/components/toasts';
-import { actions as tableComponentActions } from 'ducks/components/table';
+import { actions as toastsActions } from 'ducks/components/toasts';
+import { actions as tableActions } from 'ducks/components/table';
 import { TFetchResult } from 'ducks/fetch';
 
 // Action names
@@ -59,7 +59,7 @@ interface IModalShow {
 }
 const modalComponentShowSignal: IModalShow = (id, options = false) => (dispatch) => {
   // Lock table rows and show modal
-  dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(true));
+  dispatch(tableActions.tableComponentToggleRowsLockedDelta(true));
   dispatch(modalComponentShowDelta(id, options));
 };
 
@@ -71,7 +71,7 @@ const modalComponentHideSignal: IModalHide = () => (dispatch) => {
   window.setTimeout(() => {
     // Close modal and unlock table rows
     dispatch(modalComponentCloseDelta());
-    dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));
+    dispatch(tableActions.tableComponentToggleRowsLockedDelta(false));
   }, 10);
 };
 
@@ -83,7 +83,7 @@ const modalComponentHideAllSignal: IModalHideAll = () => (dispatch) => {
   window.setTimeout(() => {
     // Close modal and unlock table rows
     dispatch(modalComponentCloseAllDelta());
-    dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(false));
+    dispatch(tableActions.tableComponentToggleRowsLockedDelta(false));
   }, 10);
 };
 
@@ -105,9 +105,7 @@ const modalComponentSubmitWrapperSignal: IModalSubmitWrapper =
 
     if (answer.isSuccess) {
       if (doneText) {
-        dispatch(
-          toastsComponentActions.toastsComponentAddDelta({ type: 'info', content: doneText })
-        );
+        dispatch(toastsActions.toastsComponentAddDelta({ type: 'info', content: doneText }));
       }
 
       dispatch(modalComponentHideSignal());

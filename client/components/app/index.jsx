@@ -7,29 +7,28 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './header';
 import SidebarMenu from './sidebar-menu';
 
-const App = ({ location, sidebarComponentIm }) => {
-  return (
-    <div className="wrapper">
-      <Header location={location} />
+const App = ({ location, sidebarComponentIm }) => (
+  <div className="wrapper">
+    <Header location={location} />
 
-      <aside
-        className={sidebarComponentIm.get('isShownOnMobile') ? 'sidebar sidebar_shown' : 'sidebar'}
-      >
-        <SidebarMenu />
-      </aside>
+    <aside
+      className={sidebarComponentIm.get('isShownOnMobile') ? 'sidebar sidebar_shown' : 'sidebar'}
+    >
+      <SidebarMenu />
+    </aside>
 
-      <Switch>
-        <Route path="/tickets" component={Tickets} />
-        <Route path="/customers" component={Customers} />
-        <Route path="/staffs" component={Staffs} />
-        <Route path="/profile" component={Profile} />
-      </Switch>
+    <Switch>
+      <Route path="/tickets" component={Tickets} />
+      <Route path="/customers" component={Customers} />
+      <Route path="/staffs" component={Staffs} />
+      <Route path="/profile" component={Profile} />
+    </Switch>
 
-      <ModalBackground />
+    <ModalBackground />
 
-      <Toasts />
-    </div>
-  );
-};
+    <Toasts />
+  </div>
+);
+
 
 export default checkAuthEnhance(App);

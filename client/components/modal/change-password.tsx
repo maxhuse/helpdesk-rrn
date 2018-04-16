@@ -1,11 +1,21 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import getHashedPassword from 'tools/get-hashed-password';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
 import { TState, actions as modalActions } from 'ducks/components/modal';
 import { TFetchResult } from 'ducks/fetch';
+
+const mapDispatchToProps = {
+  modalComponentHideSignal: modalActions.modalComponentHideSignal,
+  modalComponentSubmitWrapperSignal: modalActions.modalComponentSubmitWrapperSignal,
+};
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
 
 interface IProps {
   doneText?: () => string;
@@ -14,7 +24,7 @@ interface IProps {
   modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
   submitSignal: (options: { id?: string | number, data: object }) => Promise<TFetchResult>;
 }
-export default class ModalChangePassword extends PureComponent<IProps> {
+class ModalChangePassword extends PureComponent<IProps> {
   private repeatRef: Input | null;
   private passwordRef: Input | null;
 
@@ -41,11 +51,7 @@ export default class ModalChangePassword extends PureComponent<IProps> {
       repeat: this.repeatRef.value,
     };
 
-    if (!modalComponentIm.options) {
-      return;
-    }
-
-    const userId = modalComponentIm.options.id;
+    const userId = modalComponentIm.options ? modalComponentIm.options.id : false;
 
     const resultDoneText = typeof doneText === 'function' && doneText();
 
@@ -141,3 +147,5 @@ export default class ModalChangePassword extends PureComponent<IProps> {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalChangePassword);

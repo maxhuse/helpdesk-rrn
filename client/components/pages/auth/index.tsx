@@ -62,7 +62,7 @@ class Auth extends PureComponent<IAuthProps, IAuthState> {
   }
 
   componentWillUnmount() {
-    this.props.toastsComponentResetDelta();
+    this.props.dispatch(this.props.toastsComponentResetDelta());
   }
 
   private onSubmit(event: MouseEvent<HTMLButtonElement>): void {
@@ -74,12 +74,13 @@ class Auth extends PureComponent<IAuthProps, IAuthState> {
 
     const login = this.formRef.login.value;
     const password = this.formRef.password.value;
+    const { dispatch, authDataLoginSignal, toastsComponentAddDelta } = this.props;
 
     if (this.validation({ login, password })) {
-      this.props.dispatch(this.props.authDataLoginSignal({ data: { login, password } }))
+      dispatch(authDataLoginSignal({ data: { login, password } }))
         .then(({ status, data = {} }) => {
           if ((status === 401 || status === 403) && data.message) {
-            this.props.toastsComponentAddDelta({ type: 'info', content: i18next.t(data.message) });
+            dispatch(toastsComponentAddDelta({ type: 'info', content: i18next.t(data.message) }));
           }
 
           this.checkAuth();

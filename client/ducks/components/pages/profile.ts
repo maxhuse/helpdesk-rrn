@@ -67,7 +67,6 @@ const profilePageUpdateSignal: IProfileUpdate = ({ data }) => dispatch =>
 
 export const actions = {
   profilePageSetOpenedNameDelta,
-  profilePageToggleBlockedDelta,
   profilePageResetDelta,
   profilePageUpdateSignal,
 };
