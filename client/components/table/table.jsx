@@ -294,7 +294,7 @@ export default class Table extends PureComponent {
       actionButtons,
       tableComponentChangePageDelta,
       tableComponentChangeItemsPerPageDelta,
-      tableComponentSortChangeDelta,
+      tableComponentSortChangeSignal,
       tableComponentOpenRowDelta,
       tableComponentCloseRowDelta,
       tableComponentChangeFiltersDelta,
@@ -353,7 +353,7 @@ export default class Table extends PureComponent {
         {showHeader && filteredItems.size > 0 ?
           <TableHeader
             cells={shownCells}
-            sortChangeAction={tableComponentSortChangeDelta}
+            sortChangeAction={tableComponentSortChangeSignal}
             currentSort={sort}
           /> :
           null

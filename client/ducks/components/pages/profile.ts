@@ -54,12 +54,10 @@ const profilePageUpdateSignal: IProfileUpdate = ({ data }) => dispatch =>
     dispatch(profilePageSetOpenedNameDelta({ name: '' }));
 
     if (answer.isSuccess) {
-      dispatch(
-        toastsComponentActions.toastsComponentAddDelta({
-          type: 'info',
-          content: i18next.t('profile_updated'),
-        })
-      );
+      dispatch(toastsComponentActions.toastsComponentAddDelta({
+        type: 'info',
+        content: i18next.t('profile_updated'),
+      }));
     }
 
     return answer;
