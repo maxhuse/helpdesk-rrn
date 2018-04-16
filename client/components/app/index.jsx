@@ -7,32 +7,15 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './header';
 import SidebarMenu from './sidebar-menu';
 
-function App({
-  authDataIm,
-  authDataSetLanguageDelta,
-  location,
-  authDataLogoutSignal,
-  sidebarComponentToggleDelta,
-  sidebarComponentIm,
-  modalComponentHideSignal,
-  modalComponentShowSignal,
-}) {
+const App = ({ location, sidebarComponentIm }) => {
   return (
     <div className="wrapper">
-      <Header
-        authDataLogoutSignal={authDataLogoutSignal}
-        sidebarComponentToggleDelta={sidebarComponentToggleDelta}
-        location={location}
-        authDataIm={authDataIm}
-        authDataSetLanguageDelta={authDataSetLanguageDelta}
-        modalComponentShowSignal={modalComponentShowSignal}
-        modalComponentHideSignal={modalComponentHideSignal}
-      />
+      <Header location={location} />
 
       <aside
         className={sidebarComponentIm.get('isShownOnMobile') ? 'sidebar sidebar_shown' : 'sidebar'}
       >
-        <SidebarMenu authDataIm={authDataIm} />
+        <SidebarMenu />
       </aside>
 
       <Switch>
@@ -47,6 +30,6 @@ function App({
       <Toasts />
     </div>
   );
-}
+};
 
 export default checkAuthEnhance(App);

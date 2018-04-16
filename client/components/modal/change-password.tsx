@@ -1,17 +1,22 @@
 import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import i18next from 'i18next';
+import Promise from 'bluebird';
 import getHashedPassword from 'tools/get-hashed-password';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { TState, actions as modalActions } from 'ducks/components/modal';
+import { TFetchResult } from 'ducks/fetch';
 
-export default class ModalChangePassword extends PureComponent {
-  static propTypes = {
-    submitSignal: PropTypes.func,
-    doneText: PropTypes.func,
-    modalComponentSubmitWrapperSignal: PropTypes.func,
-    modalComponentHideSignal: PropTypes.func,
-  };
+interface IProps {
+  doneText?: () => string;
+  modalComponentIm: TState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
+  submitSignal: (options: { id?: string | number, data: object }) => Promise<TFetchResult>;
+}
+export default class ModalChangePassword extends PureComponent<IProps> {
+  private repeatRef: Input | null;
+  private passwordRef: Input | null;
 
   constructor(props) {
     super(props);
@@ -19,7 +24,7 @@ export default class ModalChangePassword extends PureComponent {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit() {
+  private onSubmit(): void {
     const {
       modalComponentIm,
       submitSignal,
@@ -27,12 +32,20 @@ export default class ModalChangePassword extends PureComponent {
       modalComponentSubmitWrapperSignal,
     } = this.props;
 
+    if (!this.passwordRef || !this.repeatRef) {
+      return;
+    }
+
     const options = {
       password: this.passwordRef.value,
       repeat: this.repeatRef.value,
     };
 
-    const userId = modalComponentIm.get('options').id;
+    if (!modalComponentIm.options) {
+      return;
+    }
+
+    const userId = modalComponentIm.options.id;
 
     const resultDoneText = typeof doneText === 'function' && doneText();
 
@@ -47,24 +60,24 @@ export default class ModalChangePassword extends PureComponent {
     }
   }
 
-  validate({ password, repeat }) {
+  private validate({ password, repeat }: { password: string, repeat: string }): boolean {
     let isValid = true;
 
-    if (!password.length) {
+    if (!password.length && this.passwordRef) {
       this.passwordRef.error = i18next.t('v.required');
 
       isValid = false;
-    } else if (password.length < 6) {
+    } else if (password.length < 6 && this.passwordRef) {
       this.passwordRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
 
       isValid = false;
     }
 
-    if (!repeat.length) {
+    if (!repeat.length && this.repeatRef) {
       this.repeatRef.error = i18next.t('v.required');
 
       isValid = false;
-    } else if (password !== repeat) {
+    } else if (password !== repeat && this.repeatRef) {
       this.repeatRef.error = i18next.t('v.not_match_password');
 
       isValid = false;
@@ -79,7 +92,7 @@ export default class ModalChangePassword extends PureComponent {
       modalComponentIm,
     } = this.props;
 
-    const isDisabled = modalComponentIm.get('isDisabled');
+    const { isDisabled } = modalComponentIm;
 
     return (
       <Fragment>

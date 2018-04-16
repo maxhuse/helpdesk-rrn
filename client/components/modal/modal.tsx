@@ -19,7 +19,7 @@ const modalRoot = document.getElementById('modal-root');
 
 interface IProps {
   modalId: string;
-  modalWrapperClassName: string;
+  modalWrapperClassName?: string;
   onClose?: () => void;
   modalComponentIm: TState,
   modalComponentHideSignal: typeof modalComponentActions.modalComponentHideSignal,

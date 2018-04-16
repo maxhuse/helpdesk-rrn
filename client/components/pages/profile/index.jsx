@@ -162,10 +162,7 @@ class Profile extends PureComponent {
                     {i18next.t('change_password')}
                   </button>
                   <Modal modalId="changePassword">
-                    <ModalChangePassword
-                      userId={false}
-                      submitSignal={profilePageUpdateSignal}
-                    />
+                    <ModalChangePassword submitSignal={profilePageUpdateSignal} />
                   </Modal>
                 </div>
               </div>

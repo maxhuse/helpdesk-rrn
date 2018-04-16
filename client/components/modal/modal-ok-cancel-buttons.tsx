@@ -1,7 +1,7 @@
 import React, { StatelessComponent } from 'react';
 
 interface IProps {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   okText: string;
   cancelText: string;
   onSubmit: () => void;

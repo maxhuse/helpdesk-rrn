@@ -55,9 +55,9 @@ type TActions = IModalShowAction |
 
 
 interface IModalShow {
-  (id: string, options: TShowOptions): (dispatch: Dispatch<any>) => void;
+  (id: string, options?: TShowOptions): (dispatch: Dispatch<any>) => void;
 }
-const modalComponentShowSignal: IModalShow = (id, options) => (dispatch) => {
+const modalComponentShowSignal: IModalShow = (id, options = false) => (dispatch) => {
   // Lock table rows and show modal
   dispatch(tableComponentActions.tableComponentToggleRowsLockedDelta(true));
   dispatch(modalComponentShowDelta(id, options));

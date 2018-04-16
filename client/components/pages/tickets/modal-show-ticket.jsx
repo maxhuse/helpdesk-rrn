@@ -14,6 +14,7 @@ const Message = ({ userName, text, date }) => (
   </div>
 );
 
+// TODO: wrap with connect
 class ShowTicketMessages extends PureComponent {
   constructor(props) {
     super(props);

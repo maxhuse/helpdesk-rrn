@@ -1,9 +1,25 @@
 import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import Radio from 'components/radio';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { actions as modalActions } from 'ducks/components/modal';
+import { actions as authActions } from 'ducks/data/auth';
 
-export default class ModalSelectLanguage extends PureComponent {
+const mapDispatchToProps = {
+  authDataSetLanguageDelta: authActions.authDataSetLanguageDelta,
+  modalComponentHideSignal: modalActions.modalComponentHideSignal,
+};
+
+interface IProps {
+  currentLanguage: 'en'|'ru';
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  authDataSetLanguageDelta: typeof authActions.authDataSetLanguageDelta;
+}
+class ModalSelectLanguage extends PureComponent<IProps> {
+  private languageEnglishRef: Radio | null;
+  private languageRussianRef: Radio | null;
+
   constructor(props) {
     super(props);
 
@@ -11,21 +27,21 @@ export default class ModalSelectLanguage extends PureComponent {
   }
 
   onSubmit() {
-    const { setLanguageDelta, currentLanguage, closeAction } = this.props;
+    const { authDataSetLanguageDelta, currentLanguage, modalComponentHideSignal } = this.props;
     let language;
 
-    if (this.languageEnglishRef.checked) {
+    if (this.languageEnglishRef && this.languageEnglishRef.checked) {
       language = 'en';
-    } else if (this.languageRussianRef.checked) {
+    } else if (this.languageRussianRef && this.languageRussianRef.checked) {
       language = 'ru';
     }
 
     // Language not changed
     if (language === currentLanguage) {
-      closeAction();
+      modalComponentHideSignal();
     } else {
       // Language changed
-      setLanguageDelta(language);
+      authDataSetLanguageDelta(language);
     }
   }
 
@@ -72,3 +88,5 @@ export default class ModalSelectLanguage extends PureComponent {
     );
   }
 }
+
+export default connect(null, mapDispatchToProps)(ModalSelectLanguage);
