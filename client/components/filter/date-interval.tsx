@@ -5,10 +5,18 @@
 * */
 import React, { PureComponent } from 'react';
 import i18next from 'i18next';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import DatePicker from 'react-datepicker';
 
-class InputDate extends PureComponent {
+interface IInputDataProps {
+  id?: string;
+  placeholderText: string;
+  value: number | undefined;
+}
+interface IInputDataState {
+  date: Moment | string;
+}
+class InputDate extends PureComponent<IInputDataProps, IInputDataState> {
   constructor(props) {
     super(props);
 
@@ -24,10 +32,12 @@ class InputDate extends PureComponent {
   }
 
   get value() {
-    return this.state.date ? this.state.date.format('X') : '';
+    return this.state.date && moment.isMoment(this.state.date) ?
+      this.state.date.format('X') :
+      '';
   }
 
-  set value(newValue) {
+  set value(newValue: any) {
     // DatePicker want empty string as empty value
     const newDate = newValue ? moment(newValue, 'X') : '';
 
@@ -56,11 +66,21 @@ class InputDate extends PureComponent {
   }
 }
 
+interface IDateIntervalProps {
+  defaultValue: string | undefined;
+}
 // eslint-disable-next-line react/no-multi-comp
-export default class DateInterval extends PureComponent {
-  get value() {
-    const fromValue = Number(this.dateFromInputRef.value) || undefined;
-    let toValue = Number(this.dateToInputRef.value) || undefined;
+export default class DateInterval extends PureComponent<IDateIntervalProps> {
+  private dateFromInputRef: InputDate | null;
+  private dateToInputRef: InputDate | null;
+
+  get value(): [number | undefined, number | undefined] | undefined {
+    const fromValue = this.dateFromInputRef ?
+      Number(this.dateFromInputRef.value) || undefined :
+      undefined;
+    let toValue = this.dateToInputRef ?
+      Number(this.dateToInputRef.value) || undefined :
+      undefined;
 
     if (!fromValue && !toValue) {
       return undefined;
@@ -85,8 +105,10 @@ export default class DateInterval extends PureComponent {
 
     const [fromValue, toValue] = newValue;
 
-    this.dateFromInputRef.value = fromValue;
-    this.dateToInputRef.value = toValue;
+    if (this.dateFromInputRef && this.dateToInputRef) {
+      this.dateFromInputRef.value = fromValue;
+      this.dateToInputRef.value = toValue;
+    }
   }
 
   render() {

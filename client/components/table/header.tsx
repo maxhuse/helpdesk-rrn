@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { sortOrder } from 'client-constants';
@@ -16,7 +16,7 @@ interface IProps {
   tableComponentSortChangeSignal: typeof tableActions.tableComponentSortChangeSignal;
 }
 class TableHeaderInner extends PureComponent<IProps> {
-  getContent(cell) {
+  private getContent(cell): ReactElement<any> {
     const { tableComponentSortChangeSignal, currentSort } = this.props;
 
     let className = 'table__header-text';

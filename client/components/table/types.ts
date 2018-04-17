@@ -2,26 +2,35 @@ import { List, Map } from 'immutable';
 import { filterType, sortType } from 'client-constants';
 import { actions as tableActions, TFilters as TTableFilters } from 'ducks/components/table';
 
-export type TCells = Array<{
+export type TCell = {
   id: string,
   getValue: (model: any) => any,
   className: string,
   name: string,
   isHiddenOnClosed?: boolean;
   sort?: { type: sortType, field: string }
-}>;
-
-export type TRow = {
-  iconButtons: Array<{
-    getIcon: () => string;
-    getTitle: () => string;
-    getClassName: () => string;
-    onClick: (item: any) => void;
-  }>,
-  onRowClick: (id: string | number) => void;
 };
 
-export type TItems = List<Map<string, any>>;
+export type TCells = Array<TCell>;
+
+export type TItem = Map<string, any>;
+
+export type TItems = List<TItem>;
+
+export type TRowButton = {
+  getIcon?: (model: TItem) => string;
+  getText?: (model: TItem) => string;
+  getTitle: (model: TItem) => string;
+  getClassName: (model: TItem) => string;
+  isShown?: (model: TItem) => boolean;
+  onClick: (model: TItem) => void;
+};
+
+export type TRow = {
+  iconButtons: Array<TRowButton>,
+  textButtons: Array<TRowButton>,
+  onRowClick: (id: string | number) => void;
+};
 
 export type TFilterFields = Array<{
   type: filterType,
