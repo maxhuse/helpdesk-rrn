@@ -1,35 +1,47 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactElement } from 'react';
+import classnames from 'classnames';
 import { findDOMNode } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 
-export default class Tooltip extends PureComponent {
+interface IProps {
+  className?: string;
+  content: ReactElement<any>;
+  children: ReactElement<any>;
+}
+interface IState {
+  isHidden: boolean;
+}
+export default class Tooltip extends PureComponent<IProps, IState> {
   constructor(props) {
     super(props);
 
     this.toggleHide = this.toggleHide.bind(this);
-    this.handleClickBinded = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = { isHidden: true };
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleClickBinded, false);
+    document.addEventListener('click', this.handleClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickBinded, false);
+    document.removeEventListener('click', this.handleClick, false);
   }
 
-  handleClick(event) {
+  private handleClick(event): void {
+    const rootEl = document.getElementById('root');
+    const modalRootEl = document.getElementById('modal-root');
+
+    if (!rootEl || !modalRootEl) {
+      return;
+    }
+
     try {
       // Close the tooltip if there is a click outside the tooltip, but inside root.
       // This will protect you from closing when clicking on the date of the calendar.
-      if (
-        !findDOMNode(this).contains(event.target) &&
-        (
-          document.getElementById('root').contains(event.target) ||
-          document.getElementById('modal-root').contains(event.target)
-        )
+      if (!findDOMNode(this).contains(event.target) &&
+        (rootEl.contains(event.target) || modalRootEl.contains(event.target))
       ) {
         if (!this.state.isHidden) {
           this.toggleHide();
@@ -40,14 +52,14 @@ export default class Tooltip extends PureComponent {
     }
   }
 
-  toggleHide() {
+  private toggleHide(): void {
     this.setState({
       isHidden: !this.state.isHidden,
     });
   }
 
   render() {
-    const { className = '', children, content } = this.props;
+    const { className, children, content } = this.props;
 
     return (
       <div className="tooltip">
@@ -68,7 +80,7 @@ export default class Tooltip extends PureComponent {
           timeout={{ enter: 200, exit: 200 }}
           unmountOnExit
         >
-          <div className={`tooltip__content ${className}`}>
+          <div className={classnames('tooltip__content', className)}>
             {content}
           </div>
         </CSSTransition>

@@ -1,11 +1,23 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
-import { sortOrder } from 'client-constants.ts';
+import { sortOrder } from 'client-constants';
+import { actions as tableActions, TSort } from 'ducks/components/table';
 import { TableCell } from './cell';
+import { TCells } from './types';
 
-export class TableHeader extends PureComponent {
+const mapDispatchToProps = {
+  tableComponentSortChangeSignal: tableActions.tableComponentSortChangeSignal,
+};
+
+interface IProps {
+  currentSort: TSort;
+  cells: TCells;
+  tableComponentSortChangeSignal: typeof tableActions.tableComponentSortChangeSignal;
+}
+class TableHeaderInner extends PureComponent<IProps> {
   getContent(cell) {
-    const { sortChangeAction, currentSort } = this.props;
+    const { tableComponentSortChangeSignal, currentSort } = this.props;
 
     let className = 'table__header-text';
     let onClick;
@@ -24,7 +36,7 @@ export class TableHeader extends PureComponent {
 
       className += sortArrow;
       onClick = () => {
-        sortChangeAction({
+        tableComponentSortChangeSignal({
           field: cell.sort.field,
           type: cell.sort.type,
           order,
@@ -54,3 +66,5 @@ export class TableHeader extends PureComponent {
     );
   }
 }
+
+export const TableHeader = connect(null, mapDispatchToProps)(TableHeaderInner);

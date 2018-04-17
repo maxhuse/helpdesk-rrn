@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { StatelessComponent } from 'react';
 
-const ServerError = () => (
+const ServerError: StatelessComponent<{}> = () => (
   <div className="error-page">
     <div className="error-page__container">
       <div className="error-page__message error-page__message_wide">

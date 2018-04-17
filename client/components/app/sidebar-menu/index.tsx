@@ -1,5 +1,4 @@
 import React, { Component, StatelessComponent } from 'react';
-import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { rights, menu } from 'config';
 import i18next from 'i18next';
@@ -27,7 +26,7 @@ interface IMenuProps {
   authDataIm: TAuthState;
 }
 // We need here Component but not PureComponent to use activeClassName in SidebarMenuLink
-class SidebarMenu extends Component<IMenuProps> {
+export default class SidebarMenu extends Component<IMenuProps> {
   // Return only accessed links for current user role
   private getLinks() {
     const role = this.props.authDataIm.getIn(['data', 'role']);
@@ -44,9 +43,3 @@ class SidebarMenu extends Component<IMenuProps> {
     );
   }
 }
-
-const mapStateToProps = state => ({
-  authDataIm: state.data.authDataIm,
-});
-
-export default connect(mapStateToProps)(SidebarMenu);

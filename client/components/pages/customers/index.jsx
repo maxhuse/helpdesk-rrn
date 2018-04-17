@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { sortType, filterType } from 'client-constants.ts';
-import { Table } from 'containers';
+import { Table } from 'components/table';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import { actions as customersDataActions } from 'ducks/data/customers';
 import { actions as modalComponentActions } from 'ducks/components/modal';

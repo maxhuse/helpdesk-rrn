@@ -7,14 +7,14 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './header';
 import SidebarMenu from './sidebar-menu';
 
-const App = ({ location, sidebarComponentIm }) => (
+const App = ({ location, sidebarComponentIm, authDataIm }) => (
   <div className="wrapper">
     <Header location={location} />
 
     <aside
       className={sidebarComponentIm.get('isShownOnMobile') ? 'sidebar sidebar_shown' : 'sidebar'}
     >
-      <SidebarMenu />
+      <SidebarMenu authDataIm={authDataIm} />
     </aside>
 
     <Switch>

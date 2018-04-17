@@ -1,15 +1,35 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, StatelessComponent } from 'react';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { isFunction as _isFunction } from 'lodash';
+import { Map } from 'immutable';
 import Tooltip from 'components/tooltip';
 import IconButton from 'components/icon-button';
 import Filter from 'components/filter';
-import { sortType, sortOrder } from 'client-constants.ts';
+import {
+  actions as tableActions,
+  TState as TTableState,
+  TSort as TTableSort,
+} from 'ducks/components/table';
+import { sortType, sortOrder, filterType } from 'client-constants';
 import { TableRow } from './row';
 import { TableHeader } from './header';
 import Pagination from './pagination';
+import {
+  TCells,
+  TRow,
+  TItems,
+  TFilterFields,
+  TActionButtons,
+  TCreateButton,
+  TControlButtonsFilter
+} from './types';
 
-const EmptyTableContent = ({ isEmpty }) => (
+/* Components */
+interface IEmptyTableContentProps {
+  isEmpty: boolean;
+}
+const EmptyTableContent: StatelessComponent<IEmptyTableContentProps> = ({ isEmpty }) => (
   <div className="empty-table">
     <i className="material-icons empty-table__icon">sentiment_dissatisfied</i>
     <div className="empty-table__title">
@@ -22,13 +42,22 @@ const EmptyTableContent = ({ isEmpty }) => (
   </div>
 );
 
-const CreateButton = ({ onClick, text }) => (
+interface ICreateButtonProps {
+  onClick: () => void;
+  text?: string;
+}
+const CreateButton: StatelessComponent<ICreateButtonProps> = ({ onClick, text }) => (
   <button className="button button_flat button_flat_blue" onClick={onClick}>
     {i18next.t(text || 'add')}
   </button>
 );
 
-const IconLink = ({ title, icon, href }) => (
+interface IIconLinkProps {
+  title: string;
+  icon: string;
+  href: string;
+}
+const IconLink: StatelessComponent<IIconLinkProps> = ({ title, icon, href }) => (
   <a title={title} href={href}>
     <button className="button button_flat button_icon">
       <i className="material-icons">{icon}</i>
@@ -36,7 +65,10 @@ const IconLink = ({ title, icon, href }) => (
   </a>
 );
 
-const FilterButton = ({ filter }) => {
+interface IFilterButtonProps {
+  filter: TControlButtonsFilter;
+}
+const FilterButton: StatelessComponent<IFilterButtonProps> = ({ filter }) => {
   const { changeAction, resetAction, filterFields, filters } = filter;
 
   const filterBlock = (
@@ -60,7 +92,7 @@ const FilterButton = ({ filter }) => {
           <IconButton
             title={i18next.t('filter')}
             icon="filter_list"
-            className={isFiltered ? 'button_flat_blue' : false}
+            className={isFiltered ? 'button_flat_blue' : undefined}
           />
         </Tooltip> :
         null
@@ -69,7 +101,10 @@ const FilterButton = ({ filter }) => {
   );
 };
 
-const ActionButtons = ({ buttons }) => (
+interface IActionButtonsProps {
+  buttons?: TActionButtons;
+}
+const ActionButtons: StatelessComponent<IActionButtonsProps> = ({ buttons }) => (
   <div className="table__action-buttons">
     {buttons ?
       <div className="table__action-buttons">
@@ -100,14 +135,28 @@ const ActionButtons = ({ buttons }) => (
   </div>
 );
 
-const ControlButtons = ({ filter, actionButtons }) => (
+interface IControlButtonsProps {
+  actionButtons?: TActionButtons;
+  filter: TControlButtonsFilter;
+}
+const ControlButtons: StatelessComponent<IControlButtonsProps> = ({ filter, actionButtons }) => (
   <Fragment>
     <ActionButtons buttons={actionButtons} />
     <FilterButton filter={filter} />
   </Fragment>
 );
 
-const TableContent = ({
+interface ITableContentProps {
+  items: TItems;
+  cells: TCells;
+  row: TRow;
+  shownCells: TCells;
+  openedId: false | number;
+  isRowsLocked: boolean;
+  openRowAction: typeof tableActions.tableComponentOpenRowDelta;
+  closeRowAction: typeof tableActions.tableComponentCloseRowDelta;
+}
+const TableContent: StatelessComponent<ITableContentProps> = ({
   items,
   row,
   cells,
@@ -135,12 +184,43 @@ const TableContent = ({
   </Fragment>
 );
 
-export default class Table extends PureComponent {
+interface ITableProps {
+  isPreventReset?: boolean;
+  cells: TCells;
+  row: TRow;
+  items: TItems;
+  filterFields: TFilterFields;
+  showHeader?: boolean;
+  actionButtons?: TActionButtons;
+  createButton?: TCreateButton;
+  defaultSort?: TTableSort;
+  tableComponentIm: TTableState;
+  tableComponentResetDelta: typeof tableActions.tableComponentResetDelta;
+  tableComponentChangePageDelta: typeof tableActions.tableComponentChangePageDelta;
+  tableComponentChangeItemsPerPageDelta: typeof tableActions.tableComponentChangeItemsPerPageDelta;
+  tableComponentOpenRowDelta: typeof tableActions.tableComponentOpenRowDelta;
+  tableComponentCloseRowDelta: typeof tableActions.tableComponentCloseRowDelta;
+  tableComponentResetFiltersDelta: typeof tableActions.tableComponentResetFiltersDelta;
+  tableComponentChangeFiltersDelta: typeof tableActions.tableComponentChangeFiltersDelta;
+}
+interface ITableState {
+  filteredItems: TItems;
+}
+class Table extends PureComponent<ITableProps, ITableState> {
+  readonly filterFunctions: {
+    [key: string]:
+      (options: {
+      model: Map<string, any>,
+      fieldName: string,
+      value: string | number | boolean
+      }) => boolean
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      filteredItems: this.filter(props.items, props.tableComponentIm.get('filters')),
+      filteredItems: this.filter(props.items, props.tableComponentIm.filters),
     };
 
     // Extract filter functions from filterFields
@@ -148,7 +228,7 @@ export default class Table extends PureComponent {
 
     props.filterFields.forEach((filterField) => {
       // If the filter type is dateInterval, we use specific filter function
-      if (filterField.type === 'dateInterval') {
+      if (filterField.type === filterType.DATE_INTERVAL) {
         this.filterFunctions[filterField.key] = this.dateIntervalFilterFunction;
       }
 
@@ -160,10 +240,10 @@ export default class Table extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.items !== this.props.items ||
-      nextProps.tableComponentIm.get('filters') !== this.props.tableComponentIm.get('filters')
+      nextProps.tableComponentIm.get('filters') !== this.props.tableComponentIm.filters
     ) {
       this.setState({
-        filteredItems: this.filter(nextProps.items, nextProps.tableComponentIm.get('filters')),
+        filteredItems: this.filter(nextProps.items, nextProps.tableComponentIm.filters),
       });
     }
   }
@@ -176,7 +256,7 @@ export default class Table extends PureComponent {
     }
   }
 
-  sort(items, sort) {
+  private sort(items: TItems, sort): TItems {
     const type = sort.get('type');
     const field = sort.get('field');
     const order = sort.get('order');
@@ -223,7 +303,7 @@ export default class Table extends PureComponent {
   }
 
   // Filter function for 'dateInterval' filter
-  dateIntervalFilterFunction({ model, fieldName, value }) {
+  private dateIntervalFilterFunction({ model, fieldName, value }): boolean {
     const fieldValue = model.get(fieldName);
     const fromTimestamp = Number(value[0]);
     const toTimestamp = Number(value[1]);
@@ -240,7 +320,7 @@ export default class Table extends PureComponent {
     return true;
   }
 
-  filter(items, filters) {
+  public filter(items: TItems, filters): TItems {
     if (!filters || !filters.size) {
       return items;
     }
@@ -290,21 +370,18 @@ export default class Table extends PureComponent {
       showHeader,
       items,
       createButton,
-      tableComponentIm,
       actionButtons,
+      defaultSort,
+      tableComponentIm,
       tableComponentChangePageDelta,
       tableComponentChangeItemsPerPageDelta,
-      tableComponentSortChangeSignal,
       tableComponentOpenRowDelta,
       tableComponentCloseRowDelta,
       tableComponentChangeFiltersDelta,
       tableComponentResetFiltersDelta,
-      defaultSort,
     } = this.props;
 
-    const sort = tableComponentIm.get('sort');
-    const page = tableComponentIm.get('page');
-    const itemsPerPage = tableComponentIm.get('itemsPerPage');
+    const { sort, page, itemsPerPage } = tableComponentIm;
     let { filteredItems } = this.state;
 
     // Sorting
@@ -326,7 +403,7 @@ export default class Table extends PureComponent {
     }
 
     // This cells shows when row is not opened
-    const shownCells = cells.filter(cell => cell.isHiddenOnClosed !== true);
+    const shownCells = cells.filter(cell => !cell.isHiddenOnClosed);
 
     return (
       <div className="table">
@@ -344,18 +421,14 @@ export default class Table extends PureComponent {
                 changeAction: tableComponentChangeFiltersDelta,
                 resetAction: tableComponentResetFiltersDelta,
                 filterFields,
-                filters: tableComponentIm.get('filters'),
+                filters: tableComponentIm.filters,
               }}
             />
           </div>
         </div>
 
         {showHeader && filteredItems.size > 0 ?
-          <TableHeader
-            cells={shownCells}
-            sortChangeAction={tableComponentSortChangeSignal}
-            currentSort={sort}
-          /> :
+          <TableHeader cells={shownCells} currentSort={sort} /> :
           null
         }
         {filteredItems.size > 0 ?
@@ -364,8 +437,8 @@ export default class Table extends PureComponent {
             row={row}
             cells={cells}
             shownCells={shownCells}
-            openedId={tableComponentIm.get('openedId')}
-            isRowsLocked={tableComponentIm.get('isRowsLocked')}
+            openedId={tableComponentIm.openedId}
+            isRowsLocked={tableComponentIm.isRowsLocked}
             openRowAction={tableComponentOpenRowDelta}
             closeRowAction={tableComponentCloseRowDelta}
           /> :
@@ -388,3 +461,19 @@ export default class Table extends PureComponent {
     );
   }
 }
+
+const mapDispatchToProps = {
+  tableComponentResetDelta: tableActions.tableComponentResetDelta,
+  tableComponentChangePageDelta: tableActions.tableComponentChangePageDelta,
+  tableComponentChangeItemsPerPageDelta: tableActions.tableComponentChangeItemsPerPageDelta,
+  tableComponentOpenRowDelta: tableActions.tableComponentOpenRowDelta,
+  tableComponentCloseRowDelta: tableActions.tableComponentCloseRowDelta,
+  tableComponentResetFiltersDelta: tableActions.tableComponentResetFiltersDelta,
+  tableComponentChangeFiltersDelta: tableActions.tableComponentChangeFiltersDelta,
+};
+
+const mapStateToProps = state => ({
+  tableComponentIm: state.components.tableComponentIm,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
-import { Table } from 'containers';
+import { Table } from 'components/table';
 import { roles } from 'shared/constants';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import { sortType, filterType } from 'client-constants.ts';

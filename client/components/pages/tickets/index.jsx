@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Map } from 'immutable';
-import { Table } from 'containers';
+import { Table } from 'components/table';
 import { roles } from 'shared/constants';
 import { getFormatDate } from 'helpers';
 import { sortType, sortOrder, filterType } from 'client-constants';

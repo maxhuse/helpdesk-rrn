@@ -1,6 +1,11 @@
 import { Map, Record } from 'immutable';
-import { ITEMS_PER_PAGE_OPTIONS } from 'client-constants';
+import { ITEMS_PER_PAGE_OPTIONS, sortOrder, sortType } from 'client-constants';
 import { Reducer, Dispatch } from 'redux';
+
+export type TSort = Map<string, string>;
+export type TFilters = Map<string, boolean | string>;
+
+type TSortArguments = { field: string, type: sortType, order: sortOrder };
 
 // Action types
 enum ActionTypeTable {
@@ -41,7 +46,7 @@ interface IChangeFilters {
   readonly type: ActionTypeTable.CHANGE_FILTERS;
   readonly payload: Map<string, boolean | string>;
 }
-const tableComponentChangeFiltersDelta = (filters: Map<string, boolean | string>): IChangeFilters =>
+const tableComponentChangeFiltersDelta = (filters: TFilters): IChangeFilters =>
   ({ type: ActionTypeTable.CHANGE_FILTERS, payload: filters });
 
 interface IResetFilters {
@@ -64,9 +69,9 @@ const tableComponentChangeItemsPerPageDelta = (itemsPerPage: number): IChangeIte
 
 interface ISortChangeInner {
   readonly type: ActionTypeTable.SORT_CHANGE;
-  readonly payload: Map<string, string>;
+  readonly payload: TSortArguments;
 }
-const tableComponentSortChangeInnerDelta = (sort: Map<string, string>): ISortChangeInner =>
+const tableComponentSortChangeInnerDelta = (sort: TSortArguments): ISortChangeInner =>
   ({ type: ActionTypeTable.SORT_CHANGE, payload: sort });
 
 interface IToggleRowsLocked {
@@ -77,7 +82,7 @@ const tableComponentToggleRowsLockedDelta = (isLocked: boolean): IToggleRowsLock
   ({ type: ActionTypeTable.TOGGLE_ROWS_LOCKED, payload: isLocked });
 
 interface ISortChange {
-  (sort: Map<string, string>): (dispatch: Dispatch<any>) => void;
+  (sort: TSortArguments): (dispatch: Dispatch<any>) => void;
 }
 const tableComponentSortChangeSignal: ISortChange = sort => (dispatch) => {
   dispatch(tableComponentCloseRowDelta());
@@ -109,11 +114,11 @@ export const actions = {
 
 /* State */
 interface IStateFactory {
-  openedId: boolean | number;
+  openedId: false | number;
   page: number;
-  itemsPerPage: number | undefined;
-  filters: Map<string, boolean | string>;
-  sort: Map<string, string>;
+  itemsPerPage: number;
+  filters: TFilters;
+  sort: TSort;
   isRowsLocked: boolean;
 }
 const StateFactory = Record<IStateFactory>({
@@ -122,7 +127,7 @@ const StateFactory = Record<IStateFactory>({
   // Current page in the table
   page: 1,
   // How many rows are displayed on the page
-  itemsPerPage: ITEMS_PER_PAGE_OPTIONS.get(0),
+  itemsPerPage: ITEMS_PER_PAGE_OPTIONS.get(0, 10),
   filters: Map(),
   sort: Map(),
   // Lock the closing of the expanded row. This is necessary at opening of a modal window.

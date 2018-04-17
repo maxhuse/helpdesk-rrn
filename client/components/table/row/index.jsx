@@ -10,15 +10,6 @@ const getCellValue = value => (value === undefined || value === '' || value === 
   value
 );
 
-export const TableRow = (props) => {
-  // Select component and filter cells
-  if (props.item.get('id') === props.openedId) {
-    return <TableRowExpanded {...props} />;
-  }
-
-  return <TableRowShrunk {...props} />;
-};
-
 const getLastCellComponent = (CellComponent, iconButtons) =>
   ({ className, componentProps, value, item }) => (
     <div className={className}>
@@ -183,3 +174,12 @@ class TableRowExpanded extends PureComponent {
     );
   }
 }
+
+export const TableRow = (props) => {
+  // Select component and filter cells
+  if (props.item.get('id') === props.openedId) {
+    return <TableRowExpanded {...props} />;
+  }
+
+  return <TableRowShrunk {...props} />;
+};
