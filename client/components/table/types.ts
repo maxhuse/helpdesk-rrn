@@ -1,4 +1,5 @@
 import { List, Map } from 'immutable';
+import { ComponentType } from 'react';
 import { filterType, sortType } from 'client-constants';
 import { actions as tableActions, TFilters as TTableFilters } from 'ducks/components/table';
 
@@ -8,7 +9,10 @@ export type TCell = {
   className: string,
   name: string,
   isHiddenOnClosed?: boolean;
-  sort?: { type: sortType, field: string }
+  isHiddenOnOpened?: boolean;
+  sort?: { type: sortType, field: string };
+  component?: ComponentType<any>;
+  componentProps?: { [key: string]: any };
 };
 
 export type TCells = Array<TCell>;
@@ -26,6 +30,8 @@ export type TRowButton = {
   onClick: (model: TItem) => void;
 };
 
+export type TRowButtons = Array<TRowButton>;
+
 export type TRow = {
   iconButtons: Array<TRowButton>,
   textButtons: Array<TRowButton>,
@@ -37,9 +43,9 @@ export type TFilterFields = Array<{
   key: string,
   name: string,
   options?: any;
-  getValue?: (elem: any) => any;
-  getText?: (elem: any) => string;
-  getFilteredString?: (elem: any) => string;
+  getValue?: (model: any) => any;
+  getText?: (model: any) => string;
+  getFilteredString?: (model: any) => string;
   placeholder?: string;
   items?: () => any;
 }>;

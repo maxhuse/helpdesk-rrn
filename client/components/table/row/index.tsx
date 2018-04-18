@@ -1,26 +1,43 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, StatelessComponent, ComponentType, ReactElement } from 'react';
 import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
-import { TableCell } from '../cell';
-import { TextButtons, IconButtons } from './buttons';
+import { TCell, TCells, TItem, TRow, TRowButtons } from 'components/table/types';
+import { TableCell } from 'components/table';
+import { actions as tableActions } from 'ducks/components/table';
+import RowButtons from './buttons';
 
 // If value is undefined or empty string, put a dash
-const getCellValue = value => (value === undefined || value === '' || value === null ?
-  '\u2014' :
-  value
+const getCellValue = value => (
+  value === undefined || value === '' || value === null ?
+    '\u2014' :
+    value
 );
 
-const getLastCellComponent = (CellComponent, iconButtons) =>
-  ({ className, componentProps, value, item }) => (
+const getLastCellComponent = (CellComponent: ComponentType<any>, iconButtons: TRowButtons) =>
+  ({ className, componentProps, value, item }: {
+  className: string,
+  componentProps: { [key: string]: any },
+  item: TItem,
+  value: string | ReactElement<any>,
+  }) => (
     <div className={className}>
       <CellComponent value={value} {...componentProps} />
       <div className="table__button-cell" onClick={event => event.stopPropagation()}>
-        <IconButtons buttons={iconButtons} model={item} />
+        <RowButtons buttonType="icon" buttons={iconButtons} model={item} />
       </div>
     </div>
   );
 
-const TableRowShrunk = ({
+interface ITableRowShrunkProps {
+  item: TItem;
+  shownCells: TCells;
+  iconButtons: TRowButtons;
+  disabled: boolean;
+  getClassName: (item: TItem) => string;
+  openRowAction: typeof tableActions.tableComponentOpenRowDelta;
+  onRowClick: (id: string | number) => void;
+}
+const TableRowShrunk: StatelessComponent<ITableRowShrunkProps> = ({
   item,
   openRowAction,
   shownCells,
@@ -78,7 +95,11 @@ const TableRowShrunk = ({
   );
 };
 
-const CellBlock = ({ cell, item }) => (
+interface ICellBlockProps {
+  cell: TCell;
+  item: TItem;
+}
+const CellBlock: StatelessComponent<ICellBlockProps> = ({ cell, item }) => (
   cell.component ?
     <cell.component name={cell.name} value={getCellValue(cell.getValue(item))} isExpanded /> :
     <div className="table__row-parameter">
@@ -87,27 +108,46 @@ const CellBlock = ({ cell, item }) => (
     </div>
 );
 
-class TableRowExpanded extends PureComponent {
+interface ITableRowExpandedProps {
+  item: TItem;
+  cells: TCells;
+  row: TRow;
+  shownCells: TCells;
+  openedId: false | number;
+  isRowsLocked: boolean;
+  disabled: boolean;
+  iconButtons: TRowButtons;
+  textButtons: TRowButtons;
+  getClassName: (item: TItem) => string;
+  getHeaderClassName: (item: TItem) => string;
+  openRowAction: typeof tableActions.tableComponentOpenRowDelta;
+  closeRowAction: typeof tableActions.tableComponentCloseRowDelta;
+}
+class TableRowExpanded extends PureComponent<ITableRowExpandedProps> {
+  private iconButtonsRef: RowButtons | null;
+  private textButtonsRef: RowButtons | null;
+  private headerContainerRef: HTMLDivElement | null;
+
   constructor(props) {
     super(props);
 
-    this.handleClickBinded = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleClickBinded, false);
+    document.addEventListener('click', this.handleClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickBinded, false);
+    document.removeEventListener('click', this.handleClick, false);
   }
 
-  handleClick(event) {
+  private handleClick(event) {
     try {
       const { closeRowAction, isRowsLocked } = this.props;
       const { target } = event;
       const isClickedOutside = !findDOMNode(this).contains(target);
-      const isHeaderClicked = this.headerContainerRef.contains(target);
+      const isHeaderClicked = this.headerContainerRef && this.headerContainerRef.contains(target);
       const isButtonClicked = this.isButtonClicked(target);
 
       if ((isClickedOutside || isHeaderClicked) && !isRowsLocked && !isButtonClicked) {
@@ -118,8 +158,15 @@ class TableRowExpanded extends PureComponent {
     }
   }
 
-  isButtonClicked(target) {
-    return this.iconButtonsRef.contains(target) || this.textButtonsRef.contains(target);
+  private isButtonClicked(target): boolean {
+    if (
+      (this.iconButtonsRef && this.iconButtonsRef.contains(target)) ||
+      (this.textButtonsRef && this.textButtonsRef.contains(target))
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   render() {
@@ -155,12 +202,14 @@ class TableRowExpanded extends PureComponent {
           ref={(ref) => { this.headerContainerRef = ref; }}
         >
           <div className={headerClassName}>
-            <TextButtons
+            <RowButtons
+              buttonType="text"
               buttons={textButtons}
               model={item}
               ref={(ref) => { this.textButtonsRef = ref; }}
             />
-            <IconButtons
+            <RowButtons
+              buttonType="icon"
               buttons={iconButtons}
               model={item}
               ref={(ref) => { this.iconButtonsRef = ref; }}

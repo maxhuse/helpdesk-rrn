@@ -1,69 +1,66 @@
 import React, { PureComponent } from 'react';
-import { TRowButton, TItem } from 'components/table/types';
+import { TRowButtons, TItem } from 'components/table/types';
 
 interface IProps {
-  buttons: Array<TRowButton>;
+  buttons: TRowButtons;
   model: TItem;
+  buttonType: 'text' | 'icon';
 }
-const getButtonByType = (buttonType: 'text' | 'icon') =>
-  class Buttons extends PureComponent<IProps> {
-    private wrapperRef: HTMLDivElement | null;
+export default class RowButtons extends PureComponent<IProps> {
+  private wrapperRef: HTMLDivElement | null;
 
-    contains(target): boolean {
-      if (!this.wrapperRef) {
-        return false;
-      }
-
-      return this.wrapperRef.contains(target);
+  public contains(target): boolean {
+    if (!this.wrapperRef) {
+      return false;
     }
 
-    render() {
-      const { buttons, model } = this.props;
+    return this.wrapperRef.contains(target);
+  }
 
-      return (
-        <div
-          className="table__row-buttons"
-          ref={(ref) => { this.wrapperRef = ref; }}
-        >
-          {
-            buttons.map((button) => {
-              if (button.isShown && !button.isShown(model)) {
-                return null;
-              }
+  render() {
+    const { buttons, model, buttonType } = this.props;
 
-              let className = 'button button_table-header';
+    return (
+      <div
+        className="table__row-buttons"
+        ref={(ref) => { this.wrapperRef = ref; }}
+      >
+        {
+          buttons.map((button) => {
+            if (button.isShown && !button.isShown(model)) {
+              return null;
+            }
 
-              if (button.getClassName) {
-                className += ` ${button.getClassName(model)}`;
-              }
+            let className = 'button button_table-header';
 
-              if (!button.getText && !button.getIcon) {
-                throw new Error('button.getText or button.getIcon must specified');
-              }
+            if (button.getClassName) {
+              className += ` ${button.getClassName(model)}`;
+            }
 
-              const key = buttonType === 'text' ?
-                button.getText && button.getText(model) :
-                button.getIcon && button.getIcon(model);
+            if (!button.getText && !button.getIcon) {
+              throw new Error('button.getText or button.getIcon must specified');
+            }
 
-              return (
-                <button
-                  className={className}
-                  onClick={() => button.onClick(model)}
-                  key={key}
-                  title={button.getTitle(model)}
-                >
-                  {buttonType === 'text' ?
-                    button.getText && button.getText(model) :
-                    button.getIcon && (<i className="material-icons">{button.getIcon(model)}</i>)
-                  }
-                </button>
-              );
-            })
-          }
-        </div>
-      );
-    }
-  };
+            const key = buttonType === 'text' ?
+              button.getText && button.getText(model) :
+              button.getIcon && button.getIcon(model);
 
-export const TextButtons = getButtonByType('text');
-export const IconButtons = getButtonByType('icon');
+            return (
+              <button
+                className={className}
+                onClick={() => button.onClick(model)}
+                key={key}
+                title={button.getTitle(model)}
+              >
+                {buttonType === 'text' ?
+                  button.getText && button.getText(model) :
+                  button.getIcon && (<i className="material-icons">{button.getIcon(model)}</i>)
+                }
+              </button>
+            );
+          })
+        }
+      </div>
+    );
+  }
+}
