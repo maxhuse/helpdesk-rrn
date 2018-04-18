@@ -3,7 +3,7 @@ import { ITEMS_PER_PAGE_OPTIONS, sortOrder, sortType } from 'client-constants';
 import { Reducer, Dispatch } from 'redux';
 
 export type TSort = Map<string, string>;
-export type TFilters = Map<string, boolean | string>;
+export type TFilters = Map<string, boolean | string | number>;
 
 type TSortArguments = { field: string, type: sortType, order: sortOrder };
 
@@ -44,10 +44,10 @@ const tableComponentChangePageDelta = (page: number): IChangePage =>
 
 interface IChangeFilters {
   readonly type: ActionTypeTable.CHANGE_FILTERS;
-  readonly payload: Map<string, boolean | string>;
+  readonly payload: { [key: string]: any };
 }
-const tableComponentChangeFiltersDelta = (filters: TFilters): IChangeFilters =>
-  ({ type: ActionTypeTable.CHANGE_FILTERS, payload: filters });
+const tableComponentChangeFiltersDelta = (filter: { [key: string]: any }): IChangeFilters =>
+  ({ type: ActionTypeTable.CHANGE_FILTERS, payload: filter });
 
 interface IResetFilters {
   readonly type: ActionTypeTable.RESET_FILTERS;

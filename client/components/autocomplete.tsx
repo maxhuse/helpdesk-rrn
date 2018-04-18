@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, StatelessComponent, MouseEvent } from 'react';
 import { findDOMNode } from 'react-dom';
 import { List } from 'immutable';
 import Input from 'components/input';
@@ -8,52 +8,79 @@ import {
   isEqual as _isEqual,
 } from 'lodash';
 import classnames from 'classnames';
+import { TItem, TItems } from 'components/table/types';
 
-const AutocompleteList = ({ items, getText, onSelect }) => (
-  <div
-    className={
-      classnames('autocomplete__list', {
-        autocomplete__list_hidden: items.size === 0,
-      })
-    }
-  >
-    {items.map(item => (
-      <div
-        key={item.get('id')}
-        className="autocomplete__item js-autocomplete-item"
-        onClick={() => {
-          onSelect(item);
-        }}
-      >
-        {getText(item)}
-      </div>
-    ))}
-  </div>
-);
+interface IAutocompleteListProps {
+  getText: (item: any) => string;
+  onSelect: (item: any) => void;
+  items: TItems;
+}
+const AutocompleteList: StatelessComponent<IAutocompleteListProps> =
+  ({ items, getText, onSelect }) => (
+    <div
+      className={
+        classnames('autocomplete__list', {
+          autocomplete__list_hidden: items.size === 0,
+        })
+      }
+    >
+      {items.map(item => (
+        <div
+          key={item.get('id')}
+          className="autocomplete__item js-autocomplete-item"
+          onClick={() => {
+            onSelect(item);
+          }}
+        >
+          {getText(item)}
+        </div>
+      ))}
+    </div>
+  );
 
-export default class Autocomplete extends PureComponent {
+interface IAutocompleteProps {
+  id?: string;
+  name?: string;
+  items: TItems;
+  defaultValue: number | string | boolean;
+  getText: (item: any) => string;
+  getValue: (item: any) => any;
+  getFilteredString: (item: any) => string;
+  placeholder: string;
+  emptyValue: number;
+  errorClassName?: string;
+  onClick: (e: MouseEvent<HTMLDivElement>) => void;
+}
+interface IAutocompleteState {
+  inputText: string;
+  isOnFocus: boolean;
+  selectedItem: TItem | false;
+}
+export default class Autocomplete extends PureComponent<IAutocompleteProps, IAutocompleteState> {
+  private inputRef: Input | null;
+
   constructor(props) {
     super(props);
 
     this.resetState(props);
 
     // listen click event to handle click outside
-    this.handleClickBinded = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onFocusInput = this.onFocusInput.bind(this);
 
-    document.addEventListener('click', this.handleClickBinded, false);
+    document.addEventListener('click', this.handleClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickBinded, false);
+    document.removeEventListener('click', this.handleClick, false);
   }
 
-  onChangeInput(event) {
+  private onChangeInput(event): void {
     this.setState({ inputText: event.target.value });
   }
 
-  onClickOutside() {
+  private onClickOutside(): void {
     const { inputText, selectedItem } = this.state;
     const { getText } = this.props;
 
@@ -73,7 +100,7 @@ export default class Autocomplete extends PureComponent {
       const searchedItem = this.findItemByText(inputText);
 
       // Nothing founded (clear all)
-      if (searchedItem === false) {
+      if (!searchedItem) {
         this.setState({
           selectedItem: false,
           isOnFocus: false,
@@ -124,7 +151,7 @@ export default class Autocomplete extends PureComponent {
     });
   }
 
-  onFocusInput() {
+  private onFocusInput(): void {
     this.setState({ isOnFocus: true });
   }
 
@@ -140,10 +167,12 @@ export default class Autocomplete extends PureComponent {
   }
 
   set error(errorText) {
-    this.inputRef.error = errorText;
+    if (this.inputRef) {
+      this.inputRef.error = errorText;
+    }
   }
 
-  getItemByValue(selectedValue, items, getValue) {
+  private getItemByValue(selectedValue, items, getValue): TItem | false {
     // It used inside constructor...
     // Because of that we not use this.props here (IE fix)
     const searchedItem = items.find((item) => {
@@ -157,7 +186,7 @@ export default class Autocomplete extends PureComponent {
     return searchedItem || false;
   }
 
-  getVisibleItems(items, inputText) {
+  private getVisibleItems(items: TItems, inputText: string): TItems {
     const { getFilteredString } = this.props;
 
     // Show no items if input not in focus
@@ -172,16 +201,15 @@ export default class Autocomplete extends PureComponent {
 
     // Filter items by input text
     const normalizedInputText = inputText.toLowerCase().trim();
-    const filteredItems = items.filter((item) => {
+
+    return items.filter((item) => {
       const filteredString = getFilteredString(item).toLowerCase().trim();
 
       return filteredString.search(normalizedInputText) !== -1;
     });
-
-    return filteredItems;
   }
 
-  reset() {
+  public reset(): void {
     this.setState({
       selectedItem: false,
       inputText: '',
@@ -189,7 +217,14 @@ export default class Autocomplete extends PureComponent {
     });
   }
 
-  resetState({ getText, defaultValue, items, getValue }) {
+  private resetState(
+    { getText, defaultValue, items, getValue }: {
+    getText: (item: any) => string,
+    defaultValue: number | string | boolean,
+    items: TItems,
+    getValue: (item: any) => any,
+    }
+  ): void {
     // Not use this.props here, because it used in constructor ( IE fix )
 
     // Choose default item by default value
@@ -211,7 +246,7 @@ export default class Autocomplete extends PureComponent {
     }
   }
 
-  handleClick(event) {
+  private handleClick(event): void {
     try {
       // Clicked not an input
       if (!findDOMNode(this).contains(event.target)) {
@@ -225,7 +260,7 @@ export default class Autocomplete extends PureComponent {
     }
   }
 
-  findItemByText(inputText) {
+  private findItemByText(inputText: string): TItem | false {
     const { items, getText } = this.props;
     const inputTextNormalized = inputText.toLowerCase().trim();
 
@@ -236,7 +271,7 @@ export default class Autocomplete extends PureComponent {
     return searchedItem || false;
   }
 
-  selectItem(item) {
+  private selectItem(item: TItem): void {
     const { getText } = this.props;
 
     this.setState({
@@ -246,7 +281,7 @@ export default class Autocomplete extends PureComponent {
     });
   }
 
-  sortItems(items) {
+  private sortItems(items: TItems) {
     const { getText } = this.props;
 
     return items.sort((valueA, valueB) => {

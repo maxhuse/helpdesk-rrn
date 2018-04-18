@@ -67,7 +67,7 @@ class InputDate extends PureComponent<IInputDataProps, IInputDataState> {
 }
 
 interface IDateIntervalProps {
-  defaultValue: string | undefined;
+  defaultValue: [number | undefined, number | undefined] | undefined;
 }
 // eslint-disable-next-line react/no-multi-comp
 export default class DateInterval extends PureComponent<IDateIntervalProps> {

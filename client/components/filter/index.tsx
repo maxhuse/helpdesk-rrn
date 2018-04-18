@@ -1,30 +1,43 @@
-import React, { PureComponent } from 'react';
+import React, { MouseEvent, PureComponent, ReactElement, StatelessComponent } from 'react';
 import i18next from 'i18next';
 import { indexOf as _indexOf, isFunction as _isFunction } from 'lodash';
-import { filterType } from 'client-constants.ts';
+import { filterType } from 'client-constants';
 import Switch from 'components/switch';
 import Autocomplete from 'components/autocomplete';
+import { TFilterFields } from 'components/table/types';
+import { actions as tableActions, TFilters as TTableFilters } from 'ducks/components/table';
 import DateInterval from './date-interval';
 
-const FilterButtons = ({ onResetFilter, onChangeFilter }) => (
-  <div className="filter__buttons">
-    <button
-      className="button button_flat button_flat_blue"
-      onClick={onResetFilter}
-    >
-      {i18next.t('reset')}
-    </button>
+interface IFilterButtonsProps {
+  onResetFilter: () => void;
+  onChangeFilter: () => void;
+}
+const FilterButtons: StatelessComponent<IFilterButtonsProps> =
+  ({ onResetFilter, onChangeFilter }) => (
+    <div className="filter__buttons">
+      <button
+        className="button button_flat button_flat_blue"
+        onClick={onResetFilter}
+      >
+        {i18next.t('reset')}
+      </button>
 
-    <button
-      className="button button_flat button_flat_blue"
-      onClick={onChangeFilter}
-    >
-      {i18next.t('filter')}
-    </button>
-  </div>
-);
+      <button
+        className="button button_flat button_flat_blue"
+        onClick={onChangeFilter}
+      >
+        {i18next.t('filter')}
+      </button>
+    </div>
+  );
 
-export default class Filter extends PureComponent {
+interface IFilterProps {
+  changeAction: typeof tableActions.tableComponentChangeFiltersDelta;
+  resetAction: typeof tableActions.tableComponentResetFiltersDelta;
+  filterFields: TFilterFields;
+  filters: TTableFilters;
+}
+export default class Filter extends PureComponent<IFilterProps> {
   constructor(props) {
     super(props);
 
@@ -32,7 +45,7 @@ export default class Filter extends PureComponent {
     this.onChangeFilter = this.onChangeFilter.bind(this);
   }
 
-  onChangeFilter() {
+  private onChangeFilter(): void {
     const { changeAction, filterFields } = this.props;
     const filter = {};
 
@@ -56,7 +69,7 @@ export default class Filter extends PureComponent {
     changeAction(filter);
   }
 
-  onResetFilter() {
+  private onResetFilter(): void {
     const { resetAction, filterFields } = this.props;
 
     filterFields.forEach((field) => {
@@ -98,9 +111,10 @@ export default class Filter extends PureComponent {
     resetAction();
   }
 
-  getField(filterField, filterKey) {
+  private getField(filterField, filterKey: number): ReactElement<any> {
     const { filters } = this.props;
-    const currentValue = filters.get(filterField.key) || false;
+    const currentValue: string | number | boolean | [number | undefined, number | undefined] =
+      filters.get(filterField.key) || false;
     const refName = this.getRefName(filterField);
     let inputBlock;
 
@@ -111,7 +125,7 @@ export default class Filter extends PureComponent {
             className="input input_filter"
             type="text"
             ref={(ref) => { this[refName] = ref; }}
-            defaultValue={currentValue || ''}
+            defaultValue={typeof currentValue === 'boolean' ? '' : currentValue.toString()}
           />
         );
         break;
@@ -133,7 +147,7 @@ export default class Filter extends PureComponent {
           <select
             className="select"
             ref={(ref) => { this[refName] = ref; }}
-            defaultValue={currentValue}
+            defaultValue={currentValue.toString()}
           >
             <option key={-1} value="all">{i18next.t('all')}</option>
             {filterField.options.map(elem => (
@@ -150,7 +164,7 @@ export default class Filter extends PureComponent {
         inputBlock = (
           <DateInterval
             ref={(ref) => { this[refName] = ref; }}
-            defaultValue={currentValue || undefined}
+            defaultValue={typeof currentValue === 'object' ? currentValue : undefined}
           />
         );
         break;
@@ -171,9 +185,9 @@ export default class Filter extends PureComponent {
             placeholder={filterField.placeholder}
             items={filterFieldItems}
             emptyValue={0}
-            onClick={(event) => {
+            onClick={(event: MouseEvent<HTMLDivElement>) => {
               // prevent bubbling when autocomplete item clicked
-              if (_indexOf(event.target.classList, 'js-autocomplete-item') !== -1) {
+              if (_indexOf(event.currentTarget.classList, 'js-autocomplete-item') !== -1) {
                 event.nativeEvent.stopImmediatePropagation();
               }
             }}
@@ -200,7 +214,7 @@ export default class Filter extends PureComponent {
     );
   }
 
-  getRefName(filterField) {
+  private getRefName(filterField): string {
     return `${filterField.key}Ref`;
   }
 
