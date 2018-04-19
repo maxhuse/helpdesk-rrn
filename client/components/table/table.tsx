@@ -196,8 +196,6 @@ interface ITableProps {
   defaultSort?: TTableSort;
   tableComponentIm: TTableState;
   tableComponentResetDelta: typeof tableActions.tableComponentResetDelta;
-  tableComponentChangePageDelta: typeof tableActions.tableComponentChangePageDelta;
-  tableComponentChangeItemsPerPageDelta: typeof tableActions.tableComponentChangeItemsPerPageDelta;
   tableComponentOpenRowDelta: typeof tableActions.tableComponentOpenRowDelta;
   tableComponentCloseRowDelta: typeof tableActions.tableComponentCloseRowDelta;
   tableComponentResetFiltersDelta: typeof tableActions.tableComponentResetFiltersDelta;
@@ -373,8 +371,6 @@ class Table extends PureComponent<ITableProps, ITableState> {
       actionButtons,
       defaultSort,
       tableComponentIm,
-      tableComponentChangePageDelta,
-      tableComponentChangeItemsPerPageDelta,
       tableComponentOpenRowDelta,
       tableComponentCloseRowDelta,
       tableComponentChangeFiltersDelta,
@@ -448,11 +444,9 @@ class Table extends PureComponent<ITableProps, ITableState> {
         {filteredItems.size > 0 ?
           <div className="table__footer">
             <Pagination
-              changePage={tableComponentChangePageDelta}
               currentPage={page}
               itemsCount={filteredItems.size}
               itemsPerPage={itemsPerPage}
-              changeItemsPerPage={tableComponentChangeItemsPerPageDelta}
             />
           </div> :
           null
@@ -464,8 +458,6 @@ class Table extends PureComponent<ITableProps, ITableState> {
 
 const mapDispatchToProps = {
   tableComponentResetDelta: tableActions.tableComponentResetDelta,
-  tableComponentChangePageDelta: tableActions.tableComponentChangePageDelta,
-  tableComponentChangeItemsPerPageDelta: tableActions.tableComponentChangeItemsPerPageDelta,
   tableComponentOpenRowDelta: tableActions.tableComponentOpenRowDelta,
   tableComponentCloseRowDelta: tableActions.tableComponentCloseRowDelta,
   tableComponentResetFiltersDelta: tableActions.tableComponentResetFiltersDelta,

@@ -30,5 +30,4 @@ const App = ({ location, sidebarComponentIm, authDataIm }) => (
   </div>
 );
 
-
 export default checkAuthEnhance(App);

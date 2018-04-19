@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { StatelessComponent } from 'react';
 import classnames from 'classnames';
 
-const PaginationControls = ({
+interface IProps {
+  currentPage: number;
+  itemsCount: number;
+  itemsPerPage: number;
+  pagesCount: number;
+  hasPrev: boolean;
+  hasNext: boolean;
+  onPreviousClick: () => void;
+  onNextClick: () => void;
+}
+const PaginationControls: StatelessComponent<IProps> = ({
   currentPage,
   itemsPerPage,
   itemsCount,

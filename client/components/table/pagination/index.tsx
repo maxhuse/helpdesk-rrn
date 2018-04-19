@@ -1,8 +1,25 @@
-import React, { PureComponent } from 'react';
+import React, { ChangeEvent, PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { actions as tableActions } from 'ducks/components/table';
 import ItemsPerPage from './items-per-page';
 import PaginationControls from './pagination-controls';
 
-class Pagination extends PureComponent {
+const mapDispatchToProps = {
+  changePage: tableActions.tableComponentChangePageDelta,
+  changeItemsPerPage: tableActions.tableComponentChangeItemsPerPageDelta,
+};
+
+interface IProps {
+  itemsCount: number;
+  itemsPerPage: number;
+  currentPage: number;
+  changePage: typeof tableActions.tableComponentChangePageDelta;
+  changeItemsPerPage: typeof tableActions.tableComponentChangeItemsPerPageDelta;
+}
+interface IState {
+  pagesCount: number;
+}
+class Pagination extends PureComponent<IProps, IState> {
   constructor(props) {
     super(props);
 
@@ -22,8 +39,7 @@ class Pagination extends PureComponent {
       });
     }
   }
-
-  onNextClick() {
+  private onNextClick(): void {
     const { changePage, currentPage } = this.props;
 
     if (this.hasNext()) {
@@ -31,7 +47,7 @@ class Pagination extends PureComponent {
     }
   }
 
-  onPreviousClick() {
+  private onPreviousClick(): void {
     const { changePage, currentPage } = this.props;
 
     if (this.hasPrev()) {
@@ -39,21 +55,21 @@ class Pagination extends PureComponent {
     }
   }
 
-  onChangeItemsPerPage(event) {
-    this.props.changeItemsPerPage(+event.target.value);
+  private onChangeItemsPerPage(event: ChangeEvent<HTMLSelectElement>): void {
+    this.props.changeItemsPerPage(Number(event.target.value));
   }
 
-  calcPagesCount(itemsPerPage, itemsCount) {
+  private calcPagesCount(itemsPerPage: number, itemsCount: number): number {
     return itemsCount < itemsPerPage ?
       1 :
       Math.ceil(itemsCount / itemsPerPage);
   }
 
-  hasNext() {
+  private hasNext(): boolean {
     return this.props.currentPage < this.state.pagesCount;
   }
 
-  hasPrev() {
+  private hasPrev(): boolean {
     return this.props.currentPage > 1;
   }
 
@@ -84,4 +100,4 @@ class Pagination extends PureComponent {
   }
 }
 
-export default Pagination;
+export default connect(null, mapDispatchToProps)(Pagination);

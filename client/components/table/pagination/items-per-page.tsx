@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { StatelessComponent, ChangeEvent } from 'react';
 import i18next from 'i18next';
-import { ITEMS_PER_PAGE_OPTIONS } from 'client-constants.ts';
+import { ITEMS_PER_PAGE_OPTIONS } from 'client-constants';
 
-const ItemsPerPage = ({ itemsPerPage, itemsCount, onChange }) => {
+interface IProps {
+  itemsPerPage: number;
+  itemsCount: number;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+}
+const ItemsPerPage: StatelessComponent<IProps> = ({ itemsPerPage, itemsCount, onChange }) => {
   const itemsPerPageOptions = ITEMS_PER_PAGE_OPTIONS.filter(value => (value < itemsCount));
 
   return (
