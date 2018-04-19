@@ -177,6 +177,7 @@ export default class Filter extends PureComponent<IFilterProps> {
 
         inputBlock = (
           <Autocomplete
+            id={`filter__autocomplete_${filterField.key}`}
             defaultValue={currentValue}
             ref={(ref) => { this[refName] = ref; }}
             getValue={filterField.getValue}

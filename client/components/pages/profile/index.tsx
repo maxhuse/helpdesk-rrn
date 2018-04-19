@@ -80,7 +80,7 @@ class Profile extends PureComponent<IProfileProps> {
     this.props.profilePageResetDelta();
   }
 
-  private onInlineEditSubmit({ name, value }): void {
+  private onInlineEditSubmit({ name, value }: { name: string, value: string }): void {
     const {
       authDataIm,
       profilePageSetOpenedNameDelta,

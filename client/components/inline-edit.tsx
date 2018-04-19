@@ -1,29 +1,49 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, StatelessComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import Input from 'components/input';
 import IconButton from 'components/icon-button';
 
-const InlineEditClosed = ({ label, defaultValue, isBlocked, onClickEdit }) => (
-  <div className="inline-edit">
-    <span className="inline-edit__cell inline-edit__cell_label">
-      {label}:
-    </span>
-    <span className="inline-edit__cell inline-edit__cell_value">
-      {defaultValue || 'ー'}
-    </span>
-    <IconButton
-      onClick={() => {
-        if (!isBlocked) {
-          onClickEdit();
-        }
-      }}
-      icon="edit"
-      disabled={isBlocked}
-    />
-  </div>
-);
+interface IEditClosedProps {
+  defaultValue?: string;
+  label?: string;
+  isBlocked?: boolean;
+  onClickEdit: () => any;
+}
 
-class InlineEditOpened extends PureComponent {
+const InlineEditClosed: StatelessComponent<IEditClosedProps> =
+  ({ label, defaultValue, isBlocked, onClickEdit }) => (
+    <div className="inline-edit">
+      <span className="inline-edit__cell inline-edit__cell_label">
+        {label}:
+      </span>
+      <span className="inline-edit__cell inline-edit__cell_value">
+        {defaultValue || 'ー'}
+      </span>
+      <IconButton
+        onClick={() => {
+          if (!isBlocked) {
+            onClickEdit();
+          }
+        }}
+        icon="edit"
+        disabled={isBlocked}
+      />
+    </div>
+  );
+
+interface IEditOpenedProps {
+  name: string;
+  defaultValue?: string;
+  label?: string;
+  placeholder?: string;
+  isBlocked?: boolean;
+  closeEditingAction: () => any;
+  validate: (value: string) => string | false;
+  onSubmit: (options: { name: string, value: string }) => void;
+}
+class InlineEditOpened extends PureComponent<IEditOpenedProps> {
+  private inputRef: Input | null;
+
   constructor(props) {
     super(props);
 
@@ -39,31 +59,39 @@ class InlineEditOpened extends PureComponent {
     document.removeEventListener('click', this.handleClick, false);
   }
 
-  onClickDone() {
+  private onClickDone(): void {
     const {
       validate,
       onSubmit,
       name,
     } = this.props;
-    const { value } = this.inputRef;
+    const value = this.inputRef ? this.inputRef.value : '';
     const validationError = validate(value);
 
     if (validationError) {
-      this.inputRef.error = validationError;
+      if (this.inputRef) {
+        this.inputRef.error = validationError;
+      }
     } else {
       onSubmit({ name, value });
     }
   }
 
-  get value() {
+  public get value() {
+    if (!this.inputRef) {
+      return '';
+    }
+
     return this.inputRef.value;
   }
 
-  set error(value) {
-    this.inputRef.error = value;
+  public set error(value) {
+    if (this.inputRef) {
+      this.inputRef.error = value;
+    }
   }
 
-  handleClick(event) {
+  private handleClick(event): void {
     const {
       isBlocked,
       closeEditingAction,
@@ -115,7 +143,19 @@ class InlineEditOpened extends PureComponent {
   }
 }
 
-const InlineEdit = ({
+interface IInlineEditProps {
+  name: string;
+  defaultValue?: string;
+  label?: string;
+  placeholder?: string;
+  isBlocked?: boolean;
+  isEditing: boolean;
+  closeEditingAction: () => any;
+  validate: (value: string) => string | false;
+  onSubmit: (options: { name: string, value: string }) => void;
+  onClickEdit: () => any;
+}
+const InlineEdit: StatelessComponent<IInlineEditProps> = ({
   defaultValue,
   label,
   placeholder,

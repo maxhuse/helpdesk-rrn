@@ -39,7 +39,7 @@ const AutocompleteList: StatelessComponent<IAutocompleteListProps> =
   );
 
 interface IAutocompleteProps {
-  id?: string;
+  id: string;
   name?: string;
   items: TItems;
   defaultValue: number | string | boolean;

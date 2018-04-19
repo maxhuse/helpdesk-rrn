@@ -1,32 +1,60 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, MouseEvent, ChangeEvent } from 'react';
 import classnames from 'classnames';
 
-export default class Input extends PureComponent {
+interface IProps {
+  id: string;
+  value?: string;
+  defaultValue?: string;
+  placeholder?: string;
+  tagName?: 'input' | 'textarea';
+  name?: string;
+  type?: string;
+  className?: string;
+  errorClassName?: string;
+  disabled?: boolean;
+  autoFocus?: boolean;
+  autoComplete?: string;
+  onFocus?: (e: MouseEvent<HTMLInputElement| HTMLTextAreaElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBlur?: () => void;
+}
+interface IState {
+  error: string | boolean;
+}
+export default class Input extends PureComponent<IProps, IState> {
+  private inputRef: HTMLInputElement | HTMLTextAreaElement | null;
+
   constructor(props) {
     super(props);
 
     this.state = { error: false };
   }
 
-  get error() {
+  public get error() {
     return this.state.error;
   }
 
-  get value() {
+  public get value() {
+    if (!this.inputRef) {
+      return '';
+    }
+
     return this.inputRef.value;
   }
 
-  set error(newValue) {
+  public set error(newValue) {
     this.setState({
       error: newValue,
     });
   }
 
-  set value(newValue) {
-    this.inputRef.value = newValue;
+  public set value(newValue) {
+    if (this.inputRef) {
+      this.inputRef.value = newValue;
+    }
   }
 
-  clearError() {
+  private clearError(): void {
     this.setState({
       error: false,
     });
