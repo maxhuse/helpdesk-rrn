@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Auth } from 'components/pages';
-import { App } from 'containers';
+import App from 'components/app';
 
 export default (
   <Switch>

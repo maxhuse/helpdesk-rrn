@@ -1,4 +1,4 @@
-# HelpDesk (built with React/Redux and Node.js)
+# HelpDesk (built with React/Redux/Typescript and Node.js)
 
 ### How to Run?
 

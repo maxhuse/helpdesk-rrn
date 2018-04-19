@@ -1,12 +1,27 @@
 import React, { PureComponent } from 'react';
 
-export default class Switch extends PureComponent {
+interface IProps {
+  id?: string;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  onChange?: () => void;
+}
+export default class Switch extends PureComponent<IProps> {
+  private inputRef: HTMLInputElement | null;
+
   get checked() {
+    if (!this.inputRef) {
+      return false;
+    }
+
     return this.inputRef.checked;
   }
 
   set checked(value) {
-    this.inputRef.checked = value;
+    if (this.inputRef) {
+      this.inputRef.checked = value;
+    }
   }
 
   render() {

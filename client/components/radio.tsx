@@ -1,13 +1,29 @@
 import React, { PureComponent } from 'react';
 
-// id property is required
-export default class Radio extends PureComponent {
+interface IProps {
+  id: string;
+  name?: string;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  onChange?: () => void;
+}
+export default class Radio extends PureComponent<IProps> {
+  private inputRef: HTMLInputElement | null;
+
   get checked() {
+    if (!this.inputRef) {
+      return false;
+    }
+
     return this.inputRef.checked;
   }
 
   set checked(value) {
-    this.inputRef.checked = value;
+    if (this.inputRef) {
+      this.inputRef.checked = value;
+    }
   }
 
   render() {

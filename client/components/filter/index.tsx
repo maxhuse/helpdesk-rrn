@@ -135,7 +135,7 @@ export default class Filter extends PureComponent<IFilterProps> {
         inputBlock = (
           <Switch
             ref={(ref) => { this[refName] = ref; }}
-            defaultChecked={currentValue}
+            defaultChecked={typeof currentValue === 'boolean' ? currentValue : false}
           />
         );
 
