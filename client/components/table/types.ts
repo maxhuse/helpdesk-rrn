@@ -6,7 +6,7 @@ import { actions as tableActions, TFilters as TTableFilters } from 'ducks/compon
 export type TCell = {
   id: string,
   getValue: (model: any) => any,
-  className: string,
+  className?: string,
   name: string,
   isHiddenOnClosed?: boolean;
   isHiddenOnOpened?: boolean;
@@ -33,9 +33,9 @@ export type TRowButton = {
 export type TRowButtons = Array<TRowButton>;
 
 export type TRow = {
-  iconButtons: Array<TRowButton>,
-  textButtons: Array<TRowButton>,
-  onRowClick: (id: string | number) => void;
+  iconButtons?: Array<TRowButton>,
+  textButtons?: Array<TRowButton>,
+  onRowClick?: (id: string | number) => void;
 };
 
 export type TFilterFields = Array<{

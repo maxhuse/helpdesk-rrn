@@ -1,10 +1,45 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { VALID_EMAIL_REX } from 'shared/constants';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
+import { actions as customersActions, TDataItem as TCustomer } from 'ducks/data/customers';
 
-export default class ModalEditCustomer extends PureComponent {
+const mapDispatchToProps = dispatch => Object.assign(
+  {
+    dispatch,
+    customersDataUpdateSignal: customersActions.customersDataUpdateSignal,
+  },
+  bindActionCreators({
+    modalComponentHideSignal: modalActions.modalComponentHideSignal,
+    modalComponentSubmitWrapperSignal: modalActions.modalComponentSubmitWrapperSignal,
+  }, dispatch),
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
+
+interface IProps {
+  modalComponentIm: TModalState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
+  customersDataUpdateSignal: typeof customersActions.customersDataUpdateSignal;
+  getCustomer: () => TCustomer | undefined;
+  dispatch: Dispatch<any>;
+}
+interface IState {
+  customerIm: TCustomer;
+}
+class ModalEditCustomer extends PureComponent<IProps, IState> {
+  private nameRef: Input | null;
+  private loginRef: Input | null;
+  private emailRef: Input | null;
+  private descriptionRef: HTMLTextAreaElement | null;
+
   constructor(props) {
     super(props);
 
@@ -16,54 +51,70 @@ export default class ModalEditCustomer extends PureComponent {
     };
   }
 
-  onSubmit() {
+  private onSubmit(): void {
     const {
-      submitSignal,
+      dispatch,
+      customersDataUpdateSignal,
       modalComponentSubmitWrapperSignal,
     } = this.props;
     const { customerIm } = this.state;
 
     const options = {
-      login: this.loginRef.value,
-      name: this.nameRef.value,
-      description: this.descriptionRef.value,
-      email: this.emailRef.value,
+      name: this.nameRef ? this.nameRef.value : '',
+      login: this.loginRef ? this.loginRef.value : '',
+      email: this.emailRef ? this.emailRef.value : '',
+      description: this.descriptionRef ? this.descriptionRef.value : '',
     };
 
     if (this.validate(options)) {
       modalComponentSubmitWrapperSignal({
-        submitSignal: () => submitSignal({ id: customerIm.get('id'), data: options }),
+        submitSignal: () => dispatch(customersDataUpdateSignal({
+          id: customerIm.get('id'),
+          data: options,
+        })),
         doneText: i18next.t('customer_edited', { name: customerIm.get('name') }),
       });
     }
   }
 
-  validate({ name, login, email }) {
+  private validate(
+    { name, login, email }: { name: string, login: string, email: string }
+  ): string | boolean {
     let isValid = true;
 
     // Login
     if (login !== undefined) {
       if (!login.length) {
-        this.loginRef.error = i18next.t('v.required');
+        if (this.loginRef) {
+          this.loginRef.error = i18next.t('v.required');
+        }
         isValid = false;
       } else if (login.length < 6) {
-        this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+        if (this.loginRef) {
+          this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+        }
         isValid = false;
       }
     }
 
     // Name
     if (!name.length) {
-      this.nameRef.error = i18next.t('v.required');
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.required');
+      }
       isValid = false;
     } else if (name.length < 3) {
-      this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      }
       isValid = false;
     }
 
     // Email
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
-      this.emailRef.error = i18next.t('v.invalid_email');
+      if (this.emailRef) {
+        this.emailRef.error = i18next.t('v.invalid_email');
+      }
       isValid = false;
     }
 
@@ -79,7 +130,7 @@ export default class ModalEditCustomer extends PureComponent {
     const description = customerIm.get('description');
     const email = customerIm.get('email');
 
-    const isDisabled = modalComponentIm.get('isDisabled');
+    const { isDisabled } = modalComponentIm;
 
     return (
       <Fragment>
@@ -160,3 +211,5 @@ export default class ModalEditCustomer extends PureComponent {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalEditCustomer);

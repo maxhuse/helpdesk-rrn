@@ -1,7 +1,7 @@
 /*
 * HOC for data preload for a component
 * */
-import React, { PureComponent, StatelessComponent, ComponentClass } from 'react';
+import React, { PureComponent, StatelessComponent, ComponentClass, ComponentType } from 'react';
 import Promise from 'bluebird';
 import Preloader from 'components/preloader';
 import ServerError from 'components/server-error';
@@ -18,12 +18,11 @@ const ServerErrorPage: StatelessComponent = () => (
 type IsErrorStatus = (status: number) => boolean;
 const isErrorStatus: IsErrorStatus = status => (status !== 200 && status !== 401 && status !== 403);
 
-type ReactComponent = ComponentClass | StatelessComponent;
 interface IDataFetcherEnhance {
   (
-    ComposedComponent: ReactComponent,
-    customOptions?: { CustomPreloader?: ReactComponent, CustomServerError?: ReactComponent },
-  ): ComponentClass;
+    ComposedComponent: ComponentType<any>,
+    customOptions?: { CustomPreloader?: ComponentType<any>, CustomServerError?:ComponentType<any> },
+  ): ComponentClass<any>;
 }
 interface IWrapperProps {
   fetchActionAttributes: { name: string, options?: object }[];
@@ -34,8 +33,8 @@ interface IWrapperState {
 }
 const dataFetcherEnhance: IDataFetcherEnhance = (ComposedComponent, customOptions = {}) =>
   class DataFetcherWrapper extends PureComponent<IWrapperProps, IWrapperState> {
-    private readonly Preloader: ReactComponent | typeof Preloader;
-    private readonly ServerError: ReactComponent | typeof ServerErrorPage;
+    private readonly Preloader: ComponentType | typeof Preloader;
+    private readonly ServerError: ComponentType | typeof ServerErrorPage;
 
     constructor(props) {
       super(props);

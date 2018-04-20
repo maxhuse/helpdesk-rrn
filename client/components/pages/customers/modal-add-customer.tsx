@@ -1,69 +1,119 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import { VALID_EMAIL_REX, roles } from 'shared/constants';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { TState as TModalState, actions as modalActions } from 'ducks/components/modal';
+import { actions as customersActions } from 'ducks/data/customers';
 
-export default class ModalAddCustomer extends PureComponent {
+const mapDispatchToProps = dispatch => Object.assign(
+  {
+    dispatch,
+    customersDataAddSignal: customersActions.customersDataAddSignal,
+  },
+  bindActionCreators({
+    modalComponentHideSignal: modalActions.modalComponentHideSignal,
+    modalComponentSubmitWrapperSignal: modalActions.modalComponentSubmitWrapperSignal,
+  }, dispatch),
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
+
+interface IProps {
+  modalComponentIm: TModalState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
+  customersDataAddSignal: typeof customersActions.customersDataAddSignal;
+  dispatch: Dispatch<any>;
+}
+class ModalAddCustomer extends PureComponent<IProps> {
+  private nameRef: Input | null;
+  private loginRef: Input | null;
+  private passwordRef: Input | null;
+  private emailRef: Input | null;
+  private descriptionRef: HTMLTextAreaElement | null;
+
   constructor(props) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit() {
+  private onSubmit(): void {
+    const { dispatch, modalComponentSubmitWrapperSignal, customersDataAddSignal } = this.props;
     const options = {
-      name: this.nameRef.value,
-      login: this.loginRef.value,
-      password: this.passwordRef.value,
-      description: this.descriptionRef.value,
+      name: this.nameRef ? this.nameRef.value : '',
+      login: this.loginRef ? this.loginRef.value : '',
+      password: this.passwordRef ? this.passwordRef.value : '',
+      description: this.descriptionRef ? this.descriptionRef.value : '',
       role: roles.CUSTOMER,
-      email: this.emailRef.value,
+      email: this.emailRef ? this.emailRef.value : '',
       active: 1, // new customer is always active
     };
 
     if (this.validate(options)) {
-      this.props.modalComponentSubmitWrapperSignal({
-        submitSignal: () => this.props.submitSignal({ data: options }),
+      modalComponentSubmitWrapperSignal({
+        submitSignal: () => dispatch(customersDataAddSignal({ data: options })),
         doneText: i18next.t('customer_added', { name: options.name }),
       });
     }
   }
 
-  validate({ login, password, name, email }) {
+  /* eslint-disable indent */
+  private validate({ login, password, name, email }: {
+    login: string, password: string, name: string, email: string
+  }): string | boolean {
+  /* eslint-enable indent */
     let isValid = true;
 
     // Name
     if (!name.length) {
-      this.nameRef.error = i18next.t('v.required');
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.required');
+      }
       isValid = false;
     } else if (name.length < 3) {
-      this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      }
       isValid = false;
     }
 
     // Login
     if (!login.length) {
-      this.loginRef.error = i18next.t('v.required');
+      if (this.loginRef) {
+        this.loginRef.error = i18next.t('v.required');
+      }
       isValid = false;
     } else if (login.length < 6) {
-      this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+      if (this.loginRef) {
+        this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+      }
       isValid = false;
     }
 
     // Password
     if (!password.length) {
-      this.passwordRef.error = i18next.t('v.required');
+      if (this.passwordRef) {
+        this.passwordRef.error = i18next.t('v.required');
+      }
       isValid = false;
     } else if (password.length < 6) {
-      this.passwordRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+      if (this.passwordRef) {
+        this.passwordRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+      }
       isValid = false;
     }
 
-
     // Email
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
-      this.emailRef.error = i18next.t('v.invalid_email');
+      if (this.emailRef) {
+        this.emailRef.error = i18next.t('v.invalid_email');
+      }
       isValid = false;
     }
 
@@ -72,8 +122,7 @@ export default class ModalAddCustomer extends PureComponent {
 
   render() {
     const { modalComponentHideSignal, modalComponentIm } = this.props;
-
-    const isDisabled = modalComponentIm.get('isDisabled');
+    const { isDisabled } = modalComponentIm;
 
     return (
       <Fragment>
@@ -168,3 +217,5 @@ export default class ModalAddCustomer extends PureComponent {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAddCustomer);

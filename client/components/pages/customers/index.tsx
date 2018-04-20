@@ -1,21 +1,22 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, StatelessComponent } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import i18next from 'i18next';
-import { sortType, filterType } from 'client-constants.ts';
+import { sortType, filterType } from 'client-constants';
 import { Table } from 'components/table';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
-import { actions as customersDataActions } from 'ducks/data/customers';
-import { actions as modalComponentActions } from 'ducks/components/modal';
+import { actions as customersActions, TState as TCustomerState } from 'ducks/data/customers';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
 import Modal, { ModalChangePassword, modalContainerEnhance } from 'components/modal';
 import ModalAddCustomer from './modal-add-customer';
 import ModalEditCustomer from './modal-edit-customer';
 import ModalBlockCustomer from './modal-block-customer';
 
-const mapDispatchToProps = Object.assign(
-  {},
-  customersDataActions,
-  modalComponentActions
-);
+const mapDispatchToProps = {
+  customersDataGetSignal: customersActions.customersDataGetSignal,
+  customersDataUpdateSignal: customersActions.customersDataUpdateSignal,
+  modalComponentShowSignal: modalActions.modalComponentShowSignal,
+};
 
 const mapStateToProps = state => ({
   customersDataIm: state.data.customersDataIm,
@@ -29,55 +30,75 @@ const modalId = {
   CHANGE_PASSWORD: 'changePassword',
 };
 
+interface IModalContainerProps {
+  customersDataIm: TCustomerState;
+  modalComponentIm: TModalState;
+  customersDataUpdateSignal: typeof customersActions.customersDataUpdateSignal;
+  dispatch: Dispatch<any>;
+}
 // Call modalContainerEnhance for passing modalComponentIm into the component
 const CustomersModalContainer = modalContainerEnhance(
-  class extends PureComponent {
+  class extends PureComponent<IModalContainerProps> {
     render() {
       const {
         customersDataIm,
         modalComponentIm,
-        customersDataAddSignal,
         customersDataUpdateSignal,
+        dispatch,
       } = this.props;
 
       return (
         <Fragment>
           <Modal modalId={modalId.ADD}>
-            <ModalAddCustomer submitSignal={customersDataAddSignal} />
+            <ModalAddCustomer />
           </Modal>
 
           <Modal modalId={modalId.EDIT}>
             <ModalEditCustomer
               getCustomer={() => {
-                const customerId = modalComponentIm.get('options').id;
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
 
-                return customersDataIm.get('data').find(model => model.get('id') === customerId);
+                const customerId = modalComponentIm.options.id;
+
+                return customersDataIm.data.find(model => model.get('id') === customerId);
               }}
-              submitSignal={customersDataUpdateSignal}
             />
           </Modal>
 
           <Modal modalId={modalId.BLOCK}>
             <ModalBlockCustomer
               getCustomer={() => {
-                const customerId = modalComponentIm.get('options').id;
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
 
-                return customersDataIm.get('data').find(model => model.get('id') === customerId);
+                const customerId = modalComponentIm.options.id;
+
+                return customersDataIm.data.find(model => model.get('id') === customerId);
               }}
-              submitSignal={customersDataUpdateSignal}
             />
           </Modal>
 
           <Modal modalId={modalId.CHANGE_PASSWORD}>
             <ModalChangePassword
               doneText={() => {
-                const customerId = modalComponentIm.get('options').id;
-                const customerIm = customersDataIm.get('data')
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
+
+                const customerId = modalComponentIm.options.id;
+                const customerIm = customersDataIm.data
                   .find(model => model.get('id') === customerId);
+
+                if (!customerIm) {
+                  return undefined;
+                }
 
                 return i18next.t('customer_edited', { name: customerIm.get('name') });
               }}
-              submitSignal={customersDataUpdateSignal}
+              submitSignal={options => dispatch(customersDataUpdateSignal(options))}
             />
           </Modal>
         </Fragment>
@@ -86,9 +107,13 @@ const CustomersModalContainer = modalContainerEnhance(
   }
 );
 
-const Customers = ({
+interface ICustomersProps {
+  customersDataIm: TCustomerState;
+  customersDataUpdateSignal: typeof customersActions.customersDataUpdateSignal;
+  modalComponentShowSignal: typeof modalActions.modalComponentShowSignal;
+}
+const Customers: StatelessComponent<ICustomersProps> = ({
   customersDataIm,
-  customersDataAddSignal,
   customersDataUpdateSignal,
   modalComponentShowSignal,
 }) => {
@@ -170,7 +195,7 @@ const Customers = ({
     <div className="content">
       <div className="content__body">
         <Table
-          items={customersDataIm.get('data')}
+          items={customersDataIm.data}
           cells={cells}
           row={row}
           filterFields={filterFields}
@@ -182,7 +207,6 @@ const Customers = ({
 
         <CustomersModalContainer
           customersDataIm={customersDataIm}
-          customersDataAddSignal={customersDataAddSignal}
           customersDataUpdateSignal={customersDataUpdateSignal}
         />
       </div>

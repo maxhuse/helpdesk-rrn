@@ -5,9 +5,20 @@
 * */
 
 import { connect } from 'react-redux';
+import { ComponentClass } from 'react';
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
 
 const mapStateToProps = state => ({
   modalComponentIm: state.components.modalComponentIm,
 });
 
-export default ComposedComponent => connect(mapStateToProps)(ComposedComponent);
+interface IModalEnhance {
+  (ComposedComponent: ComponentClass<any>): ComponentClass<any>;
+}
+const enhance: IModalEnhance = ComposedComponent =>
+  connect(mapStateToProps, mapDispatchToProps)(ComposedComponent);
+
+export default enhance;

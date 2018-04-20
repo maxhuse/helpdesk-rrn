@@ -22,7 +22,7 @@ interface IProps {
   modalComponentIm: TState;
   modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
   modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
-  submitSignal: (options: { id?: string | number, data: object }) => Promise<TFetchResult>;
+  submitSignal: (options: { id: string | number, data: object }) => Promise<TFetchResult>;
 }
 class ModalChangePassword extends PureComponent<IProps> {
   private repeatRef: Input | null;
