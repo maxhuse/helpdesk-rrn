@@ -1,10 +1,46 @@
 import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { VALID_EMAIL_REX, roles } from 'shared/constants';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
+import { actions as staffsActions, TDataItem as TStaff } from 'ducks/data/staffs';
 
-export default class ModalEditStaff extends PureComponent {
+const mapDispatchToProps = dispatch => Object.assign(
+  {
+    dispatch,
+    staffsDataUpdateSignal: staffsActions.staffsDataUpdateSignal,
+  },
+  bindActionCreators({
+    modalComponentHideSignal: modalActions.modalComponentHideSignal,
+    modalComponentSubmitWrapperSignal: modalActions.modalComponentSubmitWrapperSignal,
+  }, dispatch),
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
+
+interface IProps {
+  modalComponentIm: TModalState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
+  staffsDataUpdateSignal: typeof staffsActions.staffsDataUpdateSignal;
+  getStaff: () => TStaff | undefined;
+  dispatch: Dispatch<any>;
+}
+interface IState {
+  staffIm: TStaff;
+}
+class ModalEditStaff extends PureComponent<IProps, IState> {
+  private nameRef: Input | null;
+  private loginRef: Input | null;
+  private emailRef: Input | null;
+  private roleRef: HTMLSelectElement | null;
+  private descriptionRef: HTMLTextAreaElement | null;
+
   constructor(props) {
     super(props);
 
@@ -16,58 +52,72 @@ export default class ModalEditStaff extends PureComponent {
     };
   }
 
-  onSubmit() {
+  private onSubmit(): void {
     const {
-      submitSignal,
+      staffsDataUpdateSignal,
       modalComponentSubmitWrapperSignal,
+      dispatch,
     } = this.props;
     const { staffIm } = this.state;
 
     const options = {
-      login: this.loginRef.value,
-      name: this.nameRef.value,
-      description: this.descriptionRef.value,
-      role: this.roleRef.value,
-      email: this.emailRef.value,
+      name: this.nameRef ? this.nameRef.value : '',
+      login: this.loginRef ? this.loginRef.value : '',
+      description: this.descriptionRef ? this.descriptionRef.value : '',
+      role: this.roleRef ? this.roleRef.value : '',
+      email: this.emailRef ? this.emailRef.value : '',
     };
 
     if (this.validate(options)) {
       modalComponentSubmitWrapperSignal({
-        submitSignal: () => submitSignal({ id: staffIm.get('id'), data: options }),
+        submitSignal: () => dispatch(staffsDataUpdateSignal({
+          id: staffIm.get('id'),
+          data: options,
+        })),
         doneText: i18next.t('staff_edited', { name: staffIm.get('name') }),
       });
     }
   }
 
-  validate({ name, login, email }) {
+  /* eslint-disable indent */
+  private validate({ login, name, email }: {
+    login: string, name: string, email: string
+  }): string | boolean {
+    /* eslint-enable indent */
     let isValid = true;
-
-    // Login
-    if (login !== undefined) {
-      if (!login.length) {
-        this.loginRef.error = i18next.t('v.required');
-        isValid = false;
-      } else if (login.length < 6) {
-        this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
-        isValid = false;
-      }
-    }
 
     // Name
     if (!name.length) {
-      this.nameRef.error = i18next.t('v.required');
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.required');
+      }
       isValid = false;
     } else if (name.length < 3) {
-      this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      if (this.nameRef) {
+        this.nameRef.error = i18next.t('v.must_be_longer_than', { count: 2 });
+      }
+      isValid = false;
+    }
+
+    if (!login.length) {
+      if (this.loginRef) {
+        this.loginRef.error = i18next.t('v.required');
+      }
+      isValid = false;
+    } else if (login.length < 6) {
+      if (this.loginRef) {
+        this.loginRef.error = i18next.t('v.must_be_longer_than', { count: 5 });
+      }
       isValid = false;
     }
 
     // Email
     if (email.length > 0 && !VALID_EMAIL_REX.test(email)) {
-      this.emailRef.error = i18next.t('v.invalid_email');
+      if (this.emailRef) {
+        this.emailRef.error = i18next.t('v.invalid_email');
+      }
       isValid = false;
     }
-
     return isValid;
   }
 
@@ -81,7 +131,7 @@ export default class ModalEditStaff extends PureComponent {
     const role = staffIm.get('role');
     const email = staffIm.get('email');
 
-    const isDisabled = modalComponentIm.get('isDisabled');
+    const { isDisabled } = modalComponentIm;
 
     return (
       <Fragment>
@@ -180,3 +230,5 @@ export default class ModalEditStaff extends PureComponent {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalEditStaff);

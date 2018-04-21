@@ -1,22 +1,23 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, StatelessComponent } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import i18next from 'i18next';
 import { Table } from 'components/table';
 import { roles } from 'shared/constants';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
-import { sortType, filterType } from 'client-constants.ts';
-import { actions as staffsDataActions } from 'ducks/data/staffs';
-import { actions as modalComponentActions } from 'ducks/components/modal';
+import { sortType, filterType } from 'client-constants';
+import { actions as staffsActions, TState as TStaffState } from 'ducks/data/staffs';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
 import Modal, { ModalChangePassword, modalContainerEnhance } from 'components/modal';
 import ModalAddStaff from './modal-add-staff';
 import ModalEditStaff from './modal-edit-staff';
 import ModalBlockStaff from './modal-block-staff';
 
-const mapDispatchToProps = Object.assign(
-  {},
-  staffsDataActions,
-  modalComponentActions
-);
+const mapDispatchToProps = {
+  staffsDataUpdateSignal: staffsActions.staffsDataUpdateSignal,
+  staffsDataGetSignal: staffsActions.staffsDataGetSignal,
+  modalComponentShowSignal: modalActions.modalComponentShowSignal,
+};
 
 const mapStateToProps = state => ({
   staffsDataIm: state.data.staffsDataIm,
@@ -30,54 +31,74 @@ const modalId = {
   CHANGE_PASSWORD: 'changePassword',
 };
 
+interface IModalContainerProps {
+  staffsDataIm: TStaffState;
+  modalComponentIm: TModalState;
+  staffsDataUpdateSignal: typeof staffsActions.staffsDataUpdateSignal;
+  dispatch: Dispatch<any>;
+}
 // Call modalContainerEnhance for passing modalComponentIm into the component
 const StaffsModalContainer = modalContainerEnhance(
-  class extends PureComponent {
+  class extends PureComponent<IModalContainerProps> {
     render() {
       const {
         staffsDataIm,
         modalComponentIm,
-        staffsDataAddSignal,
         staffsDataUpdateSignal,
+        dispatch,
       } = this.props;
 
       return (
         <Fragment>
           <Modal modalId={modalId.ADD}>
-            <ModalAddStaff submitSignal={staffsDataAddSignal} />
+            <ModalAddStaff />
           </Modal>
 
           <Modal modalId={modalId.EDIT}>
             <ModalEditStaff
               getStaff={() => {
-                const staffId = modalComponentIm.get('options').id;
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
 
-                return staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                const staffId = modalComponentIm.options.id;
+
+                return staffsDataIm.data.find(model => model.get('id') === staffId);
               }}
-              submitSignal={staffsDataUpdateSignal}
             />
           </Modal>
 
           <Modal modalId={modalId.BLOCK}>
             <ModalBlockStaff
               getStaff={() => {
-                const staffId = modalComponentIm.get('options').id;
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
 
-                return staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                const staffId = modalComponentIm.options.id;
+
+                return staffsDataIm.data.find(model => model.get('id') === staffId);
               }}
-              submitSignal={staffsDataUpdateSignal}
             />
           </Modal>
 
           <Modal modalId={modalId.CHANGE_PASSWORD}>
             <ModalChangePassword
               doneText={() => {
-                const staffId = modalComponentIm.get('options').id;
-                const staffIm = staffsDataIm.get('data').find(model => model.get('id') === staffId);
+                if (!modalComponentIm.options) {
+                  return undefined;
+                }
+
+                const staffId = modalComponentIm.options.id;
+                const staffIm = staffsDataIm.data.find(model => model.get('id') === staffId);
+
+                if (!staffIm) {
+                  return undefined;
+                }
 
                 return i18next.t('staff_edited', { name: staffIm.get('name') });
               }}
-              submitSignal={staffsDataUpdateSignal}
+              submitSignal={options => dispatch(staffsDataUpdateSignal(options))}
             />
           </Modal>
         </Fragment>
@@ -86,9 +107,13 @@ const StaffsModalContainer = modalContainerEnhance(
   }
 );
 
-const Staffs = ({
+interface IStaffProps {
+  staffsDataIm: TStaffState;
+  staffsDataUpdateSignal: typeof staffsActions.staffsDataUpdateSignal;
+  modalComponentShowSignal: typeof modalActions.modalComponentShowSignal;
+}
+const Staffs: StatelessComponent<IStaffProps> = ({
   staffsDataIm,
-  staffsDataAddSignal,
   staffsDataUpdateSignal,
   modalComponentShowSignal,
 }) => {
@@ -192,7 +217,7 @@ const Staffs = ({
     <div className="content">
       <div className="content__body">
         <Table
-          items={staffsDataIm.get('data')}
+          items={staffsDataIm.data}
           cells={cells}
           row={row}
           filterFields={filterFields}
@@ -204,7 +229,6 @@ const Staffs = ({
 
         <StaffsModalContainer
           staffsDataIm={staffsDataIm}
-          staffsDataAddSignal={staffsDataAddSignal}
           staffsDataUpdateSignal={staffsDataUpdateSignal}
         />
       </div>
