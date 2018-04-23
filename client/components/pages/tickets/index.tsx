@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment, StatelessComponent } from 'react';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Map } from 'immutable';
@@ -8,21 +8,20 @@ import { getFormatDate } from 'helpers';
 import { sortType, sortOrder, filterType } from 'client-constants';
 import Modal, { modalContainerEnhance } from 'components/modal';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
-import { actions as ticketsDataActions } from 'ducks/data/tickets';
-import { actions as customersDataActions } from 'ducks/data/customers';
-import { actions as messagesDataActions } from 'ducks/data/messages';
-import { actions as modalComponentActions } from 'ducks/components/modal';
+import { actions as ticketsActions, TState as TTicketsState } from 'ducks/data/tickets';
+import { actions as customersActions, TState as TCustomersState } from 'ducks/data/customers';
+import { actions as modalActions } from 'ducks/components/modal';
+import { TState as TAuthState } from 'ducks/data/auth';
+import { TCells, TFilterFields } from 'components/table/types';
 import TicketStatusCell from './status-cell';
 import ModalAddTicket from './modal-add-ticket';
 import ModalShowTicket from './modal-show-ticket';
 
-const mapDispatchToProps = Object.assign(
-  {},
-  ticketsDataActions,
-  customersDataActions,
-  messagesDataActions,
-  modalComponentActions
-);
+const mapDispatchToProps = {
+  ticketsDataGetSignal: ticketsActions.ticketsDataGetSignal,
+  customersDataGetSignal: customersActions.customersDataGetSignal,
+  modalComponentShowSignal: modalActions.modalComponentShowSignal,
+};
 
 function mapStateToProps(state) {
   const userRole = state.data.authDataIm.getIn(['data', 'role']);
@@ -37,7 +36,6 @@ function mapStateToProps(state) {
     authDataIm: state.data.authDataIm,
     ticketsDataIm: state.data.ticketsDataIm,
     customersDataIm: state.data.customersDataIm,
-    messagesDataIm: state.data.messagesDataIm,
     fetchActionAttributes,
   };
 }
@@ -48,60 +46,41 @@ const modalId = {
 };
 
 // Call modalContainerEnhance for passing modalComponentIm into the component
-const TicketsModalContainer = modalContainerEnhance(
-  class extends PureComponent {
-    render() {
-      const {
-        ticketsDataIm,
-        ticketsDataAddSignal,
-        ticketsDataUpdateSignal,
-        messagesDataIm,
-        messagesDataGetSignal,
-        messagesDataAddSignal,
-        authDataIm,
-      } = this.props;
+const TicketsModal = () => (
+  <Fragment>
+    <Modal modalId={modalId.ADD}>
+      <ModalAddTicket />
+    </Modal>
 
-      return (
-        <Fragment>
-          <Modal modalId={modalId.ADD}>
-            <ModalAddTicket submitSignal={ticketsDataAddSignal} />
-          </Modal>
-
-          <Modal
-            modalId={modalId.SHOW_TICKET}
-            modalWrapperClassName="modal__wrapper modal__wrapper_dialog"
-          >
-            <ModalShowTicket
-              messagesDataIm={messagesDataIm}
-              messagesDataGetSignal={messagesDataGetSignal}
-              messagesDataAddSignal={messagesDataAddSignal}
-              authDataIm={authDataIm}
-              ticketsDataIm={ticketsDataIm}
-              ticketsDataUpdateSignal={ticketsDataUpdateSignal}
-            />
-          </Modal>
-        </Fragment>
-      );
-    }
-  }
+    <Modal
+      modalId={modalId.SHOW_TICKET}
+      modalWrapperClassName="modal__wrapper modal__wrapper_dialog"
+    >
+      <ModalShowTicket />
+    </Modal>
+  </Fragment>
 );
+const TicketsModalContainer = modalContainerEnhance(TicketsModal);
 
-const Tickets = ({
+interface IProps {
+  authDataIm: TAuthState;
+  ticketsDataIm: TTicketsState;
+  customersDataIm: TCustomersState;
+  ticketsDataGetSignal: typeof ticketsActions.ticketsDataGetSignal;
+  customersDataGetSignal: typeof customersActions.customersDataGetSignal;
+  modalComponentShowSignal: typeof modalActions.modalComponentShowSignal;
+}
+const Tickets: StatelessComponent<IProps> = ({
   authDataIm,
   ticketsDataIm,
   customersDataIm,
-  messagesDataIm,
-  ticketsDataAddSignal,
-  ticketsDataUpdateSignal,
-  messagesDataGetSignal,
-  messagesDataAddSignal,
   modalComponentShowSignal,
 }) => {
   const userRole = authDataIm.getIn(['data', 'role']);
   const isStaff = userRole === roles.ADMIN || userRole === roles.ENGINEER;
 
   // Describe table cells
-  const cells = [
+  const cells: TCells = [
     {
       id: 'id',
       getValue: model => model.get('id'),
@@ -175,7 +154,7 @@ const Tickets = ({
   };
 
   // Describe filters
-  const filterFields = [
+  const filterFields: TFilterFields = [
     {
       type: filterType.TEXT,
       key: 'subject',
@@ -192,7 +171,7 @@ const Tickets = ({
       getText: elem => elem.get('name'),
       getFilteredString: elem => elem.get('name'),
       placeholder: i18next.t('all'),
-      items: () => customersDataIm.get('data'),
+      items: () => customersDataIm.data,
     });
   }
 
@@ -206,7 +185,7 @@ const Tickets = ({
     <div className="content">
       <div className="content__body">
         <Table
-          items={ticketsDataIm.get('data')}
+          items={ticketsDataIm.data}
           cells={cells}
           row={row}
           filterFields={filterFields}
@@ -217,19 +196,11 @@ const Tickets = ({
               text: 'create',
               onClick: () => modalComponentShowSignal(modalId.ADD, false),
             } :
-            null
+            undefined
           }
         />
 
-        <TicketsModalContainer
-          ticketsDataIm={ticketsDataIm}
-          ticketsDataAddSignal={ticketsDataAddSignal}
-          ticketsDataUpdateSignal={ticketsDataUpdateSignal}
-          messagesDataIm={messagesDataIm}
-          messagesDataGetSignal={messagesDataGetSignal}
-          messagesDataAddSignal={messagesDataAddSignal}
-          authDataIm={authDataIm}
-        />
+        <TicketsModalContainer />
       </div>
     </div>
   );

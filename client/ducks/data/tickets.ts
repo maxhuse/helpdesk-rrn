@@ -85,7 +85,7 @@ const ticketsDataUpdateSignal: ITicketsDataUpdate = ({ id, data }) => dispatch =
   })();
 
 interface ITicketsDataAdd {
-  (options: { data: { password: string, [key: string]: any } }): (dispatch: Dispatch<any>) =>
+  (options: { data: { [key: string]: any } }): (dispatch: Dispatch<any>) =>
     Promise<TFetchResult>;
 }
 const ticketsDataAddSignal: ITicketsDataAdd = ({ data }) => dispatch =>

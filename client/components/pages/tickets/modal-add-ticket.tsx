@@ -2,40 +2,75 @@ import React, { PureComponent, Fragment } from 'react';
 import i18next from 'i18next';
 import Input from 'components/input';
 import { ModalHeader, ModalOkCancelButtons } from 'components/modal';
+import { connect } from 'react-redux';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
+import { bindActionCreators, Dispatch } from 'redux';
+import { actions as ticketsActions } from 'ducks/data/tickets';
 
-export default class ModalAddTicket extends PureComponent {
+const mapDispatchToProps = dispatch => Object.assign(
+  {
+    dispatch,
+    ticketsDataAddSignal: ticketsActions.ticketsDataAddSignal,
+  },
+  bindActionCreators({
+    modalComponentHideSignal: modalActions.modalComponentHideSignal,
+    modalComponentSubmitWrapperSignal: modalActions.modalComponentSubmitWrapperSignal,
+  }, dispatch),
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+});
+
+interface IProps {
+  modalComponentIm: TModalState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  modalComponentSubmitWrapperSignal: typeof modalActions.modalComponentSubmitWrapperSignal;
+  ticketsDataAddSignal: typeof ticketsActions.ticketsDataAddSignal;
+  dispatch: Dispatch<any>;
+}
+class ModalAddTicket extends PureComponent<IProps> {
+  private subjectRef: Input | null;
+  private messageRef: Input | null;
+
   constructor(props) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit() {
+  private onSubmit(): void {
+    const { ticketsDataAddSignal, modalComponentSubmitWrapperSignal, dispatch } = this.props;
+
     const options = {
-      subject: this.subjectRef.value,
-      message: this.messageRef.value,
+      subject: this.subjectRef ? this.subjectRef.value : '',
+      message: this.messageRef ? this.messageRef.value : '',
     };
 
     if (this.validate(options)) {
-      this.props.modalComponentSubmitWrapperSignal({
-        submitSignal: () => this.props.submitSignal({ data: options }),
+      modalComponentSubmitWrapperSignal({
+        submitSignal: () => dispatch(ticketsDataAddSignal({ data: options })),
         doneText: i18next.t('ticket_created'),
       });
     }
   }
 
-  validate({ subject, message }) {
+  private validate({ subject, message }: { subject: string, message: string }): boolean {
     let isValid = true;
 
     // Subject
     if (!subject.length) {
-      this.subjectRef.error = i18next.t('v.required');
+      if (this.subjectRef) {
+        this.subjectRef.error = i18next.t('v.required');
+      }
       isValid = false;
     }
 
     // Message
     if (!message.length) {
-      this.messageRef.error = i18next.t('v.required');
+      if (this.messageRef) {
+        this.messageRef.error = i18next.t('v.required');
+      }
       isValid = false;
     }
 
@@ -44,8 +79,7 @@ export default class ModalAddTicket extends PureComponent {
 
   render() {
     const { modalComponentHideSignal, modalComponentIm } = this.props;
-
-    const isDisabled = modalComponentIm.get('isDisabled');
+    const { isDisabled } = modalComponentIm;
 
     return (
       <Fragment>
@@ -94,3 +128,5 @@ export default class ModalAddTicket extends PureComponent {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAddTicket);

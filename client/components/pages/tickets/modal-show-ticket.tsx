@@ -1,12 +1,27 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, StatelessComponent } from 'react';
 import i18next from 'i18next';
 import dataFetcherEnhance from 'components/data-fetcher-enhance';
 import Preloader from 'components/preloader';
 import { getFormatDateTime } from 'helpers';
 import { roles, ticketStatus } from 'shared/constants';
 import Tooltip from 'components/tooltip';
+import { actions as modalActions, TState as TModalState } from 'ducks/components/modal';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import {
+  actions as ticketsActions,
+  TState as TTicketsState,
+  TDataItem as TTicket,
+} from 'ducks/data/tickets';
+import { actions as messagesActions, TState as TMessagesState } from 'ducks/data/messages';
+import { TState as TAuthState } from 'ducks/data/auth';
 
-const Message = ({ userName, text, date }) => (
+interface IMessageProps {
+  userName: string;
+  text: string;
+  date: number;
+}
+const Message: StatelessComponent<IMessageProps> = ({ userName, text, date }) => (
   <div className="message-dialog__message">
     <div className="message-dialog__message-user">{userName}</div>
     <div className="message-dialog__message-text">{text}</div>
@@ -14,21 +29,29 @@ const Message = ({ userName, text, date }) => (
   </div>
 );
 
-// TODO: wrap with connect
-class ShowTicketMessages extends PureComponent {
+interface IShowTicketMessagesProps {
+  messagesDataIm: TMessagesState;
+  authDataIm: TAuthState;
+  ticketIm: TTicket;
+  messagesDataAddSignal: typeof messagesActions.messagesDataAddSignal;
+  dispatch: Dispatch<any>;
+}
+class ShowTicketMessages extends PureComponent<IShowTicketMessagesProps> {
+  private textRef: HTMLTextAreaElement | null;
+
   constructor(props) {
     super(props);
 
     this.onSend = this.onSend.bind(this);
   }
 
-  onSend() {
-    const text = this.textRef.value;
-    const { ticketIm } = this.props;
+  private onSend(): void {
+    const text = this.textRef ? this.textRef.value : '';
+    const { ticketIm, messagesDataAddSignal, dispatch } = this.props;
     const ticketId = ticketIm.get('id');
 
     if (text.length > 0) {
-      this.props.messagesDataAddSignal({ data: { ticketId, text } }).then(({ status }) => {
+      dispatch(messagesDataAddSignal({ data: { ticketId, text } })).then(({ status }) => {
         if (status === 200) {
           this.clearTextarea();
         }
@@ -36,11 +59,13 @@ class ShowTicketMessages extends PureComponent {
     }
   }
 
-  clearTextarea() {
-    this.textRef.value = '';
+  private clearTextarea(): void {
+    if (this.textRef) {
+      this.textRef.value = '';
+    }
   }
 
-  isInputAvailable() {
+  private isInputAvailable(): boolean {
     const { ticketIm, authDataIm } = this.props;
     const status = ticketIm.get('status');
     const isClosed = status === ticketStatus.CLOSED;
@@ -59,7 +84,7 @@ class ShowTicketMessages extends PureComponent {
     return (
       <Fragment>
         <div className="message-dialog__messages-area">
-          {messagesDataIm.get('data').map(message => (
+          {messagesDataIm.data.map(message => (
             <Message
               key={message.get('id')}
               userName={message.get('userName')}
@@ -93,7 +118,7 @@ class ShowTicketMessages extends PureComponent {
   }
 }
 
-const ModalPreloader = () => (
+const ModalPreloader: StatelessComponent = () => (
   <Preloader className="preloader_modal" />
 );
 
@@ -122,8 +147,22 @@ const ChangeStatusTooltip = props => (
   </Fragment>
 );
 
+interface IModalShowTicketProps {
+  messagesDataIm: TMessagesState;
+  authDataIm: TAuthState;
+  ticketsDataIm: TTicketsState;
+  modalComponentIm: TModalState;
+  modalComponentHideSignal: typeof modalActions.modalComponentHideSignal;
+  messagesDataAddSignal: typeof messagesActions.messagesDataAddSignal;
+  messagesDataGetSignal: typeof messagesActions.messagesDataGetSignal;
+  ticketsDataUpdateSignal: typeof ticketsActions.ticketsDataUpdateSignal;
+  dispatch: Dispatch<any>;
+}
+interface IModalShowTicketState {
+  ticketIm: TTicket | undefined;
+}
 // eslint-disable-next-line react/no-multi-comp
-export default class ModalShowTicket extends PureComponent {
+class ModalShowTicket extends PureComponent<IModalShowTicketProps, IModalShowTicketState> {
   constructor(props) {
     super(props);
 
@@ -144,21 +183,27 @@ export default class ModalShowTicket extends PureComponent {
     }
   }
 
-  onAssignToMeClick() {
+  private onAssignToMeClick(): void {
     const { ticketsDataUpdateSignal } = this.props;
     const { ticketIm } = this.state;
 
-    // Change staffId and status
-    ticketsDataUpdateSignal({
-      id: ticketIm.get('id'),
-      data: { status: ticketStatus.ASSIGNED },
-    });
+    if (ticketIm) {
+      // Change staffId and status
+      ticketsDataUpdateSignal({
+        id: ticketIm.get('id'),
+        data: { status: ticketStatus.ASSIGNED },
+      });
+    }
   }
 
-  getTicket(ticketsDataIm, modalComponentIm) {
-    const ticketId = modalComponentIm.get('options').id;
+  private getTicket(ticketsDataIm: TTicketsState, modalComponentIm: TModalState) {
+    if (!modalComponentIm.options) {
+      return undefined;
+    }
 
-    return ticketsDataIm.get('data').find(model => model.get('id') === ticketId);
+    const ticketId = modalComponentIm.options.id;
+
+    return ticketsDataIm.data.find(model => model.get('id') === ticketId);
   }
 
   render() {
@@ -169,12 +214,20 @@ export default class ModalShowTicket extends PureComponent {
       messagesDataAddSignal,
       authDataIm,
       ticketsDataUpdateSignal,
+      dispatch,
     } = this.props;
     const { ticketIm } = this.state;
+
+    if (!ticketIm) {
+      return <ShowMessagesServerError />;
+    }
+
     const customerName = ticketIm.get('customerName');
     const ticketId = ticketIm.get('id');
     const status = ticketIm.get('status');
     const staffName = ticketIm.get('staffName');
+    const subject = ticketIm.get('subject');
+    const staffId = ticketIm.get('staffId');
     const userRole = authDataIm.getIn(['data', 'role']);
     const userId = authDataIm.getIn(['data', 'id']);
     const isStaff = userRole === roles.ADMIN || userRole === roles.ENGINEER;
@@ -200,7 +253,7 @@ export default class ModalShowTicket extends PureComponent {
         <div className="message-dialog">
           <div className="message-dialog__header">
             <div className="message-dialog__header-item">
-              <div className="message-dialog__header-subject">{ticketIm.get('subject')}</div>
+              <div className="message-dialog__header-subject">{subject}</div>
               {customerName &&
                 <div className="message-dialog__header-customer">{customerName}</div>
               }
@@ -222,7 +275,7 @@ export default class ModalShowTicket extends PureComponent {
                       {i18next.t('assign_to_me')}
                     </span>
                   }
-                  {(status === ticketStatus.ASSIGNED && userId === ticketIm.get('staffId')) &&
+                  {(status === ticketStatus.ASSIGNED && userId === staffId) &&
                     <div className="message-dialog__change-status">
                       <Tooltip content={changeStatusTooltipBlock}>
                         <span className="message-dialog__change-link">
@@ -244,6 +297,7 @@ export default class ModalShowTicket extends PureComponent {
               messagesDataAddSignal={messagesDataAddSignal}
               ticketIm={ticketIm}
               authDataIm={authDataIm}
+              dispatch={dispatch}
               fetchActionAttributes={[
                 {
                   name: 'messagesDataGetSignal',
@@ -268,3 +322,24 @@ export default class ModalShowTicket extends PureComponent {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => Object.assign(
+  {
+    dispatch,
+    messagesDataAddSignal: messagesActions.messagesDataAddSignal,
+  },
+  bindActionCreators({
+    ticketsDataUpdateSignal: ticketsActions.ticketsDataUpdateSignal,
+    modalComponentHideSignal: modalActions.modalComponentHideSignal,
+    messagesDataGetSignal: messagesActions.messagesDataGetSignal,
+  }, dispatch),
+);
+
+const mapStateToProps = state => ({
+  modalComponentIm: state.components.modalComponentIm,
+  messagesDataIm: state.data.messagesDataIm,
+  authDataIm: state.data.authDataIm,
+  ticketsDataIm: state.data.ticketsDataIm,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalShowTicket);

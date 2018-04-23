@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { StatelessComponent } from 'react';
 import i18next from 'i18next';
 import { ticketStatus } from 'shared/constants';
 import { ExpandableCell } from 'components/table/cell';
 import Chip from 'components/chip';
 
-const TicketStatusCell = ({ value, name, isExpanded, className }) => {
+interface IProps {
+  className: string;
+  isExpanded: boolean;
+  name: string;
+  value: string;
+}
+const TicketStatusCell: StatelessComponent<IProps> = ({ value, name, isExpanded, className }) => {
   const types = {
     [ticketStatus.NEW]: 'green',
     [ticketStatus.PENDING]: 'yellow',

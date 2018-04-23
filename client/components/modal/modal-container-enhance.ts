@@ -5,7 +5,7 @@
 * */
 
 import { connect } from 'react-redux';
-import { ComponentClass } from 'react';
+import { ComponentClass, StatelessComponent } from 'react';
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
 });
 
 interface IModalEnhance {
-  (ComposedComponent: ComponentClass<any>): ComponentClass<any>;
+  (ComposedComponent: ComponentClass<any> | StatelessComponent<any>): ComponentClass<any>;
 }
 const enhance: IModalEnhance = ComposedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(ComposedComponent);
