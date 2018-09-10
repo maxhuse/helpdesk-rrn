@@ -1,4 +1,4 @@
-import {Map, List, Record} from 'immutable';
+import { Map, List, Record } from 'immutable';
 import { Reducer, Dispatch } from 'redux';
 import Promise from 'bluebird';
 import { fetchSignal, TFetchResult } from 'ducks/fetch';
